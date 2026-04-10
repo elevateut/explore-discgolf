@@ -1,0 +1,41 @@
+[
+  {
+    "id": "UT-040-06",
+    "name": "Cedar City Field Office",
+    "type": "field",
+    "state": "UT",
+    "lat": 37.6775,
+    "lng": -113.0619,
+    "address": "176 E DL Sargent Dr, Cedar City, UT 84721",
+    "phone": "TODO: research",
+    "email": "TODO: research",
+    "recreationPlannerName": "TODO: research",
+    "recreationPlannerEmail": "TODO: research"
+  },
+  {
+    "id": "OR-100-00",
+    "name": "Northwest Oregon District",
+    "type": "district",
+    "state": "OR",
+    "lat": 45.5231,
+    "lng": -122.6765,
+    "address": "1717 Fabry Road SE, Salem, OR 97306",
+    "phone": "TODO: research",
+    "email": "TODO: research",
+    "recreationPlannerName": "TODO: research",
+    "recreationPlannerEmail": "TODO: research"
+  },
+  {
+    "id": "OR-010-04",
+    "name": "Applegate Field Office",
+    "type": "field",
+    "state": "OR",
+    "lat": 42.3171,
+    "lng": -122.8756,
+    "address": "3040 Biddle Rd, Medford, OR 97504",
+    "phone": "TODO: research",
+    "email": "TODO: research",
+    "recreationPlannerName": "TODO: research",
+    "recreationPlannerEmail": "TODO: research"
+  }
+]

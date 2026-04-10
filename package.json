@@ -1,0 +1,26 @@
+{
+  "name": "explore-discgolf",
+  "version": "0.1.0",
+  "description": "Disc golf advocacy on BLM public lands using the EXPLORE Act — an open source project by ElevateUT (501c3)",
+  "type": "module",
+  "license": "Apache-2.0",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.39.0",
+    "@astrojs/node": "^9.1.0",
+    "@astrojs/svelte": "^7.0.0",
+    "@supabase/supabase-js": "^2.49.0",
+    "astro": "^5.7.0",
+    "maplibre-gl": "^5.1.0",
+    "svelte": "^5.25.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.0",
+    "daisyui": "^5.0.0",
+    "tailwindcss": "^4.1.0"
+  }
+}

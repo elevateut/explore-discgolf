@@ -1,0 +1,72 @@
+---
+/**
+ * EXPLORE Act — educational content listing page.
+ *
+ * Renders all entries from the "explore-act" content collection,
+ * grouped by section (legislative, provisions, implementation).
+ */
+
+import { getCollection } from "astro:content";
+import BaseLayout from "@layouts/BaseLayout.astro";
+
+const allEntries = await getCollection("explore-act");
+
+// Sort by the `order` field defined in the collection schema
+const sorted = allEntries.sort((a, b) => a.data.order - b.data.order);
+
+// Group entries by section
+const legislative = sorted.filter((e) => e.data.section === "legislative");
+const provisions = sorted.filter((e) => e.data.section === "provisions");
+const implementation = sorted.filter((e) => e.data.section === "implementation");
+
+const sections = [
+  { label: "Legislative Background", entries: legislative },
+  { label: "Key Provisions", entries: provisions },
+  { label: "Implementation & Next Steps", entries: implementation },
+];
+---
+
+<BaseLayout
+  title="The EXPLORE Act — EXPLORE Disc Golf"
+  description="Understand the EXPLORE Act and how it opens the door for disc golf on BLM public lands."
+>
+  <section class="section-padding">
+    <div class="content-width">
+      <h1 class="text-4xl font-bold mb-4">The EXPLORE Act</h1>
+      <p class="text-lg text-base-content/70 mb-10 max-w-2xl">
+        The Expanding Public Lands Outdoor Recreation Experiences (EXPLORE) Act
+        is bipartisan legislation that modernizes how federal agencies manage
+        outdoor recreation on public lands. Here's what it means for disc golf.
+      </p>
+
+      {sections.map((section) => (
+        <div class="mb-12">
+          <h2 class="text-2xl font-bold mb-4 border-b border-base-300 pb-2">
+            {section.label}
+          </h2>
+          {section.entries.length === 0 ? (
+            <p class="text-base-content/50 italic">
+              Content coming soon. Check back or contribute on GitHub.
+            </p>
+          ) : (
+            <div class="grid md:grid-cols-2 gap-4">
+              {section.entries.map((entry) => (
+                <a
+                  href={`/explore-act/${entry.data.slug}`}
+                  class="card bg-base-200 hover:shadow-md transition-shadow"
+                >
+                  <div class="card-body">
+                    <h3 class="card-title text-primary">{entry.data.title}</h3>
+                    <p class="text-sm text-base-content/70">
+                      {entry.data.description}
+                    </p>
+                  </div>
+                </a>
+              ))}
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

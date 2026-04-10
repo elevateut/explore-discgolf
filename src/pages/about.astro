@@ -1,0 +1,131 @@
+---
+/**
+ * About Page — ElevateUT and the EXPLORE Disc Golf initiative.
+ */
+
+import BaseLayout from "@layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="About — EXPLORE Disc Golf"
+  description="Learn about ElevateUT, the 501(c)(3) nonprofit behind EXPLORE Disc Golf, and our mission to expand disc golf on America's public lands."
+>
+  <section class="section-padding">
+    <div class="content-width">
+      <h1 class="text-4xl font-bold mb-8">About EXPLORE Disc Golf</h1>
+
+      <div class="prose max-w-none">
+        <!-- Mission -->
+        <div class="mb-12">
+          <h2 class="text-2xl font-bold mb-4">Our Mission</h2>
+          <p class="text-lg text-base-content/80">
+            <!-- TODO: Expand with ElevateUT's official mission statement -->
+            EXPLORE Disc Golf is an open source initiative by
+            <strong>ElevateUT Disc Golf</strong>, a 501(c)(3) nonprofit
+            organization, to expand disc golf access on Bureau of Land
+            Management (BLM) public lands across the United States.
+          </p>
+          <p class="text-lg text-base-content/80 mt-4">
+            245 million acres of America's public lands are managed by the BLM.
+            Only three disc golf courses exist on that land. We believe that
+            number should be much higher — and the EXPLORE Act gives us the
+            legislative framework to make it happen.
+          </p>
+        </div>
+
+        <!-- What We Do -->
+        <div class="mb-12">
+          <h2 class="text-2xl font-bold mb-4">What We Do</h2>
+          <div class="grid md:grid-cols-2 gap-6">
+            <div class="card bg-base-200">
+              <div class="card-body">
+                <h3 class="card-title text-primary">Educate</h3>
+                <p>
+                  We break down the EXPLORE Act and BLM recreation permitting
+                  process so advocates understand the path to a new course.
+                </p>
+              </div>
+            </div>
+            <div class="card bg-base-200">
+              <div class="card-body">
+                <h3 class="card-title text-primary">Connect</h3>
+                <p>
+                  Our BLM Office Finder maps every field office and helps
+                  advocates identify the right contacts for their area.
+                </p>
+              </div>
+            </div>
+            <div class="card bg-base-200">
+              <div class="card-body">
+                <h3 class="card-title text-primary">Equip</h3>
+                <p>
+                  Our AI-powered packet generator creates customized proposal
+                  materials tailored to each BLM office — for free.
+                </p>
+              </div>
+            </div>
+            <div class="card bg-base-200">
+              <div class="card-body">
+                <h3 class="card-title text-primary">Track</h3>
+                <p>
+                  We track engagement progress with BLM offices nationwide so
+                  the community can see momentum building.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- About ElevateUT -->
+        <div class="mb-12">
+          <h2 class="text-2xl font-bold mb-4">About ElevateUT</h2>
+          <p class="text-base-content/80">
+            <!-- TODO: Add more details about ElevateUT's history, leadership, and accomplishments -->
+            ElevateUT Disc Golf is a 501(c)(3) nonprofit based in Utah dedicated
+            to growing the sport of disc golf through course development,
+            community building, and advocacy. We work with land managers, local
+            governments, and disc golf organizations to create courses that are
+            accessible, sustainable, and fun.
+          </p>
+        </div>
+
+        <!-- Open Source -->
+        <div class="mb-12">
+          <h2 class="text-2xl font-bold mb-4">Open Source</h2>
+          <p class="text-base-content/80">
+            This project is open source under the
+            <a href="https://github.com/elevateut/explore-discgolf/blob/main/LICENSE" class="link link-primary">
+              Apache-2.0 license
+            </a>.
+            We believe that expanding recreation on public lands is a community
+            effort, and our tools should be free and transparent.
+          </p>
+          <div class="mt-4">
+            <a
+              href="https://github.com/elevateut/explore-discgolf"
+              class="btn btn-outline"
+              target="_blank"
+              rel="noopener"
+            >
+              View on GitHub
+            </a>
+            <a href="/resources" class="btn btn-ghost ml-2">
+              Browse Resources
+            </a>
+          </div>
+        </div>
+
+        <!-- Contact -->
+        <div>
+          <h2 class="text-2xl font-bold mb-4">Get in Touch</h2>
+          <p class="text-base-content/80">
+            <!-- TODO: Add contact form or email address -->
+            Interested in partnering, contributing, or just want to say hello?
+            Reach out to us through our GitHub repository or check back for
+            contact information.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

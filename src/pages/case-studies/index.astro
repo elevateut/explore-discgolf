@@ -1,0 +1,92 @@
+---
+/**
+ * Case Studies — listing page for disc golf courses on BLM land.
+ *
+ * Renders all entries from the "case-studies" content collection,
+ * showcasing existing and proposed courses with their status and details.
+ */
+
+import { getCollection } from "astro:content";
+import BaseLayout from "@layouts/BaseLayout.astro";
+
+const allCaseStudies = await getCollection("case-studies");
+
+// Sort by date descending (most recent first)
+const sorted = allCaseStudies.sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime(),
+);
+
+/**
+ * Badge color mapping for case study status.
+ */
+const statusColors: Record<string, string> = {
+  built: "badge-success",
+  approved: "badge-info",
+  "in-progress": "badge-warning",
+  proposed: "badge-ghost",
+};
+---
+
+<BaseLayout
+  title="Case Studies — EXPLORE Disc Golf"
+  description="Real examples of disc golf courses on BLM public lands — built, approved, in progress, and proposed."
+>
+  <section class="section-padding">
+    <div class="content-width">
+      <h1 class="text-4xl font-bold mb-4">Case Studies</h1>
+      <p class="text-lg text-base-content/70 mb-10 max-w-2xl">
+        Real stories of disc golf on public lands. Each case study documents a
+        course's journey — from proposal through permitting to reality — so
+        future advocates can learn from what worked.
+      </p>
+
+      {sorted.length === 0 ? (
+        <div class="text-center py-16">
+          <p class="text-base-content/50 italic text-lg">
+            Case studies coming soon. Know of a disc golf course on BLM land?
+          </p>
+          <a
+            href="https://github.com/elevateut/explore-discgolf"
+            class="btn btn-outline mt-4"
+            target="_blank"
+            rel="noopener"
+          >
+            Contribute on GitHub
+          </a>
+        </div>
+      ) : (
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {sorted.map((study) => (
+            <a
+              href={`/case-studies/${study.data.slug}`}
+              class="card bg-base-200 hover:shadow-md transition-shadow"
+            >
+              <div class="card-body">
+                <h3 class="card-title">{study.data.title}</h3>
+                <p class="text-sm text-base-content/70">
+                  {study.data.description}
+                </p>
+                <div class="flex flex-wrap gap-2 mt-2">
+                  <span class={`badge ${statusColors[study.data.status] ?? "badge-ghost"}`}>
+                    {study.data.status}
+                  </span>
+                  <span class="badge badge-outline">{study.data.state}</span>
+                  <span class="badge badge-outline text-xs">{study.data.blm_office}</span>
+                  {study.data.course_holes && (
+                    <span class="badge badge-ghost">{study.data.course_holes} holes</span>
+                  )}
+                </div>
+                <p class="text-xs text-base-content/50 mt-2">
+                  {new Date(study.data.date).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                  })}
+                </p>
+              </div>
+            </a>
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+</BaseLayout>

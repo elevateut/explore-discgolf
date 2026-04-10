@@ -1,0 +1,136 @@
+---
+/**
+ * Homepage — EXPLORE Disc Golf
+ *
+ * Landing page with hero, EXPLORE Act summary, BLM Office Finder,
+ * Get Involved CTA, and Latest News.
+ */
+
+import BaseLayout from "@layouts/BaseLayout.astro";
+import BLMOfficeFinder from "@components/BLMOfficeFinder.svelte";
+---
+
+<BaseLayout>
+  <!-- Hero -->
+  <section class="hero min-h-[70vh] bg-base-200">
+    <div class="hero-content text-center">
+      <div class="max-w-2xl">
+        <h1 class="text-5xl font-bold leading-tight">
+          Disc Golf on America's<br />
+          <span class="text-primary">Public Lands.</span>
+        </h1>
+        <p class="py-2 text-xl italic text-primary/80">Where the wild things fly.</p>
+        <p class="py-4 text-lg text-base-content/80">
+          The EXPLORE Act created new authorities for recreation on BLM land.
+          Disc golf fits those authorities unusually well. We're building the
+          tools and partnerships to make it happen.
+        </p>
+        <div class="flex gap-3 justify-center flex-wrap">
+          <a href="/offices" class="btn btn-primary btn-lg">Find Your BLM Office</a>
+          <a href="/explore-act" class="btn btn-outline btn-lg">Learn About the EXPLORE Act</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- What is the EXPLORE Act -->
+  <section class="section-padding bg-base-100">
+    <div class="content-width">
+      <h2 class="text-3xl font-bold mb-6 text-center">What is the EXPLORE Act?</h2>
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="card bg-base-200">
+          <div class="card-body">
+            <h3 class="card-title text-secondary">Recreation Expansion</h3>
+            <p>
+              <!-- TODO: Add concise summary of recreation expansion provisions -->
+              The EXPLORE Act directs federal agencies to expand outdoor recreation
+              opportunities on public lands, including new types of recreation
+              like disc golf.
+            </p>
+          </div>
+        </div>
+        <div class="card bg-base-200">
+          <div class="card-body">
+            <h3 class="card-title text-secondary">Simplified Permitting</h3>
+            <p>
+              <!-- TODO: Add concise summary of permitting provisions -->
+              Streamlined permit processes make it easier for organizations to
+              propose and develop recreation facilities on BLM-managed land.
+            </p>
+          </div>
+        </div>
+        <div class="card bg-base-200">
+          <div class="card-body">
+            <h3 class="card-title text-secondary">Community Partnerships</h3>
+            <p>
+              <!-- TODO: Add concise summary of partnership provisions -->
+              The Act encourages partnerships between federal agencies and local
+              organizations to maintain and improve recreation sites.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="text-center mt-8">
+        <a href="/explore-act" class="btn btn-secondary">Read the Full Breakdown</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Find Your BLM Office -->
+  <section class="section-padding bg-base-200">
+    <div class="content-width">
+      <h2 class="text-3xl font-bold mb-2 text-center">Find Your BLM Office</h2>
+      <p class="text-center text-base-content/70 mb-8 max-w-xl mx-auto">
+        Enter your zip code or browse the map to find the BLM field office
+        managing land near you. Each office page includes contact info,
+        engagement status, and a free AI-generated proposal packet.
+      </p>
+      <BLMOfficeFinder client:visible />
+    </div>
+  </section>
+
+  <!-- Get Involved -->
+  <section class="section-padding bg-base-100">
+    <div class="content-width text-center">
+      <h2 class="text-3xl font-bold mb-6">Get Involved</h2>
+      <div class="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+        <div class="card bg-primary text-primary-content">
+          <div class="card-body">
+            <h3 class="card-title">Build a Proposal Packet</h3>
+            <p>
+              Use our AI-powered packet generator to create a customized
+              engagement packet for your local BLM office — complete with
+              EXPLORE Act references and talking points.
+            </p>
+            <div class="card-actions justify-end">
+              <a href="/offices" class="btn btn-ghost">Get Started</a>
+            </div>
+          </div>
+        </div>
+        <div class="card bg-secondary text-secondary-content">
+          <div class="card-body">
+            <h3 class="card-title">Download Resources</h3>
+            <p>
+              Access one-pagers, letter templates, talking points, and guides
+              for advocating for disc golf on public lands.
+            </p>
+            <div class="card-actions justify-end">
+              <a href="/resources" class="btn btn-ghost">Browse Resources</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Latest News -->
+  <section class="section-padding bg-base-200">
+    <div class="content-width">
+      <h2 class="text-3xl font-bold mb-6 text-center">Latest News</h2>
+      <!-- TODO: Fetch latest news entries from the news content collection -->
+      <div class="text-center text-base-content/60">
+        <p>News and updates coming soon.</p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

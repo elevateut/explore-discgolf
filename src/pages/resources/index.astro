@@ -1,0 +1,87 @@
+---
+/**
+ * Resources — downloadable engagement materials listing page.
+ *
+ * Renders all entries from the "resources" content collection,
+ * grouped by category (template, one-pager, guide, talking-points).
+ */
+
+import { getCollection } from "astro:content";
+import BaseLayout from "@layouts/BaseLayout.astro";
+
+const allResources = await getCollection("resources");
+
+// Group by category
+const categories = [
+  { key: "one-pager", label: "One-Pagers", icon: "📄" },
+  { key: "template", label: "Letter Templates", icon: "📝" },
+  { key: "guide", label: "Guides", icon: "📘" },
+  { key: "talking-points", label: "Talking Points", icon: "💬" },
+] as const;
+
+const grouped = categories.map((cat) => ({
+  ...cat,
+  entries: allResources.filter((r) => r.data.category === cat.key),
+}));
+---
+
+<BaseLayout
+  title="Resources — EXPLORE Disc Golf"
+  description="Downloadable templates, one-pagers, guides, and talking points for disc golf advocacy on BLM public lands."
+>
+  <section class="section-padding">
+    <div class="content-width">
+      <h1 class="text-4xl font-bold mb-4">Resources</h1>
+      <p class="text-lg text-base-content/70 mb-10 max-w-2xl">
+        Free, downloadable materials to help you advocate for disc golf on
+        public lands. Use these when contacting your BLM field office, local
+        officials, or community partners.
+      </p>
+
+      {grouped.map((category) => (
+        <div class="mb-12">
+          <h2 class="text-2xl font-bold mb-4 border-b border-base-300 pb-2">
+            {category.label}
+          </h2>
+          {category.entries.length === 0 ? (
+            <p class="text-base-content/50 italic">
+              Resources coming soon. Check back or contribute on GitHub.
+            </p>
+          ) : (
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {category.entries.map((resource) => (
+                <div class="card bg-base-200">
+                  <div class="card-body">
+                    <h3 class="card-title text-sm">{resource.data.title}</h3>
+                    <p class="text-sm text-base-content/70">
+                      {resource.data.description}
+                    </p>
+                    <div class="card-actions justify-end mt-2">
+                      {resource.data.downloadable && resource.data.filePath ? (
+                        <a
+                          href={resource.data.filePath}
+                          class="btn btn-primary btn-sm"
+                          download
+                        >
+                          Download
+                        </a>
+                      ) : (
+                        <span class="badge badge-ghost">Coming Soon</span>
+                      )}
+                      <a
+                        href={`/resources/${resource.data.slug}`}
+                        class="btn btn-ghost btn-sm"
+                      >
+                        Read More
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,57 @@
+/*
+ * Global styles — explore_discgolf
+ *
+ * Tailwind CSS v4 directives and DaisyUI theme configuration.
+ * The "elevateut" custom theme is defined in tailwind.config.mjs.
+ *
+ * Import this file in BaseLayout.astro or your root layout to ensure
+ * Tailwind utilities and DaisyUI components are available site-wide.
+ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Force the custom DaisyUI "elevateut" theme.
+ * This is also achievable via data-theme="elevateut" on the <html> element.
+ */
+:root {
+  /* Any global CSS custom properties can go here */
+}
+
+/*
+ * Base typography adjustments.
+ * DaisyUI handles most component styling; these are page-level defaults.
+ */
+@layer base {
+  body {
+    @apply text-base-content bg-base-100;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-bold tracking-tight;
+  }
+
+  a {
+    @apply transition-colors;
+  }
+}
+
+/*
+ * Utility classes specific to this project.
+ */
+@layer components {
+  /* Consistent section spacing used across pages */
+  .section-padding {
+    @apply px-4 py-12 md:px-8 lg:px-16 lg:py-20;
+  }
+
+  /* Constrained content width for readability */
+  .content-width {
+    @apply mx-auto max-w-5xl;
+  }
+}

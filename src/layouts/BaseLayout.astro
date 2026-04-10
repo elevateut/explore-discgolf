@@ -1,0 +1,128 @@
+---
+/**
+ * BaseLayout — shared layout for all pages on the EXPLORE Disc Golf site.
+ *
+ * Provides:
+ *   - HTML head with meta tags, Open Graph placeholders, and global styles
+ *   - DaisyUI navbar with site navigation
+ *   - Main content slot
+ *   - Footer with ElevateUT attribution
+ */
+
+import "@styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+}
+
+const {
+  title = "EXPLORE Disc Golf — ElevateUT",
+  description = "Open source toolkit for expanding disc golf on America's public lands. Where the wild things fly.",
+  ogImage = "/images/og-default.png",
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en" data-theme="explore">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Open Graph / Social -->
+    <!-- TODO: Add final OG image and site-specific social meta -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Favicon -->
+    <!-- TODO: Add favicon files to /public -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+
+  <body class="min-h-screen flex flex-col">
+    <!-- Navbar -->
+    <header class="navbar bg-base-100 shadow-sm sticky top-0 z-50">
+      <div class="navbar-start">
+        <div class="dropdown">
+          <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
+            </svg>
+          </div>
+          <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
+            <li><a href="/">Home</a></li>
+            <li><a href="/explore-act">EXPLORE Act</a></li>
+            <li><a href="/offices">Find Your Office</a></li>
+            <li><a href="/resources">Resources</a></li>
+            <li><a href="/case-studies">Case Studies</a></li>
+            <li><a href="/about">About</a></li>
+          </ul>
+        </div>
+        <a href="/" class="btn btn-ghost text-xl font-bold">
+          <!-- TODO: Replace with logo image -->
+          EXPLORE Disc Golf
+        </a>
+      </div>
+
+      <div class="navbar-center hidden lg:flex">
+        <ul class="menu menu-horizontal px-1 gap-1">
+          <li><a href="/">Home</a></li>
+          <li><a href="/explore-act">EXPLORE Act</a></li>
+          <li><a href="/offices">Find Your Office</a></li>
+          <li><a href="/resources">Resources</a></li>
+          <li><a href="/case-studies">Case Studies</a></li>
+          <li><a href="/about">About</a></li>
+        </ul>
+      </div>
+
+      <div class="navbar-end">
+        <!-- TODO: Add sign-in / user menu when Supabase Auth is wired up -->
+        <a href="/offices" class="btn btn-primary btn-sm">Find Your Office</a>
+      </div>
+    </header>
+
+    <!-- Main content -->
+    <main class="flex-1">
+      <slot />
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer footer-center bg-neutral text-neutral-content p-10">
+      <aside>
+        <!-- TODO: Add ElevateUT logo -->
+        <p class="font-bold text-lg">ElevateUT Disc Golf</p>
+        <p class="text-sm opacity-80">
+          Disc golf on America's public lands. Where the wild things fly.
+        </p>
+        <p class="text-xs opacity-60 mt-2">
+          A 501(c)(3) nonprofit advocating for disc golf on America's public lands.
+        </p>
+        <p class="text-xs opacity-50 mt-1">
+          This project uses BLM public GIS data and the Claude API.
+          <br />
+          Licensed under <a href="https://github.com/elevateut/explore-discgolf/blob/main/LICENSE" class="link">Apache-2.0</a>.
+        </p>
+      </aside>
+      <nav>
+        <div class="grid grid-flow-col gap-4">
+          <!-- TODO: Add social links (GitHub, Instagram, etc.) -->
+          <a href="https://github.com/elevateut/explore-discgolf" class="link link-hover text-sm" target="_blank" rel="noopener">
+            GitHub
+          </a>
+        </div>
+      </nav>
+    </footer>
+  </body>
+</html>
