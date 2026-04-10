@@ -148,6 +148,7 @@ Please use your tools to research this specific office before responding. Start 
           });
 
           let currentToolUse: { id: string; name: string; inputJson: string } | null = null;
+          let toolWasUsed = false;
 
           for await (const event of response) {
             // Track token usage
@@ -222,6 +223,7 @@ Please use your tools to research this specific office before responding. Start 
                 });
 
                 currentToolUse = null;
+                toolWasUsed = true;
                 fullAssistantText = ""; // reset for next round
               }
             } else if (event.type === "message_stop") {
@@ -229,11 +231,10 @@ Please use your tools to research this specific office before responding. Start 
             }
           }
 
-          // Check final stop reason from the accumulated response
-          // If there was a tool use, we already handled it and should continue
-          // If the last content block was text (no pending tool), we're done
-          if (!currentToolUse) {
-            break; // No more tool calls, we're done
+          // If a tool was used this iteration, we need another round to
+          // process the results. If no tool was used, we're done.
+          if (!toolWasUsed) {
+            break;
           }
 
           toolRound++;
