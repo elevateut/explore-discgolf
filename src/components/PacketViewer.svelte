@@ -94,7 +94,7 @@
     startTimer();
 
     try {
-      const res = await fetch("/_actions/generatePacket", {
+      const res = await fetch("/api/packet/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -103,15 +103,9 @@
         }),
       });
 
-      if (!res.ok) {
-        throw new Error(`Server responded with ${res.status}`);
-      }
-
-      const json = await res.json();
-      const data = json.data ?? json;
+      const data = await res.json();
 
       if (data.error) {
-        // Distinguish API key not configured from other errors
         if (data.error.includes("API key") || data.error.includes("not available")) {
           status = "unavailable";
           errorMessage = data.error;
@@ -122,14 +116,15 @@
         return;
       }
 
-      if (data.packet) {
-        packet = data.packet;
-        source = data.source ?? null;
+      const result = data.data ?? data;
+      if (result.packet) {
+        packet = result.packet;
+        source = result.source ?? null;
         activeTab = 0;
         status = "success";
       } else {
         status = "error";
-        errorMessage = "Unexpected response format from the server.";
+        errorMessage = "No packet data in response.";
       }
     } catch (err: any) {
       status = "error";
