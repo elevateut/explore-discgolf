@@ -349,6 +349,27 @@
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   }
 
+  /**
+   * Show the nearest offices to a given lat/lng, fly the map there,
+   * and select the closest one.
+   */
+  function showNearby(lat: number, lng: number, zoom = 6) {
+    geocodeCenter = [lng, lat];
+    const withDistance = offices.map((o) => ({
+      office: o,
+      distance: haversineDistance(lat, lng, o.lat, o.lng),
+    }));
+    withDistance.sort((a, b) => a.distance - b.distance);
+    sortedByDistance = withDistance.slice(0, 20).map((w) => w.office);
+
+    if (map) {
+      map.flyTo({ center: [lng, lat], zoom, duration: 1200 });
+    }
+    if (sortedByDistance.length) {
+      selectOffice(sortedByDistance[0].id);
+    }
+  }
+
   async function geocodeAndSearch(query: string) {
     isGeocoding = true;
     geocodeError = null;
@@ -370,30 +391,46 @@
 
       const lat = parseFloat(results[0].lat);
       const lng = parseFloat(results[0].lon);
-      geocodeCenter = [lng, lat];
-
-      // Sort offices by distance from geocoded point
-      const withDistance = offices.map((o) => ({
-        office: o,
-        distance: haversineDistance(lat, lng, o.lat, o.lng),
-      }));
-      withDistance.sort((a, b) => a.distance - b.distance);
-      sortedByDistance = withDistance.slice(0, 20).map((w) => w.office);
-
-      // Fly map to the geocoded location
-      if (map) {
-        map.flyTo({ center: [lng, lat], zoom: 6, duration: 1200 });
-      }
-
-      // Select the nearest office
-      if (sortedByDistance.length) {
-        selectOffice(sortedByDistance[0].id);
-      }
+      showNearby(lat, lng);
     } catch (err: any) {
       geocodeError = err.message || "Geocoding failed";
     } finally {
       isGeocoding = false;
     }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Browser geolocation
+  // ---------------------------------------------------------------------------
+
+  let locating = $state(false);
+  let locationDismissed = $state(false);
+
+  async function useMyLocation() {
+    if (!navigator.geolocation) {
+      geocodeError = "Geolocation is not supported by your browser.";
+      return;
+    }
+    locating = true;
+    geocodeError = null;
+    locationDismissed = true;
+
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        locating = false;
+        searchQuery = "";
+        showNearby(pos.coords.latitude, pos.coords.longitude, 7);
+      },
+      (err) => {
+        locating = false;
+        if (err.code === err.PERMISSION_DENIED) {
+          geocodeError = "Location access denied. Try searching by zip code instead.";
+        } else {
+          geocodeError = "Could not determine your location. Try searching by zip code.";
+        }
+      },
+      { timeout: 10000, maximumAge: 300000 },
+    );
   }
 
   async function handleSearch() {
@@ -423,7 +460,30 @@
   }
 </script>
 
-<div class="flex flex-col gap-4 w-full">
+<div class="flex flex-col gap-3 w-full">
+  <!-- Location prompt banner -->
+  {#if !locationDismissed && !sortedByDistance.length && !searchQuery}
+    <div class="flex items-center gap-3 bg-info/10 border border-info/20 rounded-lg px-4 py-3">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-info shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+      </svg>
+      <p class="text-sm text-base-content/70 flex-1">Find BLM offices near you?</p>
+      <button class="btn btn-info btn-sm text-white" onclick={useMyLocation} disabled={locating}>
+        {#if locating}
+          <span class="loading loading-spinner loading-xs"></span>
+        {:else}
+          Use my location
+        {/if}
+      </button>
+      <button class="btn btn-ghost btn-xs" onclick={() => locationDismissed = true} aria-label="Dismiss">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+        </svg>
+      </button>
+    </div>
+  {/if}
+
   <!-- Search bar -->
   <div class="flex gap-2">
     <input
@@ -435,6 +495,21 @@
       onkeydown={handleKeydown}
       aria-label="Search BLM offices"
     />
+    <button
+      class="btn btn-ghost btn-square"
+      onclick={useMyLocation}
+      disabled={locating}
+      title="Use my location"
+      aria-label="Use my location"
+    >
+      {#if locating}
+        <span class="loading loading-spinner loading-sm"></span>
+      {:else}
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3A8.994 8.994 0 0013 3.06V1h-2v2.06A8.994 8.994 0 003.06 11H1v2h2.06A8.994 8.994 0 0011 20.94V23h2v-2.06A8.994 8.994 0 0020.94 13H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z" />
+        </svg>
+      {/if}
+    </button>
     <button class="btn btn-primary" onclick={handleSearch} disabled={isGeocoding}>
       {#if isGeocoding}
         <span class="loading loading-spinner loading-sm"></span>
