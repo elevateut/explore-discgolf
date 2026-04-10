@@ -191,6 +191,38 @@ Visual elements:
 `,
   },
 
+  'favicon': {
+    filename: 'favicon-generated.png',
+    prompt: `${BRAND_CONTEXT}
+
+IMAGE REQUIREMENTS (OVERRIDE):
+- Dimensions: 512x512 pixels (SQUARE — this is a favicon/app icon)
+- This is NOT an OG image — it is a favicon / app icon
+- Do NOT include any text whatsoever — no words, no letters, no URL
+- Must be instantly recognizable at 32x32 pixels and 16x16 pixels
+- Simple, bold shapes with strong silhouette — avoid fine detail
+
+LOGO REFERENCE:
+The attached image is the "EXPLORE Disc Golf" logo. It contains these iconic visual elements:
+- Desert mesas/buttes (inside the letters E and X)
+- A saguaro cactus (left side)
+- A lone tree on a trail/path line
+- Mountain peaks with snow caps (right side)
+- Evergreen/pine trees (right side)
+
+ICON DESIGN:
+Create a single iconic favicon that distills the brand into one simple mark. Ideas to consider:
+- A stylized mesa/butte silhouette with a disc golf disc flying past it
+- Mountain peaks with a disc in flight
+- The lone tree from the logo on a mesa with a disc
+- A landscape silhouette combining desert and mountain elements with a disc
+
+Use Night Sky (#1E2D3B) as the background with rounded corners (like an app icon).
+Use Terra Cotta (#B85C38) and Sandstone (#F5F0E8) for the icon elements.
+Keep it EXTREMELY simple — 2-3 shapes maximum. It must read clearly as a tiny browser tab icon.
+`,
+  },
+
   'blm': {
     filename: 'og-blm.png',
     prompt: `${BRAND_CONTEXT}
