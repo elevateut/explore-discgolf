@@ -6,14 +6,12 @@ import type Anthropic from "@anthropic-ai/sdk";
 import { getRecreationSites } from "@lib/blm/client";
 import { getOfficeEngagementStatus } from "@lib/supabase/queries";
 import { getSupabaseClient } from "@lib/supabase/client";
-import { getNearbyCourses, isFliptAvailable } from "@lib/flipt/client";
 import type { BBox } from "@lib/blm/types";
 
 /** Human-readable display names for tool execution in the chat UI. */
 export const TOOL_DISPLAY_NAMES: Record<string, string> = {
   query_blm_recreation_sites: "Researching BLM recreation sites...",
   query_blm_office_page: "Looking up office contacts and details...",
-  query_nearby_courses: "Searching for nearby disc golf courses...",
   get_engagement_history: "Checking engagement history...",
 };
 
@@ -63,30 +61,7 @@ export const PACKET_GENERATION_TOOLS: Anthropic.Tool[] = [
       required: ["website_url"],
     },
   },
-  {
-    name: "query_nearby_courses",
-    description:
-      "Search for existing disc golf courses near coordinates. Powered by FLiPT. " +
-      "Returns course names, hole counts, and distances.",
-    input_schema: {
-      type: "object" as const,
-      properties: {
-        latitude: {
-          type: "number",
-          description: "Latitude of the search center.",
-        },
-        longitude: {
-          type: "number",
-          description: "Longitude of the search center.",
-        },
-        radius_miles: {
-          type: "number",
-          description: "Search radius in miles (default 50).",
-        },
-      },
-      required: ["latitude", "longitude"],
-    },
-  },
+  // query_nearby_courses removed — FLiPT integration deferred
   {
     name: "get_engagement_history",
     description:
@@ -227,45 +202,7 @@ export async function handleToolCall(
       }
     }
 
-    case "query_nearby_courses": {
-      const lat = toolInput.latitude as number;
-      const lng = toolInput.longitude as number;
-      const radius = (toolInput.radius_miles as number) ?? 50;
-
-      if (!isFliptAvailable()) {
-        return JSON.stringify({
-          message: "Course search requires FLiPT API key. Reference known BLM courses instead.",
-          knownBLMCourses: [
-            { name: "Stewart Pond DGC", state: "OR", holes: 18, office: "Northwest Oregon District" },
-            { name: "Three Peaks DGC", state: "UT", holes: 18, office: "Cedar City Field Office" },
-            { name: "Ironside DGC", state: "UT", holes: 18, office: "Cedar City Field Office" },
-            { name: "Ward Mountain DGC", state: "NV", holes: 14, office: "Bristlecone Field Office" },
-            { name: "Barnes Grade DGC", state: "OR", holes: 9, office: "Applegate Field Office" },
-          ],
-        });
-      }
-
-      try {
-        const result = await getNearbyCourses(lat, lng, radius);
-        return JSON.stringify({
-          poweredBy: "FLiPT",
-          totalCount: result.totalCount,
-          courses: result.items.map((c) => ({
-            name: c.name,
-            location: c.location,
-            distanceMiles: c.distanceMiles,
-            numberOfHoles: c.numberOfHoles,
-            rating: c.udiscRating,
-            ratingCount: c.udiscRatingCount,
-            features: c.courseFeatures,
-          })),
-        });
-      } catch (err: any) {
-        return JSON.stringify({
-          error: "Failed to query nearby courses: " + err.message,
-        });
-      }
-    }
+    // query_nearby_courses handler removed — FLiPT integration deferred
 
     case "get_engagement_history": {
       const officeCode = toolInput.office_id as string;
