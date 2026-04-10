@@ -6,6 +6,7 @@ import type Anthropic from "@anthropic-ai/sdk";
 import { getRecreationSites } from "@lib/blm/client";
 import { getOfficeEngagementStatus } from "@lib/supabase/queries";
 import { getSupabaseClient } from "@lib/supabase/client";
+import { getNearbyCourses, isFliptAvailable } from "@lib/flipt/client";
 import type { BBox } from "@lib/blm/types";
 
 // ---------------------------------------------------------------------------
@@ -202,21 +203,43 @@ export async function handleToolCall(
     }
 
     case "query_nearby_courses": {
-      // FLiPT integration coming — return placeholder
-      return JSON.stringify({
-        message:
-          "Nearby disc golf course search is powered by FLiPT (coming soon). " +
-          "For now, reference the BLM recreation sites data and known BLM disc " +
-          "golf courses: Stewart Pond (OR), Three Peaks (UT), Ironside (UT), " +
-          "Ward Mountain (NV), Barnes Grade (OR).",
-        knownBLMCourses: [
-          { name: "Stewart Pond DGC", state: "OR", holes: 18, office: "Northwest Oregon District" },
-          { name: "Three Peaks DGC", state: "UT", holes: 18, office: "Cedar City Field Office" },
-          { name: "Ironside DGC", state: "UT", holes: 18, office: "Cedar City Field Office" },
-          { name: "Ward Mountain DGC", state: "NV", holes: 14, office: "Bristlecone Field Office" },
-          { name: "Barnes Grade DGC", state: "OR", holes: 9, office: "Applegate Field Office" },
-        ],
-      });
+      const lat = toolInput.latitude as number;
+      const lng = toolInput.longitude as number;
+      const radius = (toolInput.radius_miles as number) ?? 50;
+
+      if (!isFliptAvailable()) {
+        return JSON.stringify({
+          message: "Course search requires FLiPT API key. Reference known BLM courses instead.",
+          knownBLMCourses: [
+            { name: "Stewart Pond DGC", state: "OR", holes: 18, office: "Northwest Oregon District" },
+            { name: "Three Peaks DGC", state: "UT", holes: 18, office: "Cedar City Field Office" },
+            { name: "Ironside DGC", state: "UT", holes: 18, office: "Cedar City Field Office" },
+            { name: "Ward Mountain DGC", state: "NV", holes: 14, office: "Bristlecone Field Office" },
+            { name: "Barnes Grade DGC", state: "OR", holes: 9, office: "Applegate Field Office" },
+          ],
+        });
+      }
+
+      try {
+        const result = await getNearbyCourses(lat, lng, radius);
+        return JSON.stringify({
+          poweredBy: "FLiPT",
+          totalCount: result.totalCount,
+          courses: result.items.map((c) => ({
+            name: c.name,
+            location: c.location,
+            distanceMiles: c.distanceMiles,
+            numberOfHoles: c.numberOfHoles,
+            rating: c.udiscRating,
+            ratingCount: c.udiscRatingCount,
+            features: c.courseFeatures,
+          })),
+        });
+      } catch (err: any) {
+        return JSON.stringify({
+          error: "Failed to query nearby courses: " + err.message,
+        });
+      }
     }
 
     case "get_engagement_history": {
