@@ -149,6 +149,25 @@ function renderMarkdown(doc: PDFKit.PDFDocument, md: string) {
     const line = raw.trim();
     if (!line) { doc.y += 5; continue; }
 
+    // # Heading 1
+    if (line.startsWith("# ") && !line.startsWith("## ")) {
+      ensureSpace(doc, 36);
+      doc.y += 8;
+      doc.fillColor(C.nightSky).font("Jakarta").fontSize(15)
+        .text(line.slice(2), ML, doc.y, { width: CW });
+      doc.y += 4;
+      continue;
+    }
+
+    // --- Horizontal rule
+    if (/^[-*_]{3,}$/.test(line)) {
+      doc.y += 6;
+      doc.moveTo(ML, doc.y).lineTo(ML + CW, doc.y)
+        .strokeColor(C.base300).lineWidth(0.75).stroke();
+      doc.y += 8;
+      continue;
+    }
+
     // ## Heading 2
     if (line.startsWith("## ")) {
       ensureSpace(doc, 30);
@@ -191,7 +210,7 @@ function renderMarkdown(doc: PDFKit.PDFDocument, md: string) {
         doc.font("Inter").text(bold[2]);
       } else {
         doc.fillColor(C.textBody).font("Inter").fontSize(9.5)
-          .text(stripBold(text), ML + 16, doc.y, { width: CW - 16 });
+          .text(stripMarkdown(text), ML + 16, doc.y, { width: CW - 16 });
       }
       doc.y += 1;
       continue;
@@ -205,7 +224,7 @@ function renderMarkdown(doc: PDFKit.PDFDocument, md: string) {
       doc.fillColor(C.terraCotta).font("Inter-B").fontSize(9.5)
         .text(num[1] + ".", ML, baseY, { width: 14, align: "right" });
       doc.fillColor(C.textBody).font("Inter").fontSize(9.5)
-        .text(stripBold(num[2]), ML + 18, baseY, { width: CW - 18 });
+        .text(stripMarkdown(num[2]), ML + 18, baseY, { width: CW - 18 });
       doc.y += 1;
       continue;
     }
@@ -213,13 +232,19 @@ function renderMarkdown(doc: PDFKit.PDFDocument, md: string) {
     // Regular paragraph
     ensureSpace(doc, 16);
     doc.fillColor(C.textBody).font("Inter").fontSize(9.5)
-      .text(stripBold(line), ML, doc.y, { width: CW, lineGap: 2 });
+      .text(stripMarkdown(line), ML, doc.y, { width: CW, lineGap: 2 });
     doc.y += 2;
   }
 }
 
-function stripBold(s: string): string {
-  return s.replace(/\*\*(.+?)\*\*/g, "$1");
+function stripMarkdown(s: string): string {
+  return s
+    .replace(/\*\*(.+?)\*\*/g, "$1")       // **bold**
+    .replace(/\*(.+?)\*/g, "$1")            // *italic*
+    .replace(/_(.+?)_/g, "$1")              // _italic_
+    .replace(/`(.+?)`/g, "$1")              // `code`
+    .replace(/\[(.+?)\]\((.+?)\)/g, "$1")   // [text](url) → text
+    .replace(/^#{1,6}\s+/, "");             // stray heading markers
 }
 
 // ---------------------------------------------------------------------------

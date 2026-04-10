@@ -9,6 +9,14 @@ import { getSupabaseClient } from "@lib/supabase/client";
 import { getNearbyCourses, isFliptAvailable } from "@lib/flipt/client";
 import type { BBox } from "@lib/blm/types";
 
+/** Human-readable display names for tool execution in the chat UI. */
+export const TOOL_DISPLAY_NAMES: Record<string, string> = {
+  query_blm_recreation_sites: "Researching BLM recreation sites...",
+  query_blm_office_page: "Looking up office contacts and details...",
+  query_nearby_courses: "Searching for nearby disc golf courses...",
+  get_engagement_history: "Checking engagement history...",
+};
+
 // ---------------------------------------------------------------------------
 // Tool Definitions
 // ---------------------------------------------------------------------------

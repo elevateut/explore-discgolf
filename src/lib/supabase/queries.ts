@@ -226,3 +226,124 @@ export async function saveGeneratedPacket(
   if (error) throw error;
   return data as GeneratedPacket;
 }
+
+// ---------------------------------------------------------------------------
+// Conversation queries
+// ---------------------------------------------------------------------------
+
+export interface Conversation {
+  id: string;
+  office_id: string;
+  session_id: string;
+  title: string | null;
+  status: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ConversationMessage {
+  id: string;
+  conversation_id: string;
+  role: "user" | "assistant" | "system";
+  content: string;
+  tool_calls: unknown | null;
+  created_at: string;
+}
+
+/** Create a new conversation for an office. */
+export async function createConversation(
+  officeId: string,
+  sessionId: string,
+): Promise<Conversation | null> {
+  const supabase = getSupabaseServiceClient();
+  if (!supabase) return null;
+
+  const { data, error } = await supabase
+    .from("conversations")
+    .insert({ office_id: officeId, session_id: sessionId })
+    .select()
+    .single();
+
+  if (error) {
+    console.warn("[supabase/queries] createConversation failed:", error.message);
+    return null;
+  }
+  return data as Conversation;
+}
+
+/** Get the most recent active conversation for an office + session. */
+export async function getActiveConversation(
+  officeId: string,
+  sessionId: string,
+): Promise<Conversation | null> {
+  const supabase = getSupabaseClient();
+  if (!supabase) return null;
+
+  const { data, error } = await supabase
+    .from("conversations")
+    .select("*")
+    .eq("office_id", officeId)
+    .eq("session_id", sessionId)
+    .eq("status", "active")
+    .order("updated_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (error) return null;
+  return (data as Conversation) ?? null;
+}
+
+/** Get all messages for a conversation, ordered chronologically. */
+export async function getConversationMessages(
+  conversationId: string,
+): Promise<ConversationMessage[]> {
+  const supabase = getSupabaseClient();
+  if (!supabase) return [];
+
+  const { data, error } = await supabase
+    .from("conversation_messages")
+    .select("*")
+    .eq("conversation_id", conversationId)
+    .order("created_at", { ascending: true });
+
+  if (error) return [];
+  return (data ?? []) as ConversationMessage[];
+}
+
+/** Save a message to a conversation. */
+export async function saveConversationMessage(
+  conversationId: string,
+  role: "user" | "assistant" | "system",
+  content: string,
+  toolCalls?: unknown,
+): Promise<void> {
+  const supabase = getSupabaseServiceClient();
+  if (!supabase) return;
+
+  await supabase.from("conversation_messages").insert({
+    conversation_id: conversationId,
+    role,
+    content,
+    tool_calls: toolCalls ?? null,
+  });
+
+  // Touch conversation updated_at
+  await supabase
+    .from("conversations")
+    .update({ updated_at: new Date().toISOString() })
+    .eq("id", conversationId);
+}
+
+/** Update conversation status. */
+export async function updateConversationStatus(
+  conversationId: string,
+  status: string,
+): Promise<void> {
+  const supabase = getSupabaseServiceClient();
+  if (!supabase) return;
+
+  await supabase
+    .from("conversations")
+    .update({ status, updated_at: new Date().toISOString() })
+    .eq("id", conversationId);
+}
