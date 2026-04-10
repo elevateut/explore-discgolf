@@ -121,9 +121,16 @@
           role: m.role as "user" | "assistant",
           content: m.content,
         }));
+        return;
       }
     } catch {
-      // Silently fail — user can start a new conversation
+      // Silently fail
+    }
+
+    // No existing conversation — auto-start with an intro message
+    if (messages.length === 0) {
+      inputText = `What are the best opportunities for disc golf development at this office?`;
+      await sendMessage();
     }
   }
 

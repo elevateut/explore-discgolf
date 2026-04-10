@@ -68,16 +68,34 @@ export const POST: APIRoute = async ({ request }) => {
       content: m.content,
     }));
 
-  // Add office context to the first user message if this is the start
-  let enrichedUserMessage = userMessage;
+  // On first message, inject office context as a preceding user+assistant exchange
+  // so Claude knows exactly which office we're discussing
   if (priorMessages.length === 0) {
     const phone = dbOffice?.phone ?? (staticOffice as any)?.phone ?? "";
     const email = dbOffice?.email ?? (staticOffice as any)?.email ?? "";
     const website = dbOffice?.website_url ?? (staticOffice as any)?.websiteUrl ?? "";
-    enrichedUserMessage = `[Context: The user is exploring ideas for ${officeName} (${officeId}) in ${dbOffice?.state ?? staticOffice?.state ?? ""}. Office phone: ${phone || "unknown"}. Email: ${email || "unknown"}. Website: ${website || "unknown"}.]\n\n${userMessage}`;
+    const state = dbOffice?.state ?? staticOffice?.state ?? "";
+    const lat = dbOffice?.lat ? Number(dbOffice.lat) : staticOffice?.lat ?? 0;
+    const lng = dbOffice?.lng ? Number(dbOffice.lng) : staticOffice?.lng ?? 0;
+
+    const contextMsg = `I'm on the page for the ${officeName} in ${state}. Here's what I know about this office:
+- BLM Unit Code: ${officeId}
+- State: ${state}
+- Coordinates: ${lat}, ${lng}
+- Phone: ${phone || "not available"}
+- Email: ${email || "not available"}
+- Website: ${website || "not available"}
+
+Please use your tools to research this specific office before responding. Start by looking up their BLM website and recreation sites. The user's question is below.`;
+
+    priorMessages.push({ role: "user", content: contextMsg });
+    priorMessages.push({
+      role: "assistant",
+      content: `I'll research the ${officeName} right away. Let me look up their recreation portfolio and contact details.`,
+    });
   }
 
-  priorMessages.push({ role: "user", content: enrichedUserMessage });
+  priorMessages.push({ role: "user", content: userMessage });
 
   // Save user message to DB
   if (conversationId) {
