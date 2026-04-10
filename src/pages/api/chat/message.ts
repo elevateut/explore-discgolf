@@ -148,7 +148,9 @@ Please use your tools to research this specific office before responding. Start 
           });
 
           let currentToolUse: { id: string; name: string; inputJson: string } | null = null;
-          let toolWasUsed = false;
+          // Collect all tool calls from this single response
+          const pendingTools: Array<{ id: string; name: string; input: Record<string, unknown> }> = [];
+          let responseText = "";
 
           for await (const event of response) {
             // Track token usage
@@ -162,9 +164,7 @@ Please use your tools to research this specific office before responding. Start 
             }
 
             if (event.type === "content_block_start") {
-              if (event.content_block.type === "text") {
-                // Text block starting
-              } else if (event.content_block.type === "tool_use") {
+              if (event.content_block.type === "tool_use") {
                 currentToolUse = {
                   id: event.content_block.id,
                   name: event.content_block.name,
@@ -178,6 +178,7 @@ Please use your tools to research this specific office before responding. Start 
               }
             } else if (event.type === "content_block_delta") {
               if (event.delta.type === "text_delta") {
+                responseText += event.delta.text;
                 fullAssistantText += event.delta.text;
                 send({ type: "text_delta", text: event.delta.text });
               } else if (event.delta.type === "input_json_delta" && currentToolUse) {
@@ -185,57 +186,47 @@ Please use your tools to research this specific office before responding. Start 
               }
             } else if (event.type === "content_block_stop") {
               if (currentToolUse) {
-                // Execute the tool
                 let toolInput: Record<string, unknown> = {};
-                try {
-                  toolInput = JSON.parse(currentToolUse.inputJson);
-                } catch {}
-
-                const toolResult = await handleToolCall(currentToolUse.name, toolInput);
-                send({
-                  type: "tool_done",
-                  name: currentToolUse.name,
-                  success: true,
-                });
-
-                // Build the tool result message for the next round
-                const assistantContent: Anthropic.ContentBlockParam[] = [];
-
-                // Include any text that came before the tool use
-                if (fullAssistantText.trim()) {
-                  assistantContent.push({ type: "text", text: fullAssistantText });
-                }
-                assistantContent.push({
-                  type: "tool_use",
-                  id: currentToolUse.id,
-                  name: currentToolUse.name,
-                  input: toolInput,
-                });
-
-                messages.push({ role: "assistant", content: assistantContent });
-                messages.push({
-                  role: "user",
-                  content: [{
-                    type: "tool_result",
-                    tool_use_id: currentToolUse.id,
-                    content: toolResult,
-                  }],
-                });
-
+                try { toolInput = JSON.parse(currentToolUse.inputJson); } catch {}
+                pendingTools.push({ id: currentToolUse.id, name: currentToolUse.name, input: toolInput });
                 currentToolUse = null;
-                toolWasUsed = true;
-                fullAssistantText = ""; // reset for next round
               }
-            } else if (event.type === "message_stop") {
-              // Check if we need another round (tool_use)
             }
           }
 
-          // If a tool was used this iteration, we need another round to
-          // process the results. If no tool was used, we're done.
-          if (!toolWasUsed) {
+          // If no tools were called, we're done
+          if (pendingTools.length === 0) {
             break;
           }
+
+          // Execute all tools and build the response
+          const assistantContent: Anthropic.ContentBlockParam[] = [];
+          if (responseText.trim()) {
+            assistantContent.push({ type: "text", text: responseText });
+          }
+          const toolResults: Anthropic.ToolResultBlockParam[] = [];
+
+          for (const tool of pendingTools) {
+            assistantContent.push({
+              type: "tool_use",
+              id: tool.id,
+              name: tool.name,
+              input: tool.input,
+            });
+
+            const result = await handleToolCall(tool.name, tool.input);
+            send({ type: "tool_done", name: tool.name, success: true });
+
+            toolResults.push({
+              type: "tool_result",
+              tool_use_id: tool.id,
+              content: result,
+            });
+          }
+
+          messages.push({ role: "assistant", content: assistantContent });
+          messages.push({ role: "user", content: toolResults });
+          fullAssistantText = ""; // reset for next round
 
           toolRound++;
         }
