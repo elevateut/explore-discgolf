@@ -16,7 +16,6 @@
     "@astrojs/vercel": "^9.0.5",
     "@supabase/supabase-js": "^2.49.0",
     "astro": "^5.7.0",
-    "maplibre-gl": "^5.1.0",
     "svelte": "^5.25.0"
   },
   "devDependencies": {
