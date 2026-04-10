@@ -6,6 +6,16 @@ state: UT
 status: built
 course_holes: 18
 date: 2018-01-01
+image: /images/case-studies/three-peaks.jpg
+image_alt: "Disc golf basket perched on granite formations at Three Peaks Recreation Area"
+udisc_url: https://udisc.com/courses/three-peaks-hHdB
+gallery:
+  - src: /images/case-studies/three-peaks-2.jpg
+    alt: "Disc golf basket atop a large boulder formation at Three Peaks"
+  - src: /images/case-studies/three-peaks-3.jpg
+    alt: "Basket set among granite boulders with desert terrain at Three Peaks"
+  - src: /images/case-studies/three-peaks-4.jpg
+    alt: "Basket nestled between rocks and juniper trees at Three Peaks"
 ---
 
 Three Peaks Disc Golf Course is one of two 18-hole courses in BLM's Three Peaks Recreation Area near Cedar City, Utah. Built through a partnership between the **Southern Utah University Disc Golf Club** and BLM Utah, it represents the strongest existing BLM disc golf relationship in the country.

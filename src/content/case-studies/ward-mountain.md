@@ -6,6 +6,16 @@ state: NV
 status: built
 course_holes: 14
 date: 2017-01-01
+image: /images/case-studies/ward-mountain.jpg
+image_alt: "Sagebrush landscape with mountains at sunset near Ward Mountain Recreation Area"
+udisc_url: https://udisc.com/courses/ward-recreation-area-lNmO
+gallery:
+  - src: /images/case-studies/ward-mountain-2.jpg
+    alt: "Dog and disc on the course with basket and junipers at Ward Mountain"
+  - src: /images/case-studies/ward-mountain-3.jpg
+    alt: "Basket #7 among sagebrush and juniper at Ward Mountain"
+  - src: /images/case-studies/ward-mountain-4.jpg
+    alt: "Players throwing with snow-capped mountains in the background at Ward Mountain"
 ---
 
 Ward Mountain Recreation Area in Ely, Nevada, is home to a 14-hole disc golf course on BLM land managed by the **Bristlecone Field Office**. While less documented than Stewart Pond or Three Peaks, Ward Mountain represents an important data point: disc golf on BLM land isn't limited to large offices or high-profile recreation areas.

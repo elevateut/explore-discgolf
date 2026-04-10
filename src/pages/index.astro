@@ -29,57 +29,64 @@ const latestNews = allNews
 <BaseLayout>
   <!-- Hero -->
   <section class="relative overflow-hidden bg-neutral text-neutral-content">
-    <!-- Gradient overlay -->
-    <div class="absolute inset-0 bg-gradient-to-br from-neutral via-neutral/95 to-primary/20"></div>
-    <!-- Subtle grid pattern -->
-    <div class="absolute inset-0 opacity-[0.03]" style="background-image: url('data:image/svg+xml,%3Csvg width=&quot;60&quot; height=&quot;60&quot; viewBox=&quot;0 0 60 60&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;%3E%3Cg fill=&quot;none&quot; fill-rule=&quot;evenodd&quot;%3E%3Cg fill=&quot;%23ffffff&quot; fill-opacity=&quot;1&quot;%3E%3Cpath d=&quot;M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z&quot;/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+    <div class="max-w-7xl mx-auto px-4 lg:px-8 py-16 md:py-24 lg:py-32">
+      <div class="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+        <!-- Text column -->
+        <div>
+          <!-- Nonprofit badge -->
+          <div class="inline-flex items-center gap-2 rounded-full bg-neutral-content/10 border border-neutral-content/10 px-4 py-1.5 text-xs font-medium text-neutral-content/70 mb-8">
+            <span class="inline-block w-1.5 h-1.5 rounded-full bg-secondary"></span>
+            501(c)(3) nonprofit initiative by ElevateUT
+          </div>
 
-    <div class="relative max-w-7xl mx-auto px-4 lg:px-8 py-24 md:py-32 lg:py-40">
-      <div class="max-w-3xl">
-        <!-- Nonprofit badge -->
-        <div class="inline-flex items-center gap-2 rounded-full bg-neutral-content/10 border border-neutral-content/10 px-4 py-1.5 text-xs font-medium text-neutral-content/70 mb-8">
-          <span class="inline-block w-1.5 h-1.5 rounded-full bg-secondary"></span>
-          501(c)(3) nonprofit initiative by ElevateUT
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.1] tracking-tight">
+            Disc golf on<br />
+            America's <span class="text-primary">public lands.</span>
+          </h1>
+
+          <p class="mt-4 text-lg sm:text-xl text-neutral-content/60 italic font-heading">
+            Where the wild things fly.
+          </p>
+
+          <p class="mt-6 text-base sm:text-lg text-neutral-content/70 max-w-2xl leading-relaxed">
+            The EXPLORE Act created new federal authorities for recreation on BLM land.
+            Disc golf fits those authorities unusually well. We're building the open source
+            tools and partnerships to make it happen -- across 245 million acres.
+          </p>
+
+          <div class="mt-10 flex flex-wrap gap-4">
+            <a href="/offices" class="btn btn-primary btn-lg shadow-lg shadow-primary/20 font-semibold">
+              Find Your BLM Office
+            </a>
+            <a href="/explore-act" class="btn btn-outline btn-lg border-neutral-content/30 text-neutral-content hover:bg-neutral-content/10 hover:border-neutral-content/50 font-semibold">
+              Learn About the EXPLORE Act
+            </a>
+          </div>
+
+          <!-- Quick stats -->
+          <div class="mt-14 flex flex-wrap gap-8 sm:gap-12 text-sm">
+            <div>
+              <p class="text-2xl sm:text-3xl font-extrabold text-primary font-heading">245M</p>
+              <p class="text-neutral-content/70 mt-0.5">acres of BLM land</p>
+            </div>
+            <div>
+              <p class="text-2xl sm:text-3xl font-extrabold text-accent font-heading">5</p>
+              <p class="text-neutral-content/70 mt-0.5">existing BLM courses</p>
+            </div>
+            <div>
+              <p class="text-2xl sm:text-3xl font-extrabold text-primary-content font-heading">21.2M</p>
+              <p class="text-neutral-content/70 mt-0.5">rounds played nationwide</p>
+            </div>
+          </div>
         </div>
 
-        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.1] tracking-tight">
-          Disc golf on<br />
-          America's <span class="text-primary">public lands.</span>
-        </h1>
-
-        <p class="mt-4 text-lg sm:text-xl text-neutral-content/60 italic font-heading">
-          Where the wild things fly.
-        </p>
-
-        <p class="mt-6 text-base sm:text-lg text-neutral-content/70 max-w-2xl leading-relaxed">
-          The EXPLORE Act created new federal authorities for recreation on BLM land.
-          Disc golf fits those authorities unusually well. We're building the open source
-          tools and partnerships to make it happen -- across 245 million acres.
-        </p>
-
-        <div class="mt-10 flex flex-wrap gap-4">
-          <a href="/offices" class="btn btn-primary btn-lg shadow-lg shadow-primary/20 font-semibold">
-            Find Your BLM Office
-          </a>
-          <a href="/explore-act" class="btn btn-outline btn-lg border-neutral-content/30 text-neutral-content hover:bg-neutral-content/10 hover:border-neutral-content/50 font-semibold">
-            Learn About the EXPLORE Act
-          </a>
-        </div>
-
-        <!-- Quick stats -->
-        <div class="mt-14 flex flex-wrap gap-8 sm:gap-12 text-sm">
-          <div>
-            <p class="text-2xl sm:text-3xl font-extrabold text-primary font-heading">245M</p>
-            <p class="text-neutral-content/70 mt-0.5">acres of BLM land</p>
-          </div>
-          <div>
-            <p class="text-2xl sm:text-3xl font-extrabold text-accent font-heading">5</p>
-            <p class="text-neutral-content/70 mt-0.5">existing BLM courses</p>
-          </div>
-          <div>
-            <p class="text-2xl sm:text-3xl font-extrabold text-primary-content font-heading">21.2M</p>
-            <p class="text-neutral-content/70 mt-0.5">annual rounds played</p>
-          </div>
+        <!-- Thunderbird image column -->
+        <div class="hidden lg:block">
+          <img
+            src="/images/thunderbird-hero.png"
+            alt="Thunderbird soaring over western public lands — Where the wild things fly"
+            class="w-full rounded-xl shadow-2xl shadow-primary/10"
+          />
         </div>
       </div>
     </div>

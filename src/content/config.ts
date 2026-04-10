@@ -31,6 +31,13 @@ const caseStudies = defineCollection({
     status: z.enum(["built", "approved", "proposed", "in-progress"]),
     course_holes: z.number().optional(),
     date: z.coerce.date(),
+    image: z.string().optional(),
+    image_alt: z.string().optional(),
+    udisc_url: z.string().optional(),
+    gallery: z.array(z.object({
+      src: z.string(),
+      alt: z.string(),
+    })).optional(),
   }),
 });
 

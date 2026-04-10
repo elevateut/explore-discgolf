@@ -6,6 +6,15 @@ state: OR
 status: approved
 course_holes: 9
 date: 2025-09-01
+image: /images/case-studies/barnes-grade-2.jpg
+image_alt: "Wildflower bloom on BLM land managed by the Applegate Field Office"
+gallery:
+  - src: /images/case-studies/barnes-grade-1.jpg
+    alt: "BLM Applegate Field Office building and sign in Alturas"
+  - src: /images/case-studies/barnes-grade-3.jpg
+    alt: "Vast sagebrush steppe under storm clouds on Applegate Field Office land"
+  - src: /images/case-studies/barnes-grade-2.jpg
+    alt: "Wildflower bloom across the high desert managed by the Applegate Field Office"
 ---
 
 In September 2025, the **Applegate Field Office** issued a decision authorizing the Barnes Grade Recreation Area in southern Oregon, including three parking areas, one day-use area, **a nine-hole disc golf course**, and related infrastructure.

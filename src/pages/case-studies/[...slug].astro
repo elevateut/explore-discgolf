@@ -58,6 +58,22 @@ const stateFull = stateNames[entry.data.state] ?? entry.data.state;
         </ul>
       </div>
 
+      <!-- Hero image -->
+      {entry.data.image && (
+        <figure class="mb-8">
+          <img
+            src={entry.data.image}
+            alt={entry.data.image_alt || entry.data.title}
+            class="w-full rounded-xl shadow-lg max-h-96 object-cover"
+          />
+          {entry.data.udisc_url && (
+            <figcaption class="text-xs text-base-content/50 mt-2 text-right">
+              Photo via <a href={entry.data.udisc_url} target="_blank" rel="noopener" class="underline hover:text-primary">UDisc</a>
+            </figcaption>
+          )}
+        </figure>
+      )}
+
       <!-- Article header -->
       <header class="mb-8">
         <div class="flex flex-wrap items-center gap-3 mb-4">
@@ -118,6 +134,30 @@ const stateFull = stateNames[entry.data.state] ?? entry.data.state;
           </div>
         </div>
       </div>
+
+      <!-- Photo gallery -->
+      {entry.data.gallery && entry.data.gallery.length > 0 && (
+        <div class="mt-8">
+          <h2 class="text-2xl font-bold mb-4">Course Photos</h2>
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+            {entry.data.gallery.map((photo) => (
+              <figure class="overflow-hidden rounded-lg">
+                <img
+                  src={photo.src}
+                  alt={photo.alt}
+                  class="w-full h-48 md:h-56 object-cover hover:scale-105 transition-transform duration-300"
+                  loading="lazy"
+                />
+              </figure>
+            ))}
+          </div>
+          {entry.data.udisc_url && (
+            <p class="text-xs text-base-content/50 mt-3 text-right">
+              Photos via <a href={entry.data.udisc_url} target="_blank" rel="noopener" class="underline hover:text-primary">UDisc</a>
+            </p>
+          )}
+        </div>
+      )}
 
       <!-- Bottom CTA -->
       <div class="mt-8 rounded-xl bg-base-200 border border-base-300 p-6 flex flex-col sm:flex-row items-center justify-between gap-4">

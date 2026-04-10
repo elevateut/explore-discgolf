@@ -6,6 +6,16 @@ state: OR
 status: built
 course_holes: 18
 date: 2016-09-01
+image: /images/case-studies/stewart-pond.jpg
+image_alt: "Disc golfer throwing from a concrete tee pad at Stewart Pond in the West Eugene Wetlands"
+udisc_url: https://udisc.com/courses/stewart-pond-TpR3
+gallery:
+  - src: /images/case-studies/stewart-pond-2.jpg
+    alt: "Basket #16 among autumn leaves and mature trees at Stewart Pond"
+  - src: /images/case-studies/stewart-pond-3.jpg
+    alt: "Wooded fairway with tall deciduous trees at Stewart Pond"
+  - src: /images/case-studies/stewart-pond-4.jpg
+    alt: "Stewart Pond course blanketed in winter snow with basket visible"
 ---
 
 Stewart Pond Disc Golf Course is BLM's first 18-hole disc golf course in the Oregon/Washington region. Located in the West Eugene Wetlands, it opened in September 2016 through a multi-year collaboration between the **Eugene Disc Golf Club** and BLM, with "hundreds of hours of donated volunteer time."

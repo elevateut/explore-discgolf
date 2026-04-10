@@ -57,8 +57,18 @@ const sorted = allCaseStudies.sort(
           {sorted.map((study) => (
             <a
               href={`/case-studies/${study.id.replace(/\.md$/, '')}`}
-              class="card bg-base-200 hover:shadow-md transition-shadow"
+              class="card bg-base-200 hover:shadow-md transition-shadow overflow-hidden"
             >
+              {study.data.image && (
+                <figure>
+                  <img
+                    src={study.data.image}
+                    alt={study.data.image_alt || study.data.title}
+                    class="w-full h-48 object-cover"
+                    loading="lazy"
+                  />
+                </figure>
+              )}
               <div class="card-body">
                 <h3 class="card-title">{study.data.title}</h3>
                 <p class="text-xs text-base-content/50">{study.data.blm_office} &middot; {study.data.course_holes ? `${study.data.course_holes} holes` : ""}</p>

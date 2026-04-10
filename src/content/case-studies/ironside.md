@@ -6,6 +6,16 @@ state: UT
 status: built
 course_holes: 18
 date: 2019-01-01
+image: /images/case-studies/ironside.jpg
+image_alt: "Granite boulders and juniper trees at Ironside Disc Golf Course near Cedar City"
+udisc_url: https://udisc.com/courses/ironside-oFBd
+gallery:
+  - src: /images/case-studies/ironside-2.jpg
+    alt: "Concrete tee pad and hole signage in winter snow at Ironside"
+  - src: /images/case-studies/ironside-3.jpg
+    alt: "Aerial view of juniper woodland terrain across the Ironside course"
+  - src: /images/case-studies/ironside-4.jpg
+    alt: "Ironside Disc Golf Course hole sign showing course map and par info"
 ---
 
 Ironside Disc Golf Course is the second 18-hole course at BLM's Three Peaks Recreation Area near Cedar City, Utah. Built alongside [Three Peaks](/case-studies/three-peaks) through the same partnership between the **Southern Utah University Disc Golf Club** and BLM Utah, Ironside plays at **6,761–7,444 feet elevation** through dramatic high desert terrain.

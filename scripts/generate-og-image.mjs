@@ -22,8 +22,8 @@ if (!GEMINI_API_KEY) {
   process.exit(1);
 }
 
-// Logo reference image
-const logoPath = path.join(ROOT, 'public/images/brand/explore-disc-golf-white.png');
+// Logo reference image (dark version so Gemini can see the design)
+const logoPath = path.join(ROOT, 'public/images/brand/explore-disc-golf-dark.png');
 const logoBase64 = fs.readFileSync(logoPath).toString('base64');
 
 const BRAND_CONTEXT = `
@@ -156,6 +156,38 @@ Visual elements:
 - Night Sky background transitioning to mountain landscape
 - Professional and trustworthy tone — like a nonprofit annual report cover
 - "explorediscgolf.org" in small text bottom-right
+`,
+  },
+
+  'thunderbird-hero': {
+    filename: 'thunderbird-hero.png',
+    prompt: `${BRAND_CONTEXT}
+
+Create a wide cinematic hero illustration (1200x630) of a mythic Thunderbird for the homepage.
+
+CONCEPT: "Where the wild things fly" — a majestic Thunderbird soaring over BLM public lands
+
+IMAGE REQUIREMENTS (OVERRIDE):
+- This is NOT an OG card — it's a hero background illustration
+- Do NOT include "explorediscgolf.org" text
+- Dark edges so it composites over Night Sky (#1E2D3B) background
+
+LOGO INSTRUCTIONS:
+- The attached image is our "EXPLORE Disc Golf" logo — it spells "EXPLORE" with mountains, mesas, a tree, and a cactus integrated into the letterforms, with "Disc Golf" in clean text below
+- Reproduce this logo in WHITE/Sandstone (#F5F0E8) in the upper portion of the image, above the Thunderbird
+- The logo must be clearly legible and faithfully reproduce the attached design
+
+Visual elements:
+- The "EXPLORE Disc Golf" logo rendered in white/Sandstone at the top, clearly readable
+- Below the logo: a powerful stylized Thunderbird with wings fully spread, viewed from slightly below
+- The bird rendered in Terra Cotta (#B85C38) and Summit Gold (#D4952B) tones with Sandstone (#F5F0E8) highlights
+- Geometric/tribal-inspired design language — not cartoonish, not photorealistic
+- Below the bird: vast western landscape silhouette — mesas, sagebrush, distant mountains
+- A single disc golf disc subtly visible in flight, catching the light
+- Night Sky (#1E2D3B) dominant background with warm atmospheric glow behind the bird
+- The tagline "Where the wild things fly" in elegant serif lettering below the bird
+- Mood: mythic, aspirational, powerful — like a national park poster meets Pacific Northwest art
+- Illustration style with painterly edges, not hard vector graphics
 `,
   },
 
