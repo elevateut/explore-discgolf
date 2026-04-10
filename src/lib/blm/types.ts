@@ -38,7 +38,7 @@ export interface BLMRecreationSite {
 /** A GeoJSON polygon boundary for a BLM administrative unit. */
 export interface BLMBoundary {
   officeId: string;
-  geometry: GeoJSON.Polygon;
+  geometry: GeoJSON.Polygon | GeoJSON.MultiPolygon;
 }
 
 /**

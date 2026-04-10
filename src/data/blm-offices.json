@@ -1,41 +1,1762 @@
 [
   {
-    "id": "UT-040-06",
+    "id": "AK000000",
+    "name": "Alaska",
+    "type": "state",
+    "state": "AK",
+    "lat": 61.2152,
+    "lng": -149.8853
+  },
+  {
+    "id": "AKA00000",
+    "name": "Anchorage District Office",
+    "type": "district",
+    "state": "AK",
+    "lat": 61.156,
+    "lng": -149.7958
+  },
+  {
+    "id": "AKR00000",
+    "name": "Arctic District Office",
+    "type": "district",
+    "state": "AK",
+    "lat": 64.8404,
+    "lng": -147.8147
+  },
+  {
+    "id": "AKF00000",
+    "name": "Fairbanks District Office",
+    "type": "district",
+    "state": "AK",
+    "lat": 64.8404,
+    "lng": -147.8147
+  },
+  {
+    "id": "AKA01000",
+    "name": "Anchorage Field Office",
+    "type": "field",
+    "state": "AK",
+    "lat": 61.156,
+    "lng": -149.7958
+  },
+  {
+    "id": "AKF03000",
+    "name": "Central Yukon Field Office",
+    "type": "field",
+    "state": "AK",
+    "lat": 64.8404,
+    "lng": -147.8147
+  },
+  {
+    "id": "AKF02000",
+    "name": "Eastern Interior Field Office",
+    "type": "field",
+    "state": "AK",
+    "lat": 64.8404,
+    "lng": -147.8147
+  },
+  {
+    "id": "AKA02000",
+    "name": "Glennallen Field Office",
+    "type": "field",
+    "state": "AK",
+    "lat": 62.1094,
+    "lng": -145.5466
+  },
+  {
+    "id": "AKF03000",
+    "name": "Central Yukon Field Office",
+    "type": "other",
+    "state": "AK",
+    "lat": 65.8792,
+    "lng": -149.7147
+  },
+  {
+    "id": "AZ000000",
+    "name": "Arizona",
+    "type": "state",
+    "state": "AZ",
+    "lat": 33.4485,
+    "lng": -112.0732
+  },
+  {
+    "id": "AZA00000",
+    "name": "Arizona Strip District Office",
+    "type": "district",
+    "state": "AZ",
+    "lat": 37.0827,
+    "lng": -113.5768
+  },
+  {
+    "id": "AZC00000",
+    "name": "Colorado River District Office",
+    "type": "district",
+    "state": "AZ",
+    "lat": 34.5035,
+    "lng": -114.3531
+  },
+  {
+    "id": "AZG00000",
+    "name": "Gila District Office",
+    "type": "district",
+    "state": "AZ",
+    "lat": 32.1329,
+    "lng": -110.9239
+  },
+  {
+    "id": "AZP00000",
+    "name": "Phoenix District Office",
+    "type": "district",
+    "state": "AZ",
+    "lat": 33.6418,
+    "lng": -112.0383
+  },
+  {
+    "id": "AZA01000",
+    "name": "Arizona Strip Field Office",
+    "type": "field",
+    "state": "AZ",
+    "lat": 37.0827,
+    "lng": -113.5768
+  },
+  {
+    "id": "AZP01000",
+    "name": "Hassayampa Field Office",
+    "type": "field",
+    "state": "AZ",
+    "lat": 33.6419,
+    "lng": -112.0383
+  },
+  {
+    "id": "AZC01000",
+    "name": "Kingman Field Office",
+    "type": "field",
+    "state": "AZ",
+    "lat": 35.19,
+    "lng": -114.0146
+  },
+  {
+    "id": "AZC03000",
+    "name": "Lake Havasu Field Office",
+    "type": "field",
+    "state": "AZ",
+    "lat": 34.5035,
+    "lng": -114.3531
+  },
+  {
+    "id": "AZP02000",
+    "name": "Lower Sonoran Field Office",
+    "type": "field",
+    "state": "AZ",
+    "lat": 33.6418,
+    "lng": -112.0383
+  },
+  {
+    "id": "AZG01000",
+    "name": "Safford Field Office",
+    "type": "field",
+    "state": "AZ",
+    "lat": 32.8319,
+    "lng": -109.7242
+  },
+  {
+    "id": "AZG02000",
+    "name": "Tucson Field Office",
+    "type": "field",
+    "state": "AZ",
+    "lat": 32.1329,
+    "lng": -110.9239
+  },
+  {
+    "id": "AZC02000",
+    "name": "Yuma Field Office",
+    "type": "field",
+    "state": "AZ",
+    "lat": 32.6731,
+    "lng": -114.5071
+  },
+  {
+    "id": "AZA03000",
+    "name": "Grand Canyon/parashant National Monum",
+    "type": "other",
+    "state": "AZ",
+    "lat": 37.0828,
+    "lng": -113.5768
+  },
+  {
+    "id": "AZG02200",
+    "name": "San Pedro Riparian Nca",
+    "type": "other",
+    "state": "AZ",
+    "lat": 31.4585,
+    "lng": -110.2568
+  },
+  {
+    "id": "CA900000",
+    "name": "California State Office",
+    "type": "state",
+    "state": "CA",
+    "lat": 38.6024,
+    "lng": -121.3988
+  },
+  {
+    "id": "CAD01000",
+    "name": "California Desert District Office",
+    "type": "district",
+    "state": "CA",
+    "lat": 33.8399,
+    "lng": -116.5053
+  },
+  {
+    "id": "CAC01000",
+    "name": "Central California District Office",
+    "type": "district",
+    "state": "CA",
+    "lat": 38.6204,
+    "lng": -121.0607
+  },
+  {
+    "id": "CAN01000",
+    "name": "Northern California District Office",
+    "type": "district",
+    "state": "CA",
+    "lat": 40.5094,
+    "lng": -122.3035
+  },
+  {
+    "id": "CAN02000",
+    "name": "Applegate Field Office",
+    "type": "field",
+    "state": "CA",
+    "lat": 41.495,
+    "lng": -120.5528
+  },
+  {
+    "id": "CAN03000",
+    "name": "Arcata Field Office",
+    "type": "field",
+    "state": "CA",
+    "lat": 40.9032,
+    "lng": -124.0879
+  },
+  {
+    "id": "CAC06000",
+    "name": "Bakersfield Field Office",
+    "type": "field",
+    "state": "CA",
+    "lat": 35.4443,
+    "lng": -119.0755
+  },
+  {
+    "id": "CAD08000",
+    "name": "Barstow Field Office",
+    "type": "field",
+    "state": "CA",
+    "lat": 34.8726,
+    "lng": -117.0206
+  },
+  {
+    "id": "CAC07000",
+    "name": "Bishop Field Office",
+    "type": "field",
+    "state": "CA",
+    "lat": 37.3626,
+    "lng": -118.4109
+  },
+  {
+    "id": "CAC09000",
+    "name": "Central Coast Field Office",
+    "type": "field",
+    "state": "CA",
+    "lat": 36.668,
+    "lng": -121.8077
+  },
+  {
+    "id": "CAN05000",
+    "name": "Eagle Lake Field Office",
+    "type": "field",
+    "state": "CA",
+    "lat": 40.4067,
+    "lng": -120.6373
+  },
+  {
+    "id": "CAD07000",
+    "name": "El Centro Field Office",
+    "type": "field",
+    "state": "CA",
+    "lat": 32.7795,
+    "lng": -115.5519
+  },
+  {
+    "id": "CAC08000",
+    "name": "Motherlode Field Office",
+    "type": "field",
+    "state": "CA",
+    "lat": 38.6204,
+    "lng": -121.0607
+  },
+  {
+    "id": "CAD09000",
+    "name": "Needles Field Office",
+    "type": "field",
+    "state": "CA",
+    "lat": 34.8184,
+    "lng": -114.6012
+  },
+  {
+    "id": "CAD06000",
+    "name": "Palm Springs/s Coast Fld Ofc",
+    "type": "field",
+    "state": "CA",
+    "lat": 33.8399,
+    "lng": -116.5053
+  },
+  {
+    "id": "CAN06000",
+    "name": "Redding Field Office",
+    "type": "field",
+    "state": "CA",
+    "lat": 40.5094,
+    "lng": -122.3035
+  },
+  {
+    "id": "CAD05000",
+    "name": "Ridgecrest Field Office",
+    "type": "field",
+    "state": "CA",
+    "lat": 35.618,
+    "lng": -117.6476
+  },
+  {
+    "id": "CAC05000",
+    "name": "Ukiah Field Office",
+    "type": "field",
+    "state": "CA",
+    "lat": 39.1836,
+    "lng": -123.2105
+  },
+  {
+    "id": "CAN02000",
+    "name": "Applegate Field Office",
+    "type": "other",
+    "state": "CA",
+    "lat": 41.5308,
+    "lng": -120.1795
+  },
+  {
+    "id": "CAC06900",
+    "name": "Carrizo Plain National Monument",
+    "type": "other",
+    "state": "CA",
+    "lat": 35.1903,
+    "lng": -119.8636
+  },
+  {
+    "id": "CAN03900",
+    "name": "Headwaters Forest Reserve",
+    "type": "other",
+    "state": "CA",
+    "lat": 40.9032,
+    "lng": -124.0879
+  },
+  {
+    "id": "CAN03800",
+    "name": "King Range National Conservation Area",
+    "type": "other",
+    "state": "CA",
+    "lat": 40.0568,
+    "lng": -123.9756
+  },
+  {
+    "id": "CAC06800",
+    "name": "Piedras Blancas Light Station Ona",
+    "type": "other",
+    "state": "CA",
+    "lat": 35.6656,
+    "lng": -121.2843
+  },
+  {
+    "id": "CAD06430",
+    "name": "Santa Rosa And San Jacinto Nm",
+    "type": "other",
+    "state": "CA",
+    "lat": 33.6716,
+    "lng": -116.4087
+  },
+  {
+    "id": "CO000000",
+    "name": "Colorado State Office",
+    "type": "state",
+    "state": "CO",
+    "lat": 39.7175,
+    "lng": -105.1162
+  },
+  {
+    "id": "CON00000",
+    "name": "Northwest District Office",
+    "type": "district",
+    "state": "CO",
+    "lat": 40.5141,
+    "lng": -107.5316
+  },
+  {
+    "id": "COF00000",
+    "name": "Rocky Mountain District Office",
+    "type": "district",
+    "state": "CO",
+    "lat": 38.4454,
+    "lng": -105.1966
+  },
+  {
+    "id": "COS00000",
+    "name": "Southwest District Office",
+    "type": "district",
+    "state": "CO",
+    "lat": 38.459,
+    "lng": -107.8672
+  },
+  {
+    "id": "COG00000",
+    "name": "Upper Colorado River District Office",
+    "type": "district",
+    "state": "CO",
+    "lat": 39.1181,
+    "lng": -108.5317
+  },
+  {
+    "id": "COG02000",
+    "name": "Colorado River Valley Field Office",
+    "type": "field",
+    "state": "CO",
+    "lat": 39.5434,
+    "lng": -107.6371
+  },
+  {
+    "id": "COG01000",
+    "name": "Grand Junction Field Office",
+    "type": "field",
+    "state": "CO",
+    "lat": 39.1181,
+    "lng": -108.5317
+  },
+  {
+    "id": "COS06000",
+    "name": "Gunnison Field Office",
+    "type": "field",
+    "state": "CO",
+    "lat": 38.5555,
+    "lng": -106.9283
+  },
+  {
+    "id": "CON02000",
+    "name": "Kremmling Field Office",
+    "type": "field",
+    "state": "CO",
+    "lat": 40.0575,
+    "lng": -106.369
+  },
+  {
+    "id": "CON01000",
+    "name": "Little Snake Field Office",
+    "type": "field",
+    "state": "CO",
+    "lat": 40.5141,
+    "lng": -107.5316
+  },
+  {
+    "id": "COF02000",
+    "name": "Royal Gorge Field Office",
+    "type": "field",
+    "state": "CO",
+    "lat": 38.4454,
+    "lng": -105.1966
+  },
+  {
+    "id": "COF03000",
+    "name": "San Luis Valley Field Office",
+    "type": "field",
+    "state": "CO",
+    "lat": 37.5733,
+    "lng": -106.1251
+  },
+  {
+    "id": "COS01000",
+    "name": "Tres Rios Field Office",
+    "type": "field",
+    "state": "CO",
+    "lat": 37.4619,
+    "lng": -108.5183
+  },
+  {
+    "id": "COS05000",
+    "name": "Uncompahgre Field Office",
+    "type": "field",
+    "state": "CO",
+    "lat": 38.459,
+    "lng": -107.8672
+  },
+  {
+    "id": "CON05000",
+    "name": "White River Field Office",
+    "type": "field",
+    "state": "CO",
+    "lat": 40.0372,
+    "lng": -107.9054
+  },
+  {
+    "id": "COF02400",
+    "name": "Browns Canyon National Monument",
+    "type": "other",
+    "state": "CO",
+    "lat": 38.4454,
+    "lng": -105.1966
+  },
+  {
+    "id": "COS07000",
+    "name": "Canyon Ancnts Natl Monument",
+    "type": "other",
+    "state": "CO",
+    "lat": 37.4764,
+    "lng": -108.546
+  },
+  {
+    "id": "COG03000",
+    "name": "Dominguez-Escalante Nca",
+    "type": "other",
+    "state": "CO",
+    "lat": 39.1181,
+    "lng": -108.5317
+  },
+  {
+    "id": "COG01200",
+    "name": "Mcinnis Canyons Nca",
+    "type": "other",
+    "state": "CO",
+    "lat": 39.1181,
+    "lng": -108.5317
+  },
+  {
+    "id": "COF02000",
+    "name": "Royal Gorge Field Office",
+    "type": "other",
+    "state": "CO",
+    "lat": 38.4454,
+    "lng": -105.1966
+  },
+  {
+    "id": "COS01000",
+    "name": "Tres Rios Field Office",
+    "type": "other",
+    "state": "CO",
+    "lat": 37.2732,
+    "lng": -107.8932
+  },
+  {
+    "id": "ES000000",
+    "name": "Eastern States",
+    "type": "state",
+    "state": "ES",
+    "lat": 38.8768,
+    "lng": -77.0079
+  },
+  {
+    "id": "ESM00000",
+    "name": "Northeastern States District",
+    "type": "district",
+    "state": "ES",
+    "lat": 43.039,
+    "lng": -87.9031
+  },
+  {
+    "id": "ESJ00000",
+    "name": "Southeastern States District",
+    "type": "district",
+    "state": "ES",
+    "lat": 32.3357,
+    "lng": -90.0672
+  },
+  {
+    "id": "ESJ02400",
+    "name": "Jupiter Inlet Lighthouse Ona",
+    "type": "field",
+    "state": "ES",
+    "lat": 26.954,
+    "lng": -80.0825
+  },
+  {
+    "id": "ESM03400",
+    "name": "Lower Potomac Field Station",
+    "type": "field",
+    "state": "ES",
+    "lat": 38.6716,
+    "lng": -77.1979
+  },
+  {
+    "id": "ID000000",
+    "name": "Idaho State Office",
+    "type": "state",
+    "state": "ID",
+    "lat": 43.5925,
+    "lng": -116.2869
+  },
+  {
+    "id": "IDB00000",
+    "name": "Boise District Office",
+    "type": "district",
+    "state": "ID",
+    "lat": 43.5667,
+    "lng": -116.2067
+  },
+  {
+    "id": "IDC00000",
+    "name": "Coeur D'alene District Office",
+    "type": "district",
+    "state": "ID",
+    "lat": 47.7145,
+    "lng": -116.8013
+  },
+  {
+    "id": "IDI00000",
+    "name": "Idaho Falls District Office",
+    "type": "district",
+    "state": "ID",
+    "lat": 43.509,
+    "lng": -112.007
+  },
+  {
+    "id": "IDT00000",
+    "name": "Twin Falls District Office",
+    "type": "district",
+    "state": "ID",
+    "lat": 42.548,
+    "lng": -114.4326
+  },
+  {
+    "id": "IDB02000",
+    "name": "Bruneau Field Office",
+    "type": "field",
+    "state": "ID",
+    "lat": 43.5667,
+    "lng": -116.2065
+  },
+  {
+    "id": "IDT02000",
+    "name": "Burley Field Office",
+    "type": "field",
+    "state": "ID",
+    "lat": 42.5034,
+    "lng": -113.7915
+  },
+  {
+    "id": "IDI03000",
+    "name": "Challis Field Office",
+    "type": "field",
+    "state": "ID",
+    "lat": 44.5047,
+    "lng": -114.2319
+  },
+  {
+    "id": "IDC01000",
+    "name": "Coeur D'alene Field Office",
+    "type": "field",
+    "state": "ID",
+    "lat": 47.7146,
+    "lng": -116.8013
+  },
+  {
+    "id": "IDC02000",
+    "name": "Cottonwood Field Office",
+    "type": "field",
+    "state": "ID",
+    "lat": 46.0631,
+    "lng": -116.3483
+  },
+  {
+    "id": "IDB01000",
+    "name": "Four Rivers Field Office",
+    "type": "field",
+    "state": "ID",
+    "lat": 43.5667,
+    "lng": -116.2064
+  },
+  {
+    "id": "IDT01000",
+    "name": "Jarbidge Field Office",
+    "type": "field",
+    "state": "ID",
+    "lat": 42.548,
+    "lng": -114.4327
+  },
+  {
+    "id": "IDB03000",
+    "name": "Owyhee Field Office",
+    "type": "field",
+    "state": "ID",
+    "lat": 43.5446,
+    "lng": -116.8022
+  },
+  {
+    "id": "IDI02000",
+    "name": "Pocatello Field Office",
+    "type": "field",
+    "state": "ID",
+    "lat": 42.8345,
+    "lng": -112.4055
+  },
+  {
+    "id": "IDI04000",
+    "name": "Salmon Field Office",
+    "type": "field",
+    "state": "ID",
+    "lat": 45.16,
+    "lng": -113.8922
+  },
+  {
+    "id": "IDT03000",
+    "name": "Shoshone Field Office",
+    "type": "field",
+    "state": "ID",
+    "lat": 42.9321,
+    "lng": -114.4137
+  },
+  {
+    "id": "IDI01000",
+    "name": "Upper Snake Field Office",
+    "type": "field",
+    "state": "ID",
+    "lat": 43.5088,
+    "lng": -112.007
+  },
+  {
+    "id": "MT000000",
+    "name": "Montana/dakotas, Blm",
+    "type": "state",
+    "state": "MT",
+    "lat": 45.7546,
+    "lng": -108.5421
+  },
+  {
+    "id": "MTC00000",
+    "name": "Eastern Montana/daks District Office",
+    "type": "district",
+    "state": "MT",
+    "lat": 46.3979,
+    "lng": -105.8644
+  },
+  {
+    "id": "MTL00000",
+    "name": "North Central Montana District Office",
+    "type": "district",
+    "state": "MT",
+    "lat": 47.0708,
+    "lng": -109.4007
+  },
+  {
+    "id": "MTB00000",
+    "name": "Western Montana District Office",
+    "type": "district",
+    "state": "MT",
+    "lat": 45.928,
+    "lng": -112.5113
+  },
+  {
+    "id": "MTC01000",
+    "name": "Billings Field Office",
+    "type": "field",
+    "state": "MT",
+    "lat": 45.7544,
+    "lng": -108.5424
+  },
+  {
+    "id": "MTB07000",
+    "name": "Butte Field Office",
+    "type": "field",
+    "state": "MT",
+    "lat": 45.928,
+    "lng": -112.5113
+  },
+  {
+    "id": "MTB05000",
+    "name": "Dillon Field Office",
+    "type": "field",
+    "state": "MT",
+    "lat": 45.2294,
+    "lng": -112.6288
+  },
+  {
+    "id": "MTL02000",
+    "name": "Glasgow Field Office",
+    "type": "field",
+    "state": "MT",
+    "lat": 48.1956,
+    "lng": -106.6206
+  },
+  {
+    "id": "MTL03000",
+    "name": "Havre Field Office",
+    "type": "field",
+    "state": "MT",
+    "lat": 48.5547,
+    "lng": -109.7437
+  },
+  {
+    "id": "MTL06000",
+    "name": "Lewistown Field Office",
+    "type": "field",
+    "state": "MT",
+    "lat": 47.0708,
+    "lng": -109.4007
+  },
+  {
+    "id": "MTL01000",
+    "name": "Malta Field Office",
+    "type": "field",
+    "state": "MT",
+    "lat": 48.3588,
+    "lng": -107.8662
+  },
+  {
+    "id": "MTC02000",
+    "name": "Miles City Field Office",
+    "type": "field",
+    "state": "MT",
+    "lat": 46.3979,
+    "lng": -105.8644
+  },
+  {
+    "id": "MTB01000",
+    "name": "Missoula Field Office",
+    "type": "field",
+    "state": "MT",
+    "lat": 46.843,
+    "lng": -114.0544
+  },
+  {
+    "id": "MTL00000",
+    "name": "North Central Montana District Office",
+    "type": "field",
+    "state": "MT",
+    "lat": 47.5209,
+    "lng": -111.2428
+  },
+  {
+    "id": "MTC03000",
+    "name": "North Dakota Field Office",
+    "type": "field",
+    "state": "MT",
+    "lat": 46.8807,
+    "lng": -102.8199
+  },
+  {
+    "id": "MTC04000",
+    "name": "South Dakota Field Office",
+    "type": "field",
+    "state": "MT",
+    "lat": 44.6825,
+    "lng": -103.8598
+  },
+  {
+    "id": "MT001200",
+    "name": "Pompeys Pillar National Monument",
+    "type": "other",
+    "state": "MT",
+    "lat": 45.9948,
+    "lng": -108.0023
+  },
+  {
+    "id": "MTL07000",
+    "name": "Upper Missouri River Breaks Nm",
+    "type": "other",
+    "state": "MT",
+    "lat": 47.8101,
+    "lng": -110.673
+  },
+  {
+    "id": "NM000000",
+    "name": "New Mexico",
+    "type": "state",
+    "state": "NM",
+    "lat": 35.598,
+    "lng": -106.0379
+  },
+  {
+    "id": "NMA00000",
+    "name": "Albuquerque District Office",
+    "type": "district",
+    "state": "NM",
+    "lat": 35.1663,
+    "lng": -106.5866
+  },
+  {
+    "id": "NMF00000",
+    "name": "Farmington District Office",
+    "type": "district",
+    "state": "NM",
+    "lat": 36.7861,
+    "lng": -108.1583
+  },
+  {
+    "id": "NML00000",
+    "name": "Las Cruces District Office",
+    "type": "district",
+    "state": "NM",
+    "lat": 32.288,
+    "lng": -106.7777
+  },
+  {
+    "id": "NMP00000",
+    "name": "Pecos District Office",
+    "type": "district",
+    "state": "NM",
+    "lat": 33.395,
+    "lng": -104.5655
+  },
+  {
+    "id": "NM006000",
+    "name": "Amarillo Field Office",
+    "type": "field",
+    "state": "NM",
+    "lat": 35.2052,
+    "lng": -101.8349
+  },
+  {
+    "id": "NMP02000",
+    "name": "Carlsbad Field Office",
+    "type": "field",
+    "state": "NM",
+    "lat": 32.4203,
+    "lng": -104.2175
+  },
+  {
+    "id": "NMF01000",
+    "name": "Farmington Field Office",
+    "type": "field",
+    "state": "NM",
+    "lat": 36.7861,
+    "lng": -108.1583
+  },
+  {
+    "id": "NMP01400",
+    "name": "Ft Stanton-Snowy River Cave Nca",
+    "type": "field",
+    "state": "NM",
+    "lat": 33.4952,
+    "lng": -105.5269
+  },
+  {
+    "id": "NM004000",
+    "name": "Oklahoma Field Office",
+    "type": "field",
+    "state": "NM",
+    "lat": 35.1857,
+    "lng": -97.4391
+  },
+  {
+    "id": "NMA01000",
+    "name": "Rio Puerco Field Office",
+    "type": "field",
+    "state": "NM",
+    "lat": 35.1663,
+    "lng": -106.5866
+  },
+  {
+    "id": "NMP01000",
+    "name": "Roswell Field Office",
+    "type": "field",
+    "state": "NM",
+    "lat": 33.395,
+    "lng": -104.5655
+  },
+  {
+    "id": "NMA02000",
+    "name": "Socorro Field Office",
+    "type": "field",
+    "state": "NM",
+    "lat": 34.0469,
+    "lng": -106.8929
+  },
+  {
+    "id": "NMF02000",
+    "name": "Taos Field Office",
+    "type": "field",
+    "state": "NM",
+    "lat": 36.385,
+    "lng": -105.5869
+  },
+  {
+    "id": "NMA00000",
+    "name": "Albuquerque District Office",
+    "type": "other",
+    "state": "NM",
+    "lat": 36.0194,
+    "lng": -106.9419
+  },
+  {
+    "id": "NM006000",
+    "name": "Amarillo Field Office",
+    "type": "other",
+    "state": "NM",
+    "lat": 37.4479,
+    "lng": -100.9626
+  },
+  {
+    "id": "NMP02000",
+    "name": "Carlsbad Field Office",
+    "type": "other",
+    "state": "NM",
+    "lat": 32.7022,
+    "lng": -103.1407
+  },
+  {
+    "id": "NML00000",
+    "name": "Las Cruces District Office",
+    "type": "other",
+    "state": "NM",
+    "lat": 32.4307,
+    "lng": -105.6221
+  },
+  {
+    "id": "NMA01000",
+    "name": "Rio Puerco Field Office",
+    "type": "other",
+    "state": "NM",
+    "lat": 35.1629,
+    "lng": -107.8389
+  },
+  {
+    "id": "NV000000",
+    "name": "Nevada State Ofc, Bur Of Land Mgmt",
+    "type": "state",
+    "state": "NV",
+    "lat": 39.5078,
+    "lng": -119.7475
+  },
+  {
+    "id": "NVB00000",
+    "name": "Battle Mountain District Office",
+    "type": "district",
+    "state": "NV",
+    "lat": 40.6305,
+    "lng": -116.9553
+  },
+  {
+    "id": "NVC00000",
+    "name": "Carson City District Office",
+    "type": "district",
+    "state": "NV",
+    "lat": 39.1834,
+    "lng": -119.7014
+  },
+  {
+    "id": "NVE00000",
+    "name": "Elko District Office",
+    "type": "district",
+    "state": "NV",
+    "lat": 40.8621,
+    "lng": -115.7344
+  },
+  {
+    "id": "NVL00000",
+    "name": "Ely District Office",
+    "type": "district",
+    "state": "NV",
+    "lat": 39.2937,
+    "lng": -114.8366
+  },
+  {
+    "id": "NVS00000",
+    "name": "Southern Nevada District Office",
+    "type": "district",
+    "state": "NV",
+    "lat": 36.2456,
+    "lng": -115.2345
+  },
+  {
+    "id": "NVW00000",
+    "name": "Winnemucca District Office",
+    "type": "district",
+    "state": "NV",
+    "lat": 40.9768,
+    "lng": -117.7137
+  },
+  {
+    "id": "NVW03000",
+    "name": "Black Rock Field Office",
+    "type": "field",
+    "state": "NV",
+    "lat": 40.9768,
+    "lng": -117.7137
+  },
+  {
+    "id": "NVL06000",
+    "name": "Bristlecone Field Office",
+    "type": "field",
+    "state": "NV",
+    "lat": 39.2937,
+    "lng": -114.8366
+  },
+  {
+    "id": "NVL03000",
+    "name": "Caliente Field Office",
+    "type": "field",
+    "state": "NV",
+    "lat": 37.6111,
+    "lng": -114.5278
+  },
+  {
+    "id": "NVW01000",
+    "name": "Humboldt River Field Office",
+    "type": "field",
+    "state": "NV",
+    "lat": 40.9768,
+    "lng": -117.7137
+  },
+  {
+    "id": "NVS01000",
+    "name": "Las Vegas Field Office",
+    "type": "field",
+    "state": "NV",
+    "lat": 36.2456,
+    "lng": -115.2345
+  },
+  {
+    "id": "NVB01000",
+    "name": "Mount Lewis Field Office",
+    "type": "field",
+    "state": "NV",
+    "lat": 40.6305,
+    "lng": -116.9553
+  },
+  {
+    "id": "NVS03000",
+    "name": "Pahrump Field Office",
+    "type": "field",
+    "state": "NV",
+    "lat": 36.2456,
+    "lng": -115.2345
+  },
+  {
+    "id": "NVS02000",
+    "name": "Red Rock/sloan Canyon Nca Field Offic",
+    "type": "field",
+    "state": "NV",
+    "lat": 36.1357,
+    "lng": -115.4279
+  },
+  {
+    "id": "NVS02000",
+    "name": "Red Rock/sloan Canyon Nca Field Offic",
+    "type": "field",
+    "state": "NV",
+    "lat": 35.9162,
+    "lng": -115.1261
+  },
+  {
+    "id": "NVC02000",
+    "name": "Sierra Front Field Office",
+    "type": "field",
+    "state": "NV",
+    "lat": 39.1834,
+    "lng": -119.7014
+  },
+  {
+    "id": "NVC01000",
+    "name": "Stillwater Field Office",
+    "type": "field",
+    "state": "NV",
+    "lat": 39.1834,
+    "lng": -119.7014
+  },
+  {
+    "id": "NVB02000",
+    "name": "Tonopah Field Office",
+    "type": "field",
+    "state": "NV",
+    "lat": 38.053,
+    "lng": -117.2171
+  },
+  {
+    "id": "NVE02000",
+    "name": "Tuscarora Field Office",
+    "type": "field",
+    "state": "NV",
+    "lat": 40.8621,
+    "lng": -115.7344
+  },
+  {
+    "id": "NVE03000",
+    "name": "Wells Field Office",
+    "type": "field",
+    "state": "NV",
+    "lat": 40.8621,
+    "lng": -115.7344
+  },
+  {
+    "id": "NVL05000",
+    "name": "Basin & Range National Monument",
+    "type": "other",
+    "state": "NV",
+    "lat": 37.6111,
+    "lng": -114.5278
+  },
+  {
+    "id": "OR000000",
+    "name": "Oregon State Office",
+    "type": "state",
+    "state": "OR",
+    "lat": 45.5146,
+    "lng": -122.6772
+  },
+  {
+    "id": "ORB00000",
+    "name": "Burns District Office",
+    "type": "district",
+    "state": "OR",
+    "lat": 43.5233,
+    "lng": -119.0966
+  },
+  {
+    "id": "ORC00000",
+    "name": "Coos Bay District Office",
+    "type": "district",
+    "state": "OR",
+    "lat": 43.4154,
+    "lng": -124.2511
+  },
+  {
+    "id": "ORL00000",
+    "name": "Lakeview District Office",
+    "type": "district",
+    "state": "OR",
+    "lat": 42.1709,
+    "lng": -120.3465
+  },
+  {
+    "id": "ORM00000",
+    "name": "Medford District Office",
+    "type": "district",
+    "state": "OR",
+    "lat": 42.3616,
+    "lng": -122.8746
+  },
+  {
+    "id": "ORN00000",
+    "name": "Nw Oregon District Office",
+    "type": "district",
+    "state": "OR",
+    "lat": 44.8743,
+    "lng": -123.0235
+  },
+  {
+    "id": "ORP00000",
+    "name": "Prineville District Office",
+    "type": "district",
+    "state": "OR",
+    "lat": 44.3029,
+    "lng": -120.8099
+  },
+  {
+    "id": "ORR00000",
+    "name": "Roseburg District Office",
+    "type": "district",
+    "state": "OR",
+    "lat": 43.2276,
+    "lng": -123.364
+  },
+  {
+    "id": "ORW00000",
+    "name": "Spokane District Office",
+    "type": "district",
+    "state": "OR",
+    "lat": 47.6679,
+    "lng": -117.3255
+  },
+  {
+    "id": "ORV00000",
+    "name": "Vale District Office",
+    "type": "district",
+    "state": "OR",
+    "lat": 43.9867,
+    "lng": -117.2404
+  },
+  {
+    "id": "ORB06000",
+    "name": "Burns Andrews Field Office",
+    "type": "field",
+    "state": "OR",
+    "lat": 43.5233,
+    "lng": -119.0966
+  },
+  {
+    "id": "ORB05000",
+    "name": "Burns Three Rivers Field Office",
+    "type": "field",
+    "state": "OR",
+    "lat": 43.5233,
+    "lng": -119.0966
+  },
+  {
+    "id": "ORC04000",
+    "name": "Coos Bay Myrtlewood Field Office",
+    "type": "field",
+    "state": "OR",
+    "lat": 43.4154,
+    "lng": -124.2511
+  },
+  {
+    "id": "ORC03000",
+    "name": "Coos Bay Umpqua Field Office",
+    "type": "field",
+    "state": "OR",
+    "lat": 43.4154,
+    "lng": -124.2511
+  },
+  {
+    "id": "ORL05000",
+    "name": "Lakeview District Lakeview Field Offc",
+    "type": "field",
+    "state": "OR",
+    "lat": 42.1709,
+    "lng": -120.3465
+  },
+  {
+    "id": "ORL04000",
+    "name": "Lakeview Klamath Falls Field Office",
+    "type": "field",
+    "state": "OR",
+    "lat": 42.1814,
+    "lng": -121.7548
+  },
+  {
+    "id": "ORM06000",
+    "name": "Medford Ashland Field Office",
+    "type": "field",
+    "state": "OR",
+    "lat": 42.3616,
+    "lng": -122.8746
+  },
+  {
+    "id": "ORM05000",
+    "name": "Medford Butte Falls Field Office",
+    "type": "field",
+    "state": "OR",
+    "lat": 42.3616,
+    "lng": -122.8746
+  },
+  {
+    "id": "ORM07000",
+    "name": "Medford Grants Pass Field Office",
+    "type": "field",
+    "state": "OR",
+    "lat": 42.4308,
+    "lng": -123.2941
+  },
+  {
+    "id": "ORN01000",
+    "name": "Nw Oregon Cascades Field Office",
+    "type": "field",
+    "state": "OR",
+    "lat": 44.8743,
+    "lng": -123.0235
+  },
+  {
+    "id": "ORN02000",
+    "name": "Nw Oregon Marys Peak Field Office",
+    "type": "field",
+    "state": "OR",
+    "lat": 44.8743,
+    "lng": -123.0235
+  },
+  {
+    "id": "ORN03000",
+    "name": "Nw Oregon Siuslaw Field Office",
+    "type": "field",
+    "state": "OR",
+    "lat": 44.0654,
+    "lng": -122.9802
+  },
+  {
+    "id": "ORN04000",
+    "name": "Nw Oregon Tillamook Field Office",
+    "type": "field",
+    "state": "OR",
+    "lat": 45.4569,
+    "lng": -123.8153
+  },
+  {
+    "id": "ORN05000",
+    "name": "Nw Oregon Upper Willamette Field Off.",
+    "type": "field",
+    "state": "OR",
+    "lat": 44.0654,
+    "lng": -122.9802
+  },
+  {
+    "id": "ORP04000",
+    "name": "Prineville Central Oregon Field Offic",
+    "type": "field",
+    "state": "OR",
+    "lat": 44.3029,
+    "lng": -120.8099
+  },
+  {
+    "id": "ORP06000",
+    "name": "Prineville Deschutes Field Office",
+    "type": "field",
+    "state": "OR",
+    "lat": 44.3029,
+    "lng": -120.8099
+  },
+  {
+    "id": "ORR05000",
+    "name": "Roseburg District South River Fo",
+    "type": "field",
+    "state": "OR",
+    "lat": 43.2276,
+    "lng": -123.364
+  },
+  {
+    "id": "ORR04000",
+    "name": "Roseburg District Swiftwater Fo",
+    "type": "field",
+    "state": "OR",
+    "lat": 43.2276,
+    "lng": -123.364
+  },
+  {
+    "id": "ORW03000",
+    "name": "Spokane Border Field Office",
+    "type": "field",
+    "state": "OR",
+    "lat": 47.6679,
+    "lng": -117.3255
+  },
+  {
+    "id": "ORW02000",
+    "name": "Spokane Wenatchee Field Office",
+    "type": "field",
+    "state": "OR",
+    "lat": 47.4373,
+    "lng": -120.3161
+  },
+  {
+    "id": "ORV05000",
+    "name": "Vale Baker Field Office",
+    "type": "field",
+    "state": "OR",
+    "lat": 44.7877,
+    "lng": -117.8426
+  },
+  {
+    "id": "ORV04000",
+    "name": "Vale Malheur Field Office",
+    "type": "field",
+    "state": "OR",
+    "lat": 43.9867,
+    "lng": -117.2404
+  },
+  {
+    "id": "UT000000",
+    "name": "Utah",
+    "type": "state",
+    "state": "UT",
+    "lat": 40.7653,
+    "lng": -111.9034
+  },
+  {
+    "id": "UTY00000",
+    "name": "Canyon Country District Office",
+    "type": "district",
+    "state": "UT",
+    "lat": 38.5607,
+    "lng": -109.5493
+  },
+  {
+    "id": "UTC00000",
+    "name": "Color Country District Office",
+    "type": "district",
+    "state": "UT",
+    "lat": 37.7149,
+    "lng": -113.059
+  },
+  {
+    "id": "UTG00000",
+    "name": "Green River District Office",
+    "type": "district",
+    "state": "UT",
+    "lat": 40.4535,
+    "lng": -109.5194
+  },
+  {
+    "id": "UTP00000",
+    "name": "Paria River District",
+    "type": "district",
+    "state": "UT",
+    "lat": 37.037,
+    "lng": -112.5242
+  },
+  {
+    "id": "UTW00000",
+    "name": "West Desert District Office",
+    "type": "district",
+    "state": "UT",
+    "lat": 40.7791,
+    "lng": -112.0373
+  },
+  {
+    "id": "UTC01000",
     "name": "Cedar City Field Office",
     "type": "field",
     "state": "UT",
-    "lat": 37.6775,
-    "lng": -113.0619,
-    "address": "176 E DL Sargent Dr, Cedar City, UT 84721",
-    "phone": "TODO: research",
-    "email": "TODO: research",
-    "recreationPlannerName": "TODO: research",
-    "recreationPlannerEmail": "TODO: research"
+    "lat": 37.7149,
+    "lng": -113.059
   },
   {
-    "id": "OR-100-00",
-    "name": "Northwest Oregon District",
-    "type": "district",
-    "state": "OR",
-    "lat": 45.5231,
-    "lng": -122.6765,
-    "address": "1717 Fabry Road SE, Salem, OR 97306",
-    "phone": "TODO: research",
-    "email": "TODO: research",
-    "recreationPlannerName": "TODO: research",
-    "recreationPlannerEmail": "TODO: research"
-  },
-  {
-    "id": "OR-010-04",
-    "name": "Applegate Field Office",
+    "id": "UTW02000",
+    "name": "Fillmore Field Office",
     "type": "field",
-    "state": "OR",
-    "lat": 42.3171,
-    "lng": -122.8756,
-    "address": "3040 Biddle Rd, Medford, OR 97504",
-    "phone": "TODO: research",
-    "email": "TODO: research",
-    "recreationPlannerName": "TODO: research",
-    "recreationPlannerEmail": "TODO: research"
+    "state": "UT",
+    "lat": 38.9803,
+    "lng": -112.3214
+  },
+  {
+    "id": "UTP01000",
+    "name": "Grand Staircase Escalante Nat'l Mon",
+    "type": "field",
+    "state": "UT",
+    "lat": 37.037,
+    "lng": -112.5242
+  },
+  {
+    "id": "UTP02000",
+    "name": "Kanab Field Office",
+    "type": "field",
+    "state": "UT",
+    "lat": 37.037,
+    "lng": -112.5242
+  },
+  {
+    "id": "UTY01000",
+    "name": "Moab Field Office",
+    "type": "field",
+    "state": "UT",
+    "lat": 38.5607,
+    "lng": -109.5493
+  },
+  {
+    "id": "UTY02000",
+    "name": "Monticello Field Office",
+    "type": "field",
+    "state": "UT",
+    "lat": 37.8778,
+    "lng": -109.3434
+  },
+  {
+    "id": "UTG02000",
+    "name": "Price Field Office",
+    "type": "field",
+    "state": "UT",
+    "lat": 39.5986,
+    "lng": -110.8196
+  },
+  {
+    "id": "UTC02000",
+    "name": "Richfield Field Office",
+    "type": "field",
+    "state": "UT",
+    "lat": 38.7805,
+    "lng": -112.0826
+  },
+  {
+    "id": "UTW01000",
+    "name": "Salt Lake Field Office",
+    "type": "field",
+    "state": "UT",
+    "lat": 40.7791,
+    "lng": -112.0369
+  },
+  {
+    "id": "UTC03000",
+    "name": "St George Field Office",
+    "type": "field",
+    "state": "UT",
+    "lat": 37.0828,
+    "lng": -113.5768
+  },
+  {
+    "id": "UTG01000",
+    "name": "Vernal Field Office",
+    "type": "field",
+    "state": "UT",
+    "lat": 40.4535,
+    "lng": -109.5194
+  },
+  {
+    "id": "UTW02000",
+    "name": "Fillmore Field Office",
+    "type": "other",
+    "state": "UT",
+    "lat": 39.7264,
+    "lng": -112.307
+  },
+  {
+    "id": "UTP01000",
+    "name": "Grand Staircase Escalante Nat'l Mon",
+    "type": "other",
+    "state": "UT",
+    "lat": 37.9109,
+    "lng": -111.4236
+  },
+  {
+    "id": "UTP01000",
+    "name": "Grand Staircase Escalante Nat'l Mon",
+    "type": "other",
+    "state": "UT",
+    "lat": 37.7728,
+    "lng": -111.6157
+  },
+  {
+    "id": "UTP01000",
+    "name": "Grand Staircase Escalante Nat'l Mon",
+    "type": "other",
+    "state": "UT",
+    "lat": 37.5672,
+    "lng": -112.0544
+  },
+  {
+    "id": "UTP01000",
+    "name": "Grand Staircase Escalante Nat'l Mon",
+    "type": "other",
+    "state": "UT",
+    "lat": 37.0768,
+    "lng": -111.6642
+  },
+  {
+    "id": "UTC02100",
+    "name": "Hanksville Field Station",
+    "type": "other",
+    "state": "UT",
+    "lat": 38.3667,
+    "lng": -110.7172
+  },
+  {
+    "id": "UTP02000",
+    "name": "Kanab Field Office",
+    "type": "other",
+    "state": "UT",
+    "lat": 37.0425,
+    "lng": -112.5121
+  },
+  {
+    "id": "WY000000",
+    "name": "Wyoming",
+    "type": "state",
+    "state": "WY",
+    "lat": 41.1688,
+    "lng": -104.8266
+  },
+  {
+    "id": "WYR00000",
+    "name": "Wind River/bighorn Basin District Off",
+    "type": "district",
+    "state": "WY",
+    "lat": 44.0164,
+    "lng": -107.9386
+  },
+  {
+    "id": "WYD00000",
+    "name": "Wyoming High Desert District Office",
+    "type": "district",
+    "state": "WY",
+    "lat": 41.6278,
+    "lng": -109.2306
+  },
+  {
+    "id": "WYP00000",
+    "name": "Wyoming High Plains District Office",
+    "type": "district",
+    "state": "WY",
+    "lat": 42.8193,
+    "lng": -106.3843
+  },
+  {
+    "id": "WYP07000",
+    "name": "Buffalo Field Office",
+    "type": "field",
+    "state": "WY",
+    "lat": 44.3422,
+    "lng": -106.7243
+  },
+  {
+    "id": "WYP06000",
+    "name": "Casper Field Office",
+    "type": "field",
+    "state": "WY",
+    "lat": 42.8193,
+    "lng": -106.3843
+  },
+  {
+    "id": "WYR02000",
+    "name": "Cody Field Office",
+    "type": "field",
+    "state": "WY",
+    "lat": 44.5277,
+    "lng": -109.042
+  },
+  {
+    "id": "WYD09000",
+    "name": "Kemmerer Field Office",
+    "type": "field",
+    "state": "WY",
+    "lat": 41.8125,
+    "lng": -110.5336
+  },
+  {
+    "id": "WYR05000",
+    "name": "Lander Field Office",
+    "type": "field",
+    "state": "WY",
+    "lat": 42.8402,
+    "lng": -108.7456
+  },
+  {
+    "id": "WYP08000",
+    "name": "Newcastle Field Office",
+    "type": "field",
+    "state": "WY",
+    "lat": 43.8493,
+    "lng": -104.1897
+  },
+  {
+    "id": "WYD01000",
+    "name": "Pinedale Field Office",
+    "type": "field",
+    "state": "WY",
+    "lat": 42.8674,
+    "lng": -109.8846
+  },
+  {
+    "id": "WYD03000",
+    "name": "Rawlins Field Office",
+    "type": "field",
+    "state": "WY",
+    "lat": 41.7999,
+    "lng": -107.2413
+  },
+  {
+    "id": "WYD04000",
+    "name": "Rock Springs Field Office",
+    "type": "field",
+    "state": "WY",
+    "lat": 41.6278,
+    "lng": -109.2306
+  },
+  {
+    "id": "WYR01000",
+    "name": "Worland Field Office",
+    "type": "field",
+    "state": "WY",
+    "lat": 44.0164,
+    "lng": -107.9386
   }
 ]
