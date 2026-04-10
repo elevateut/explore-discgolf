@@ -40,14 +40,6 @@
     "lng": -149.7958
   },
   {
-    "id": "AKF03000",
-    "name": "Central Yukon Field Office",
-    "type": "field",
-    "state": "AK",
-    "lat": 64.8404,
-    "lng": -147.8147
-  },
-  {
     "id": "AKF02000",
     "name": "Eastern Interior Field Office",
     "type": "field",
@@ -336,14 +328,6 @@
     "lng": -123.2105
   },
   {
-    "id": "CAN02000",
-    "name": "Applegate Field Office",
-    "type": "other",
-    "state": "CA",
-    "lat": 41.5308,
-    "lng": -120.1795
-  },
-  {
     "id": "CAC06900",
     "name": "Carrizo Plain National Monument",
     "type": "other",
@@ -464,28 +448,12 @@
     "lng": -107.5316
   },
   {
-    "id": "COF02000",
-    "name": "Royal Gorge Field Office",
-    "type": "field",
-    "state": "CO",
-    "lat": 38.4454,
-    "lng": -105.1966
-  },
-  {
     "id": "COF03000",
     "name": "San Luis Valley Field Office",
     "type": "field",
     "state": "CO",
     "lat": 37.5733,
     "lng": -106.1251
-  },
-  {
-    "id": "COS01000",
-    "name": "Tres Rios Field Office",
-    "type": "field",
-    "state": "CO",
-    "lat": 37.4619,
-    "lng": -108.5183
   },
   {
     "id": "COS05000",
@@ -832,14 +800,6 @@
     "lng": -114.0544
   },
   {
-    "id": "MTL00000",
-    "name": "North Central Montana District Office",
-    "type": "field",
-    "state": "MT",
-    "lat": 47.5209,
-    "lng": -111.2428
-  },
-  {
     "id": "MTC03000",
     "name": "North Dakota Field Office",
     "type": "field",
@@ -984,46 +944,6 @@
     "lng": -105.5869
   },
   {
-    "id": "NMA00000",
-    "name": "Albuquerque District Office",
-    "type": "other",
-    "state": "NM",
-    "lat": 36.0194,
-    "lng": -106.9419
-  },
-  {
-    "id": "NM006000",
-    "name": "Amarillo Field Office",
-    "type": "other",
-    "state": "NM",
-    "lat": 37.4479,
-    "lng": -100.9626
-  },
-  {
-    "id": "NMP02000",
-    "name": "Carlsbad Field Office",
-    "type": "other",
-    "state": "NM",
-    "lat": 32.7022,
-    "lng": -103.1407
-  },
-  {
-    "id": "NML00000",
-    "name": "Las Cruces District Office",
-    "type": "other",
-    "state": "NM",
-    "lat": 32.4307,
-    "lng": -105.6221
-  },
-  {
-    "id": "NMA01000",
-    "name": "Rio Puerco Field Office",
-    "type": "other",
-    "state": "NM",
-    "lat": 35.1629,
-    "lng": -107.8389
-  },
-  {
     "id": "NV000000",
     "name": "Nevada State Ofc, Bur Of Land Mgmt",
     "type": "state",
@@ -1142,14 +1062,6 @@
     "state": "NV",
     "lat": 36.1357,
     "lng": -115.4279
-  },
-  {
-    "id": "NVS02000",
-    "name": "Red Rock/sloan Canyon Nca Field Offic",
-    "type": "field",
-    "state": "NV",
-    "lat": 35.9162,
-    "lng": -115.1261
   },
   {
     "id": "NVC02000",
@@ -1520,14 +1432,6 @@
     "lng": -112.3214
   },
   {
-    "id": "UTP01000",
-    "name": "Grand Staircase Escalante Nat'l Mon",
-    "type": "field",
-    "state": "UT",
-    "lat": 37.037,
-    "lng": -112.5242
-  },
-  {
     "id": "UTP02000",
     "name": "Kanab Field Office",
     "type": "field",
@@ -1592,14 +1496,6 @@
     "lng": -109.5194
   },
   {
-    "id": "UTW02000",
-    "name": "Fillmore Field Office",
-    "type": "other",
-    "state": "UT",
-    "lat": 39.7264,
-    "lng": -112.307
-  },
-  {
     "id": "UTP01000",
     "name": "Grand Staircase Escalante Nat'l Mon",
     "type": "other",
@@ -1608,44 +1504,12 @@
     "lng": -111.4236
   },
   {
-    "id": "UTP01000",
-    "name": "Grand Staircase Escalante Nat'l Mon",
-    "type": "other",
-    "state": "UT",
-    "lat": 37.7728,
-    "lng": -111.6157
-  },
-  {
-    "id": "UTP01000",
-    "name": "Grand Staircase Escalante Nat'l Mon",
-    "type": "other",
-    "state": "UT",
-    "lat": 37.5672,
-    "lng": -112.0544
-  },
-  {
-    "id": "UTP01000",
-    "name": "Grand Staircase Escalante Nat'l Mon",
-    "type": "other",
-    "state": "UT",
-    "lat": 37.0768,
-    "lng": -111.6642
-  },
-  {
     "id": "UTC02100",
     "name": "Hanksville Field Station",
     "type": "other",
     "state": "UT",
     "lat": 38.3667,
     "lng": -110.7172
-  },
-  {
-    "id": "UTP02000",
-    "name": "Kanab Field Office",
-    "type": "other",
-    "state": "UT",
-    "lat": 37.0425,
-    "lng": -112.5121
   },
   {
     "id": "WY000000",

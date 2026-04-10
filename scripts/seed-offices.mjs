@@ -32,17 +32,21 @@ async function fetchAllOffices() {
   const data = await res.json();
   if (data.error) throw new Error(data.error.message);
 
-  const offices = data.features.map((f) => {
+  const seen = new Set();
+  const offices = [];
+  for (const f of data.features) {
     const a = f.attributes;
-    return {
+    if (seen.has(a.ADM_UNIT_CD)) continue; // deduplicate
+    seen.add(a.ADM_UNIT_CD);
+    offices.push({
       id: a.ADM_UNIT_CD,
       name: a.Label_Full_Name || a.ADMU_NAME,
       type: ORG_TYPE_MAP[a.BLM_ORG_TYPE] ?? "other",
       state: a.ADMIN_ST,
       lat: Math.round(f.geometry.y * 10000) / 10000,
       lng: Math.round(f.geometry.x * 10000) / 10000,
-    };
-  });
+    });
+  }
 
   // Sort by state, then type (state > district > field > other), then name
   const typeOrder = { state: 0, district: 1, field: 2, other: 3 };
