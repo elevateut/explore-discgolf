@@ -181,19 +181,36 @@ export async function handleToolCall(
           info.email = email;
         }
 
-        // Page text content (trimmed for context)
+        // Extract all emails (decode Cloudflare obfuscation for all matches)
+        const allCfEmails = html.match(/data-cfemail="([a-f0-9]+)"/g) ?? [];
+        const emails = allCfEmails.map((match) => {
+          const hex = match.match(/"([a-f0-9]+)"/)?.[1] ?? "";
+          const key = parseInt(hex.substr(0, 2), 16);
+          let decoded = "";
+          for (let i = 2; i < hex.length; i += 2) {
+            decoded += String.fromCharCode(parseInt(hex.substr(i, 2), 16) ^ key);
+          }
+          return decoded;
+        }).filter((e, i, arr) => arr.indexOf(e) === i); // deduplicate
+
+        if (emails.length > 0) info.emails = emails.join(", ");
+
+        // Extract page text content — get a generous excerpt for Claude to find staff names
         const textContent = html
           .replace(/<script[\s\S]*?<\/script>/gi, "")
           .replace(/<style[\s\S]*?<\/style>/gi, "")
+          .replace(/<nav[\s\S]*?<\/nav>/gi, "")
+          .replace(/<footer[\s\S]*?<\/footer>/gi, "")
           .replace(/<[^>]+>/g, " ")
           .replace(/\s+/g, " ")
           .trim()
-          .slice(0, 2000);
+          .slice(0, 4000); // increased from 2000 for more context
 
         return JSON.stringify({
           url,
           ...info,
-          pageExcerpt: textContent,
+          staffAndContactInfo: textContent,
+          note: "Look for staff names, titles, and roles in the page text above. BLM pages often list Field Manager, Recreation Planner, and other key staff.",
         });
       } catch (err: any) {
         return JSON.stringify({

@@ -24,6 +24,17 @@ Reference specific sections relevant to this office's situation:
 - **Section 131 — Gateway Communities:** Financial/technical assistance for communities near public lands.
 - **Sections 221–222 — Youth and Veterans:** Strategy to increase youth visits; veteran recreation partnerships.
 
+## IMPORTANT: Research Before Writing
+
+Before generating any content, you MUST use the available tools to gather real data:
+
+1. ALWAYS call the query_blm_office_page tool with the office website URL to find actual staff names, addresses, and current projects. The BLM website has real people's names — use them. Never write "Recreation Planner" generically if you can find the actual person's name.
+2. ALWAYS call query_blm_recreation_sites to understand what recreation infrastructure already exists in this office's jurisdiction.
+3. Call query_nearby_courses to understand existing disc golf coverage near this office.
+4. Call get_engagement_history to check if we have contacted this office before.
+
+Do NOT skip the research phase. Generic packets with no real names or site-specific details are useless. Every packet should reference real staff names, real recreation sites, and real local context.
+
 ## Output Requirements
 
 Generate structured output with CLEARLY LABELED SECTIONS using these exact delimiters:
@@ -115,11 +126,15 @@ export function buildUserPrompt(context: OfficeContext): string {
 
   // Contacts
   parts.push("\n# Known Office Contacts\n");
-  if (context.phone || context.email) {
-    if (context.phone) parts.push(`- **Phone:** ${context.phone}`);
-    if (context.email) parts.push(`- **Email:** ${context.email}`);
-  } else {
-    parts.push("No direct contact information available. Suggest title-based outreach.");
+  if (context.phone) parts.push(`- **Phone:** ${context.phone}`);
+  if (context.email) parts.push(`- **Email:** ${context.email}`);
+  if (!context.phone && !context.email) {
+    parts.push("No contact info on file — use the query_blm_office_page tool to find it.");
+  }
+  parts.push("");
+  parts.push("**IMPORTANT:** Use the query_blm_office_page tool to scrape the BLM website for this office and find actual staff names, the field manager, recreation planner, and any other relevant contacts. Do not use generic titles without first attempting to find real names.");
+  if (context.websiteUrl) {
+    parts.push(`Call: query_blm_office_page with website_url = "${context.websiteUrl}"`);
   }
 
   // Recreation sites
