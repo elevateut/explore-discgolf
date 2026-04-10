@@ -3,7 +3,6 @@ import { defineCollection, z } from "astro:content";
 const exploreAct = defineCollection({
   type: "content",
   schema: z.object({
-    slug: z.string(),
     title: z.string(),
     description: z.string(),
     order: z.number(),
@@ -14,7 +13,6 @@ const exploreAct = defineCollection({
 const resources = defineCollection({
   type: "content",
   schema: z.object({
-    slug: z.string(),
     title: z.string(),
     description: z.string(),
     category: z.enum(["template", "one-pager", "guide", "talking-points"]),
@@ -26,7 +24,6 @@ const resources = defineCollection({
 const caseStudies = defineCollection({
   type: "content",
   schema: z.object({
-    slug: z.string(),
     title: z.string(),
     description: z.string(),
     blm_office: z.string(),
@@ -40,7 +37,6 @@ const caseStudies = defineCollection({
 const news = defineCollection({
   type: "content",
   schema: z.object({
-    slug: z.string(),
     title: z.string(),
     description: z.string(),
     date: z.coerce.date(),

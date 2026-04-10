@@ -1,25 +1,14 @@
 ---
 /**
  * Office Detail Page — dynamic route for individual BLM offices.
+ * Route: /offices/:id (uses blmUnitCode as the id parameter)
  *
- * Route: /offices/:id
- *
- * Displays detailed information about a single BLM office including:
- *   - Office name, type, address, contact info
- *   - Map with the office boundary polygon
- *   - Recreation sites managed by this office
- *   - Current engagement status
- *   - "Build My Packet" button to generate an AI-powered proposal
- *
- * Since the site uses SSR (output: "server"), this page renders on each
- * request. For SSG, switch to getStaticPaths() with office data.
+ * Loads office data from static JSON (Phase 0) with future Supabase fallback.
  */
 
 import BaseLayout from "@layouts/BaseLayout.astro";
-// TODO: Import Supabase query helpers once wired up
-// import { getOfficeByUnitCode, getOfficeEngagementStatus } from "@lib/supabase/queries";
-// TODO: Import map component for office boundary display
-// import OfficeMap from "@components/OfficeMap.svelte";
+import officesData from "@data/blm-offices.json";
+import { engagementBadges, officeTypeLabels } from "@lib/badges";
 
 const { id } = Astro.params;
 
@@ -27,57 +16,38 @@ if (!id) {
   return Astro.redirect("/offices");
 }
 
-// TODO: Fetch office data from Supabase
-// const office = await getOfficeByUnitCode(id);
-// if (!office) {
-//   return new Response("Office not found", { status: 404 });
-// }
-// const engagement = await getOfficeEngagementStatus(office.id);
+const office = officesData.find((o: any) => o.id === id);
 
-// Placeholder data until Supabase is connected
-const office = {
-  id,
-  name: `BLM Office: ${id}`,
-  office_type: "field",
-  state: "UT",
-  address: null as string | null,
-  phone: null as string | null,
-  email: null as string | null,
-  recreation_planner_name: null as string | null,
-  recreation_planner_email: null as string | null,
-};
+if (!office) {
+  return new Response(null, { status: 404, statusText: "Not Found" });
+}
 
 const engagement = {
   status: "no-contact",
   updated_at: new Date().toISOString(),
 };
 
-/**
- * Status badge color mapping for engagement status.
- */
-const statusColors: Record<string, string> = {
-  "no-contact": "badge-ghost",
-  "initial-outreach": "badge-info",
-  "meeting-scheduled": "badge-warning",
-  "meeting-completed": "badge-warning",
-  "proposal-submitted": "badge-accent",
-  "project-active": "badge-success",
-  "course-built": "badge-primary",
-};
+const engBadge = engagementBadges[engagement.status as keyof typeof engagementBadges] ?? { label: engagement.status, class: "badge-ghost" };
+
+function isReal(val: unknown): val is string {
+  return typeof val === "string" && val.length > 0 && !val.startsWith("TODO");
+}
+const hasContact = isReal(office.phone) || isReal(office.email);
+const hasPlanner = isReal(office.recreationPlannerName);
 ---
 
 <BaseLayout
   title={`${office.name} — EXPLORE Disc Golf`}
-  description={`BLM office detail page for ${office.name}. View contact info, engagement status, and generate a proposal packet.`}
+  description={`BLM office detail page for ${office.name}. View contact info, engagement status, and resources for disc golf advocacy.`}
 >
   <section class="section-padding">
     <div class="content-width">
       <!-- Breadcrumb -->
-      <div class="text-sm breadcrumbs mb-6">
+      <div class="breadcrumbs text-sm mb-6">
         <ul>
-          <li><a href="/">Home</a></li>
-          <li><a href="/offices">Offices</a></li>
-          <li>{office.name}</li>
+          <li><a href="/" class="text-primary">Home</a></li>
+          <li><a href="/offices" class="text-primary">Offices</a></li>
+          <li class="text-base-content/60">{office.name}</li>
         </ul>
       </div>
 
@@ -85,75 +55,111 @@ const statusColors: Record<string, string> = {
       <div class="flex flex-col md:flex-row justify-between items-start gap-4 mb-8">
         <div>
           <h1 class="text-3xl font-bold">{office.name}</h1>
-          <div class="flex gap-2 mt-2">
-            <span class="badge badge-outline">{office.office_type}</span>
+          <div class="flex flex-wrap gap-2 mt-2">
+            <span class="badge badge-outline">{officeTypeLabels[office.type] ?? office.type}</span>
             <span class="badge badge-ghost">{office.state}</span>
-            <span class={`badge ${statusColors[engagement.status] ?? "badge-ghost"}`}>
-              {engagement.status.replace(/-/g, " ")}
+            <span class={`badge ${engBadge.class}`}>
+              {engBadge.label}
             </span>
           </div>
         </div>
-        <div>
-          <!-- TODO: Wire up to packet generation action -->
-          <button class="btn btn-primary btn-lg">
+        <div class="text-right">
+          <button class="btn btn-primary btn-lg" disabled>
             Build My Packet
           </button>
+          <p class="text-xs text-base-content/50 mt-1">AI packet generation coming soon</p>
         </div>
       </div>
 
       <div class="grid lg:grid-cols-3 gap-8">
-        <!-- Map -->
-        <div class="lg:col-span-2">
+        <!-- Main content -->
+        <div class="lg:col-span-2 flex flex-col gap-6">
+          <!-- Map placeholder -->
           <div class="card bg-base-200">
             <div class="card-body">
               <h2 class="card-title">Office Boundary</h2>
-              <!-- TODO: Replace with OfficeMap Svelte component showing boundary polygon -->
               <div class="w-full h-[400px] rounded-lg bg-base-300 flex items-center justify-center">
-                <span class="text-base-content/50">Map placeholder — boundary for {office.name}</span>
+                <div class="text-center text-base-content/50">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-2 opacity-30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                  </svg>
+                  <p>Interactive map coming in Phase 1</p>
+                  <p class="text-xs mt-1">
+                    {office.lat.toFixed(4)}, {office.lng.toFixed(4)}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- What you can do -->
+          <div class="card bg-base-200">
+            <div class="card-body">
+              <h2 class="card-title">How to Engage This Office</h2>
+              <div class="space-y-3 text-sm">
+                <p>
+                  The EXPLORE Act gives BLM new authorities for recreation development.
+                  Here's how to start a conversation with {office.name}:
+                </p>
+                <ol class="list-decimal list-inside space-y-2 ml-2">
+                  <li>Download the <a href="/resources/blm-one-pager" class="link link-primary">BLM Executive One-Pager</a> and customize it for this office</li>
+                  <li>Review the <a href="/resources/talking-points" class="link link-primary">Talking Points</a> for common concerns</li>
+                  <li>Read the <a href="/resources/engagement-strategy" class="link link-primary">Engagement Strategy</a> for meeting request guidance</li>
+                  <li>Request a meeting with the Recreation Planner to discuss partnership opportunities</li>
+                </ol>
               </div>
             </div>
           </div>
 
           <!-- Recreation Sites -->
-          <div class="card bg-base-200 mt-6">
+          <div class="card bg-base-200">
             <div class="card-body">
               <h2 class="card-title">Recreation Sites</h2>
-              <!-- TODO: Fetch and display BLM recreation sites within this office's boundary -->
-              <p class="text-base-content/50 italic">
-                Recreation site data will be loaded from the BLM ArcGIS MapServer.
+              <p class="text-base-content/50 text-sm">
+                Recreation site data from BLM ArcGIS will be loaded in Phase 1.
               </p>
             </div>
           </div>
         </div>
 
-        <!-- Sidebar: Contact & Engagement -->
+        <!-- Sidebar -->
         <div class="flex flex-col gap-6">
           <!-- Contact info -->
           <div class="card bg-base-200">
             <div class="card-body">
               <h2 class="card-title text-lg">Contact Information</h2>
               <div class="space-y-2 text-sm">
-                {office.address ? (
-                  <p><span class="font-semibold">Address:</span> {office.address}</p>
+                {office.address && (
+                  <div>
+                    <span class="font-semibold block text-base-content/60 text-xs uppercase tracking-wide">Address</span>
+                    <p>{office.address}</p>
+                  </div>
+                )}
+                {hasContact ? (
+                  <>
+                    {isReal(office.phone) && (
+                      <div>
+                        <span class="font-semibold block text-base-content/60 text-xs uppercase tracking-wide">Phone</span>
+                        <p>{office.phone}</p>
+                      </div>
+                    )}
+                    {isReal(office.email) && (
+                      <div>
+                        <span class="font-semibold block text-base-content/60 text-xs uppercase tracking-wide">Email</span>
+                        <a href={`mailto:${office.email}`} class="link link-primary">{office.email}</a>
+                      </div>
+                    )}
+                  </>
                 ) : (
-                  <p class="text-base-content/50">Address not yet available</p>
+                  <p class="text-base-content/50 italic">Contact details being researched</p>
                 )}
-                {office.phone && (
-                  <p><span class="font-semibold">Phone:</span> {office.phone}</p>
-                )}
-                {office.email && (
-                  <p>
-                    <span class="font-semibold">Email:</span>{" "}
-                    <a href={`mailto:${office.email}`} class="link link-primary">{office.email}</a>
-                  </p>
-                )}
-                {office.recreation_planner_name && (
+                {hasPlanner && (
                   <div class="mt-3 pt-3 border-t border-base-300">
-                    <p class="font-semibold">Recreation Planner</p>
-                    <p>{office.recreation_planner_name}</p>
-                    {office.recreation_planner_email && (
-                      <a href={`mailto:${office.recreation_planner_email}`} class="link link-primary text-sm">
-                        {office.recreation_planner_email}
+                    <span class="font-semibold block text-base-content/60 text-xs uppercase tracking-wide">Recreation Planner</span>
+                    <p>{office.recreationPlannerName}</p>
+                    {isReal(office.recreationPlannerEmail) && (
+                      <a href={`mailto:${office.recreationPlannerEmail}`} class="link link-primary text-sm">
+                        {office.recreationPlannerEmail}
                       </a>
                     )}
                   </div>
@@ -166,27 +172,23 @@ const statusColors: Record<string, string> = {
           <div class="card bg-base-200">
             <div class="card-body">
               <h2 class="card-title text-lg">Engagement Status</h2>
-              <div class="space-y-2">
-                <span class={`badge ${statusColors[engagement.status] ?? "badge-ghost"} badge-lg`}>
-                  {engagement.status.replace(/-/g, " ")}
-                </span>
-                <p class="text-xs text-base-content/50">
-                  Last updated: {new Date(engagement.updated_at).toLocaleDateString()}
-                </p>
-                <!-- TODO: Show engagement history timeline -->
-              </div>
+              <span class={`badge ${engBadge.class} badge-lg`}>
+                {engBadge.label}
+              </span>
+              <p class="text-xs text-base-content/50 mt-1">
+                Engagement tracking coming in Phase 2
+              </p>
             </div>
           </div>
 
-          <!-- Quick actions -->
+          <!-- CTA -->
           <div class="card bg-primary text-primary-content">
             <div class="card-body">
               <h2 class="card-title text-lg">Take Action</h2>
-              <p class="text-sm">
-                Generate a free, AI-powered proposal packet tailored to this office.
+              <p class="text-sm opacity-90">
+                Download resources to prepare your outreach to this office.
               </p>
-              <!-- TODO: Wire up to packet generation Astro Action -->
-              <button class="btn btn-ghost mt-2">Build My Packet</button>
+              <a href="/resources" class="btn btn-outline border-primary-content/30 text-primary-content hover:bg-primary-content/10 mt-2">Browse Resources</a>
             </div>
           </div>
         </div>

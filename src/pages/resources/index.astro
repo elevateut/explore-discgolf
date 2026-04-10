@@ -48,32 +48,32 @@ const grouped = categories.map((cat) => ({
               Resources coming soon. Check back or contribute on GitHub.
             </p>
           ) : (
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div class={`grid gap-4 ${category.entries.length === 1 ? 'md:grid-cols-1 max-w-lg' : 'md:grid-cols-2 lg:grid-cols-3'}`}>
               {category.entries.map((resource) => (
                 <div class="card bg-base-200">
                   <div class="card-body">
-                    <h3 class="card-title text-sm">{resource.data.title}</h3>
+                    <h3 class="card-title text-base">{resource.data.title}</h3>
                     <p class="text-sm text-base-content/70">
                       {resource.data.description}
                     </p>
                     <div class="card-actions justify-end mt-2">
-                      {resource.data.downloadable && resource.data.filePath ? (
+                      <a
+                        href={`/resources/${resource.id.replace(/\.md$/, '')}`}
+                        class="btn btn-primary btn-sm"
+                      >
+                        Read
+                      </a>
+                      {resource.data.filePath ? (
                         <a
                           href={resource.data.filePath}
-                          class="btn btn-primary btn-sm"
+                          class="btn btn-outline btn-sm"
                           download
                         >
-                          Download
+                          Download PDF
                         </a>
-                      ) : (
-                        <span class="badge badge-ghost">Coming Soon</span>
-                      )}
-                      <a
-                        href={`/resources/${resource.data.slug}`}
-                        class="btn btn-ghost btn-sm"
-                      >
-                        Read More
-                      </a>
+                      ) : resource.data.downloadable ? (
+                        <span class="badge badge-ghost text-xs">PDF coming soon</span>
+                      ) : null}
                     </div>
                   </div>
                 </div>

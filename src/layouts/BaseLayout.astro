@@ -3,10 +3,10 @@
  * BaseLayout — shared layout for all pages on the EXPLORE Disc Golf site.
  *
  * Provides:
- *   - HTML head with meta tags, Open Graph placeholders, and global styles
- *   - DaisyUI navbar with site navigation
+ *   - HTML head with meta tags, Open Graph, brand fonts, and global styles
+ *   - DaisyUI navbar with logo and polished navigation
  *   - Main content slot
- *   - Footer with ElevateUT attribution
+ *   - Footer with branding, links, and nonprofit attribution
  */
 
 import "@styles/global.css";
@@ -18,12 +18,21 @@ interface Props {
 }
 
 const {
-  title = "EXPLORE Disc Golf — ElevateUT",
-  description = "Open source toolkit for expanding disc golf on America's public lands. Where the wild things fly.",
-  ogImage = "/images/og-default.png",
+  title = "EXPLORE Disc Golf — Disc golf on America's public lands",
+  description = "Open source toolkit for expanding disc golf on America's public lands under the EXPLORE Act. A 501(c)(3) nonprofit initiative by ElevateUT.",
+  ogImage = "/images/og-default.svg",
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const currentPath = Astro.url.pathname;
+
+const navLinks = [
+  { href: "/explore-act", label: "EXPLORE Act" },
+  { href: "/offices", label: "Offices" },
+  { href: "/resources", label: "Resources" },
+  { href: "/case-studies", label: "Case Studies" },
+  { href: "/about", label: "About" },
+];
 ---
 
 <!doctype html>
@@ -38,7 +47,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <link rel="canonical" href={canonicalURL} />
 
     <!-- Open Graph / Social -->
-    <!-- TODO: Add final OG image and site-specific social meta -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -47,50 +55,86 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <meta name="twitter:card" content="summary_large_image" />
 
     <!-- Favicon -->
-    <!-- TODO: Add favicon files to /public -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Preload brand fonts -->
+    <link rel="preload" href="/fonts/PlusJakartaSans-Bold.ttf" as="font" type="font/ttf" crossorigin />
+    <link rel="preload" href="/fonts/PlusJakartaSans-ExtraBold.ttf" as="font" type="font/ttf" crossorigin />
+    <link rel="preload" href="/fonts/Inter-Regular.ttf" as="font" type="font/ttf" crossorigin />
+    <link rel="preload" href="/fonts/Inter-Medium.ttf" as="font" type="font/ttf" crossorigin />
+    <link rel="preload" href="/fonts/Inter-SemiBold.ttf" as="font" type="font/ttf" crossorigin />
+    <link rel="preload" href="/fonts/Inter-Bold.ttf" as="font" type="font/ttf" crossorigin />
   </head>
 
-  <body class="min-h-screen flex flex-col">
+  <body class="min-h-screen flex flex-col font-body antialiased">
     <!-- Navbar -->
-    <header class="navbar bg-base-100 shadow-sm sticky top-0 z-50">
-      <div class="navbar-start">
-        <div class="dropdown">
-          <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
-            </svg>
+    <header class="sticky top-0 z-50 border-b border-base-300/50 bg-base-100/95 backdrop-blur-sm">
+      <nav class="navbar max-w-7xl mx-auto px-4 lg:px-8">
+        <div class="navbar-start">
+          <!-- Mobile menu -->
+          <div class="dropdown">
+            <div tabindex="0" role="button" class="btn btn-ghost lg:hidden p-2" aria-label="Open navigation menu">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
+              </svg>
+            </div>
+            <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-50 mt-3 w-56 p-3 shadow-lg border border-base-300/50">
+              <li><a href="/" class:list={[currentPath === "/" && "active"]}>Home</a></li>
+              {navLinks.map((link) => (
+                <li>
+                  <a href={link.href} class:list={[currentPath.startsWith(link.href) && "active"]}>
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+              <li class="mt-2">
+                <a href="/offices" class="btn btn-primary btn-sm text-primary-content justify-center">
+                  Find Your Office
+                </a>
+              </li>
+            </ul>
           </div>
-          <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-            <li><a href="/">Home</a></li>
-            <li><a href="/explore-act">EXPLORE Act</a></li>
-            <li><a href="/offices">Find Your Office</a></li>
-            <li><a href="/resources">Resources</a></li>
-            <li><a href="/case-studies">Case Studies</a></li>
-            <li><a href="/about">About</a></li>
+
+          <!-- Logo -->
+          <a href="/" class="flex items-center gap-2 pl-1 lg:pl-0 shrink-0" aria-label="EXPLORE Disc Golf home">
+            <img
+              src="/images/brand/explore-disc-golf-dark.png"
+              alt="EXPLORE Disc Golf"
+              class="h-8 lg:h-9 w-auto"
+              width="180"
+              height="36"
+            />
+          </a>
+        </div>
+
+        <!-- Desktop navigation -->
+        <div class="navbar-center hidden lg:flex">
+          <ul class="menu menu-horizontal gap-0.5 px-1 text-sm font-medium">
+            {navLinks.map((link) => (
+              <li>
+                <a
+                  href={link.href}
+                  class:list={[
+                    "rounded-lg px-3 py-2 transition-colors",
+                    currentPath.startsWith(link.href)
+                      ? "bg-primary/10 text-primary font-semibold"
+                      : "text-base-content/80 hover:text-base-content hover:bg-base-200",
+                  ]}
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
           </ul>
         </div>
-        <a href="/" class="btn btn-ghost text-xl font-bold">
-          <!-- TODO: Replace with logo image -->
-          EXPLORE Disc Golf
-        </a>
-      </div>
 
-      <div class="navbar-center hidden lg:flex">
-        <ul class="menu menu-horizontal px-1 gap-1">
-          <li><a href="/">Home</a></li>
-          <li><a href="/explore-act">EXPLORE Act</a></li>
-          <li><a href="/offices">Find Your Office</a></li>
-          <li><a href="/resources">Resources</a></li>
-          <li><a href="/case-studies">Case Studies</a></li>
-          <li><a href="/about">About</a></li>
-        </ul>
-      </div>
-
-      <div class="navbar-end">
-        <!-- TODO: Add sign-in / user menu when Supabase Auth is wired up -->
-        <a href="/offices" class="btn btn-primary btn-sm">Find Your Office</a>
-      </div>
+        <!-- Desktop CTA -->
+        <div class="navbar-end hidden lg:flex">
+          <a href="/offices" class="btn btn-primary btn-sm font-semibold shadow-sm">
+            Find Your Office
+          </a>
+        </div>
+      </nav>
     </header>
 
     <!-- Main content -->
@@ -99,30 +143,142 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     </main>
 
     <!-- Footer -->
-    <footer class="footer footer-center bg-neutral text-neutral-content p-10">
-      <aside>
-        <!-- TODO: Add ElevateUT logo -->
-        <p class="font-bold text-lg">ElevateUT Disc Golf</p>
-        <p class="text-sm opacity-80">
-          Disc golf on America's public lands. Where the wild things fly.
-        </p>
-        <p class="text-xs opacity-60 mt-2">
-          A 501(c)(3) nonprofit advocating for disc golf on America's public lands.
-        </p>
-        <p class="text-xs opacity-50 mt-1">
-          This project uses BLM public GIS data and the Claude API.
-          <br />
-          Licensed under <a href="https://github.com/elevateut/explore-discgolf/blob/main/LICENSE" class="link">Apache-2.0</a>.
-        </p>
-      </aside>
-      <nav>
-        <div class="grid grid-flow-col gap-4">
-          <!-- TODO: Add social links (GitHub, Instagram, etc.) -->
-          <a href="https://github.com/elevateut/explore-discgolf" class="link link-hover text-sm" target="_blank" rel="noopener">
-            GitHub
-          </a>
+    <footer class="bg-neutral text-neutral-content">
+      <div class="max-w-7xl mx-auto px-4 lg:px-8">
+        <!-- Top section: logo, tagline, and link columns -->
+        <div class="py-12 lg:py-16 grid gap-10 lg:grid-cols-12">
+          <!-- Brand column -->
+          <div class="lg:col-span-5">
+            <a href="/" class="inline-block" aria-label="EXPLORE Disc Golf home">
+              <img
+                src="/images/brand/explore-disc-golf-white.png"
+                alt="EXPLORE Disc Golf"
+                class="h-10 w-auto mb-4"
+                width="200"
+                height="40"
+              />
+            </a>
+            <p class="text-lg font-heading font-bold leading-snug max-w-sm">
+              Disc golf on America's public lands.
+            </p>
+            <p class="text-sm text-neutral-content/60 mt-1 italic">
+              Where the wild things fly.
+            </p>
+            <p class="text-xs text-neutral-content/50 mt-6">
+              A 501(c)(3) nonprofit advocating for disc golf<br />on America's public lands.
+            </p>
+          </div>
+
+          <!-- Link columns -->
+          <div class="lg:col-span-7 grid sm:grid-cols-3 gap-8">
+            <!-- Advocacy -->
+            <div>
+              <h3 class="text-xs font-semibold uppercase tracking-wider text-neutral-content/40 mb-3">
+                Advocacy
+              </h3>
+              <ul class="space-y-2 text-sm">
+                <li><a href="/explore-act" class="text-neutral-content/70 hover:text-neutral-content transition-colors">EXPLORE Act</a></li>
+                <li><a href="/offices" class="text-neutral-content/70 hover:text-neutral-content transition-colors">BLM Offices</a></li>
+                <li><a href="/case-studies" class="text-neutral-content/70 hover:text-neutral-content transition-colors">Case Studies</a></li>
+              </ul>
+            </div>
+
+            <!-- Resources -->
+            <div>
+              <h3 class="text-xs font-semibold uppercase tracking-wider text-neutral-content/40 mb-3">
+                Resources
+              </h3>
+              <ul class="space-y-2 text-sm">
+                <li><a href="/resources" class="text-neutral-content/70 hover:text-neutral-content transition-colors">Downloads</a></li>
+                <li><a href="/about" class="text-neutral-content/70 hover:text-neutral-content transition-colors">About</a></li>
+                <!-- News listing page deferred to Phase 5 -->
+              </ul>
+            </div>
+
+            <!-- Open Source -->
+            <div>
+              <h3 class="text-xs font-semibold uppercase tracking-wider text-neutral-content/40 mb-3">
+                Open Source
+              </h3>
+              <ul class="space-y-2 text-sm">
+                <li>
+                  <a href="https://github.com/elevateut/explore-discgolf" class="text-neutral-content/70 hover:text-neutral-content transition-colors" target="_blank" rel="noopener">
+                    GitHub
+                  </a>
+                </li>
+                <li>
+                  <a href="https://github.com/elevateut/explore-discgolf/blob/main/LICENSE" class="text-neutral-content/70 hover:text-neutral-content transition-colors" target="_blank" rel="noopener">
+                    Apache-2.0 License
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
-      </nav>
+
+        <!-- Bottom bar -->
+        <div class="border-t border-neutral-content/10 py-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-neutral-content/40">
+          <p>
+            &copy; {new Date().getFullYear()} ElevateUT. Open source under Apache-2.0.
+          </p>
+          <p>
+            Built with public BLM data and the Claude API.
+          </p>
+        </div>
+      </div>
     </footer>
   </body>
 </html>
+
+<style is:global>
+  /* Brand font-face declarations */
+  @font-face {
+    font-family: "Plus Jakarta Sans";
+    src: url("/fonts/PlusJakartaSans-Bold.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "Plus Jakarta Sans";
+    src: url("/fonts/PlusJakartaSans-ExtraBold.ttf") format("truetype");
+    font-weight: 800;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "Inter";
+    src: url("/fonts/Inter-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "Inter";
+    src: url("/fonts/Inter-Medium.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "Inter";
+    src: url("/fonts/Inter-SemiBold.ttf") format("truetype");
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "Inter";
+    src: url("/fonts/Inter-Bold.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  /* Font-family assignments are in global.css @layer base */
+</style>

@@ -5,6 +5,7 @@
    */
 
   import type { BLMOffice, EngagementStatus } from "@lib/blm/types";
+  import { engagementBadges } from "@lib/badges";
 
   interface Props {
     office: BLMOffice;
@@ -13,24 +14,7 @@
 
   let { office, engagement }: Props = $props();
 
-  /** Map engagement status to a human-readable label and DaisyUI badge color. */
-  function statusBadge(status: EngagementStatus["status"]): {
-    label: string;
-    class: string;
-  } {
-    const map: Record<EngagementStatus["status"], { label: string; class: string }> = {
-      "no-contact": { label: "No Contact", class: "badge-ghost" },
-      "initial-outreach": { label: "Outreach Sent", class: "badge-info" },
-      "meeting-scheduled": { label: "Meeting Scheduled", class: "badge-warning" },
-      "meeting-completed": { label: "Meeting Done", class: "badge-accent" },
-      "proposal-submitted": { label: "Proposal Sent", class: "badge-secondary" },
-      "project-active": { label: "Project Active", class: "badge-primary" },
-      "course-built": { label: "Course Built!", class: "badge-success" },
-    };
-    return map[status];
-  }
-
-  const badge = engagement ? statusBadge(engagement.status) : null;
+  const badge = engagement ? engagementBadges[engagement.status] : null;
 </script>
 
 <div class="card bg-base-100 shadow-md">

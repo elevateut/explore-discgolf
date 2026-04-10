@@ -2,7 +2,7 @@
  * Anthropic Claude Client — explore_discgolf
  *
  * Provides a configured Anthropic SDK client for server-side LLM operations.
- * Reads the API key from the ANTHROPIC_API_KEY environment variable.
+ * Returns null when the API key is missing so the site runs without LLM.
  *
  * This module must ONLY be imported in server-side contexts (Astro Actions,
  * SSR endpoints, build scripts). The API key is never exposed to the browser.
@@ -13,22 +13,24 @@ import Anthropic from "@anthropic-ai/sdk";
 const apiKey = import.meta.env.ANTHROPIC_API_KEY;
 
 if (!apiKey) {
-  throw new Error(
-    "Missing ANTHROPIC_API_KEY environment variable. " +
+  console.warn(
+    "[llm/client] Missing ANTHROPIC_API_KEY — packet generation disabled. " +
       "Copy .env.example to .env and add your Anthropic API key.",
   );
 }
 
 /**
- * Pre-configured Anthropic client instance.
- *
- * Usage:
- *   import { anthropic } from "@lib/llm/client";
- *   const response = await anthropic.messages.create({ ... });
+ * Pre-configured Anthropic client instance, or null when the API key is
+ * missing. Guard with `isLLMAvailable()` before calling.
  */
-export const anthropic = new Anthropic({
-  apiKey,
-});
+export const anthropic: Anthropic | null = apiKey
+  ? new Anthropic({ apiKey })
+  : null;
+
+/** Returns true when the Anthropic client is configured and ready. */
+export function isLLMAvailable(): boolean {
+  return anthropic !== null;
+}
 
 /**
  * Default model to use for packet generation.

@@ -52,11 +52,11 @@ const sections = [
             <div class="grid md:grid-cols-2 gap-4">
               {section.entries.map((entry) => (
                 <a
-                  href={`/explore-act/${entry.data.slug}`}
-                  class="card bg-base-200 hover:shadow-md transition-shadow"
+                  href={`/explore-act/${entry.id.replace(/\.md$/, '')}`}
+                  class="group card bg-base-200 hover:shadow-md transition-all"
                 >
                   <div class="card-body">
-                    <h3 class="card-title text-primary">{entry.data.title}</h3>
+                    <h3 class="card-title text-primary group-hover:text-primary/80 transition-colors">{entry.data.title}</h3>
                     <p class="text-sm text-base-content/70">
                       {entry.data.description}
                     </p>

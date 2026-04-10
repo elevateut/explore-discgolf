@@ -25,26 +25,66 @@ const RECREATION_BASE =
 // Helpers
 // ---------------------------------------------------------------------------
 
+const QUERY_TIMEOUT_MS = 15_000;
+const MAX_RECORD_COUNT = 1000;
+
 /**
  * Perform a query against a specific ArcGIS MapServer layer and return JSON.
- *
- * TODO: add retry / timeout logic and proper error mapping.
+ * Uses AbortController for timeout. Paginates automatically when the server
+ * returns `exceededTransferLimit`.
  */
 async function queryLayer(
   baseUrl: string,
   layerId: number,
   params: Record<string, string>,
 ): Promise<any> {
-  const url = new URL(`${baseUrl}/${layerId}/query`);
-  url.searchParams.set("f", "json");
-  url.searchParams.set("outFields", "*");
-  for (const [key, value] of Object.entries(params)) {
-    url.searchParams.set(key, value);
-  }
+  const allFeatures: any[] = [];
+  let offset = 0;
 
-  // TODO: implement actual fetch — stubbed for now
-  console.warn(`[blm/client] stubbed fetch: ${url.toString()}`);
-  return { features: [] };
+  while (true) {
+    const url = new URL(`${baseUrl}/${layerId}/query`);
+    url.searchParams.set("f", "json");
+    url.searchParams.set("outFields", "*");
+    url.searchParams.set("resultOffset", String(offset));
+    url.searchParams.set("resultRecordCount", String(MAX_RECORD_COUNT));
+    for (const [key, value] of Object.entries(params)) {
+      url.searchParams.set(key, value);
+    }
+
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), QUERY_TIMEOUT_MS);
+
+    try {
+      const res = await fetch(url.toString(), { signal: controller.signal });
+      if (!res.ok) {
+        throw new Error(`BLM ArcGIS HTTP ${res.status}: ${res.statusText}`);
+      }
+      const data = await res.json();
+      if (data.error) {
+        throw new Error(
+          `BLM ArcGIS error ${data.error.code}: ${data.error.message}`,
+        );
+      }
+
+      const features = data.features ?? [];
+      allFeatures.push(...features);
+
+      if (data.exceededTransferLimit && features.length > 0) {
+        offset += features.length;
+        continue;
+      }
+      return { ...data, features: allFeatures };
+    } catch (err: any) {
+      if (err.name === "AbortError") {
+        throw new Error(
+          `BLM ArcGIS query timed out after ${QUERY_TIMEOUT_MS}ms`,
+        );
+      }
+      throw err;
+    } finally {
+      clearTimeout(timer);
+    }
+  }
 }
 
 // ---------------------------------------------------------------------------

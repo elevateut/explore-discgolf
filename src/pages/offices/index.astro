@@ -1,0 +1,89 @@
+---
+/**
+ * Offices Index — listing page for BLM offices with office finder.
+ *
+ * Renders all offices from static JSON, grouped by state,
+ * with the interactive BLMOfficeFinder map component.
+ */
+
+import BaseLayout from "@layouts/BaseLayout.astro";
+import BLMOfficeFinder from "@components/BLMOfficeFinder.svelte";
+import officesData from "@data/blm-offices.json";
+import { officeTypeLabels } from "@lib/badges";
+
+const offices = officesData as Array<{
+  id: string;
+  name: string;
+  type: string;
+  state: string;
+  lat: number;
+  lng: number;
+  address: string;
+}>;
+
+// Group by state
+const byState = offices.reduce<Record<string, typeof offices>>((acc, office) => {
+  if (!acc[office.state]) acc[office.state] = [];
+  acc[office.state].push(office);
+  return acc;
+}, {});
+
+const sortedStates = Object.keys(byState).sort();
+
+---
+
+<BaseLayout
+  title="Find Your BLM Office — EXPLORE Disc Golf"
+  description="Find your local BLM field office and start advocating for disc golf on public lands."
+>
+  <!-- Map finder section -->
+  <section class="section-padding bg-base-200">
+    <div class="content-width">
+      <h1 class="text-4xl font-bold mb-2">Find Your BLM Office</h1>
+      <p class="text-lg text-base-content/70 mb-8 max-w-2xl">
+        Search by zip code or browse the map to find the BLM field office managing
+        public land near you. Each office is your entry point for proposing disc golf
+        under the EXPLORE Act.
+      </p>
+      <BLMOfficeFinder client:visible offices={offices} />
+    </div>
+  </section>
+
+  <!-- Office listing by state -->
+  <section class="section-padding bg-base-100">
+    <div class="content-width">
+      <h2 class="text-2xl font-bold mb-6">All Offices by State</h2>
+      <p class="text-base-content/60 mb-8 text-sm">
+        Currently showing {offices.length} seed offices. Full dataset (~220 offices) will be loaded from BLM ArcGIS in Phase 1.
+      </p>
+
+      <div class="space-y-8">
+        {sortedStates.map((state) => (
+          <div>
+            <h3 class="text-xl font-bold mb-3 border-b border-base-300 pb-2">{state}</h3>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {byState[state].map((office) => (
+                <a
+                  href={`/offices/${office.id}`}
+                  class="card bg-base-200 hover:shadow-md transition-shadow"
+                >
+                  <div class="card-body p-5">
+                    <h4 class="card-title text-sm text-primary">{office.name}</h4>
+                    <div class="flex gap-2">
+                      <span class="badge badge-sm badge-outline">
+                        {officeTypeLabels[office.type] ?? office.type}
+                      </span>
+                    </div>
+                    {office.address && (
+                      <p class="text-xs text-base-content/60 mt-1">{office.address}</p>
+                    )}
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

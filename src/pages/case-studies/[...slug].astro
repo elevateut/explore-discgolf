@@ -1,0 +1,152 @@
+---
+/**
+ * Case Studies — detail page for a single disc golf course case study.
+ *
+ * Renders markdown content from the "case-studies" collection with:
+ *   - Breadcrumb navigation
+ *   - Status badge (built / approved / in-progress / proposed)
+ *   - Metadata header showing BLM office, state, holes, and date
+ *   - Styled prose content on a Sandstone card
+ */
+
+import { getEntry } from "astro:content";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import { caseStudyBadges, stateNames } from "@lib/badges";
+
+const { slug } = Astro.params;
+
+if (!slug) {
+  return Astro.redirect("/case-studies");
+}
+
+const entry = await getEntry("case-studies", slug);
+
+if (!entry) {
+  return new Response(null, { status: 404, statusText: "Not Found" });
+}
+
+const { Content } = await entry.render();
+
+const status = caseStudyBadges[entry.data.status] ?? {
+  label: entry.data.status,
+  class: "badge-ghost",
+};
+
+// Format date
+const formattedDate = new Date(entry.data.date).toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+});
+
+const stateFull = stateNames[entry.data.state] ?? entry.data.state;
+---
+
+<BaseLayout
+  title={`${entry.data.title} — Case Studies — EXPLORE Disc Golf`}
+  description={entry.data.description}
+>
+  <article class="section-padding">
+    <div class="content-width">
+
+      <!-- Breadcrumbs -->
+      <div class="breadcrumbs text-sm mb-8">
+        <ul>
+          <li><a href="/" class="text-primary hover:text-primary/80">Home</a></li>
+          <li><a href="/case-studies" class="text-primary hover:text-primary/80">Case Studies</a></li>
+          <li class="text-base-content/60">{entry.data.title}</li>
+        </ul>
+      </div>
+
+      <!-- Article header -->
+      <header class="mb-8">
+        <div class="flex flex-wrap items-center gap-3 mb-4">
+          <span class={`badge ${status.class}`}>
+            {status.label}
+          </span>
+          <span class="badge badge-outline">{stateFull}</span>
+          {entry.data.course_holes && (
+            <span class="badge badge-outline">{entry.data.course_holes} holes</span>
+          )}
+        </div>
+
+        <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-base-content leading-tight mb-4">
+          {entry.data.title}
+        </h1>
+        <p class="text-lg md:text-xl text-base-content/70 max-w-3xl leading-relaxed">
+          {entry.data.description}
+        </p>
+      </header>
+
+      <!-- Metadata bar -->
+      <div class="rounded-xl bg-base-200 border border-base-300 p-5 mb-8">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <!-- BLM Office -->
+          <div>
+            <dt class="text-xs uppercase tracking-wide text-base-content/50 mb-1">BLM Office</dt>
+            <dd class="font-semibold text-sm text-base-content">
+              <a href="/offices" class="text-primary hover:text-primary/80 underline underline-offset-2">
+                {entry.data.blm_office}
+              </a>
+            </dd>
+          </div>
+          <!-- State -->
+          <div>
+            <dt class="text-xs uppercase tracking-wide text-base-content/50 mb-1">State</dt>
+            <dd class="font-semibold text-sm text-base-content">{stateFull} ({entry.data.state})</dd>
+          </div>
+          <!-- Holes -->
+          <div>
+            <dt class="text-xs uppercase tracking-wide text-base-content/50 mb-1">Course Layout</dt>
+            <dd class="font-semibold text-sm text-base-content">
+              {entry.data.course_holes ? `${entry.data.course_holes} holes` : "TBD"}
+            </dd>
+          </div>
+          <!-- Date -->
+          <div>
+            <dt class="text-xs uppercase tracking-wide text-base-content/50 mb-1">Date</dt>
+            <dd class="font-semibold text-sm text-base-content">{formattedDate}</dd>
+          </div>
+        </div>
+      </div>
+
+      <!-- Prose content card -->
+      <div class="card bg-base-200 shadow-sm">
+        <div class="card-body p-6 md:p-10 lg:p-12">
+          <div class="article-prose max-w-none">
+            <Content />
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom CTA -->
+      <div class="mt-8 rounded-xl bg-base-200 border border-base-300 p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div>
+          <p class="font-semibold text-base-content">Interested in this BLM office?</p>
+          <p class="text-sm text-base-content/60">
+            Find contact information and learn how to engage the {entry.data.blm_office}.
+          </p>
+        </div>
+        <a href="/offices" class="btn btn-primary gap-2 shrink-0">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          Find Your Office
+        </a>
+      </div>
+
+      <!-- Back link -->
+      <div class="mt-8 text-center">
+        <a href="/case-studies" class="btn btn-ghost btn-sm text-primary">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11 17l-5-5m0 0l5-5m-5 5h12" />
+          </svg>
+          All Case Studies
+        </a>
+      </div>
+
+    </div>
+  </article>
+</BaseLayout>
+
+<!-- Prose styles are in global.css .article-prose -->

@@ -1,0 +1,142 @@
+---
+/**
+ * EXPLORE Act — detail page for a single content entry.
+ *
+ * Renders markdown content from the "explore-act" collection with:
+ *   - Breadcrumb navigation
+ *   - Section badge (legislative / provisions / implementation)
+ *   - Prev/next navigation based on the `order` field
+ *   - Styled prose content on a Sandstone card
+ */
+
+import { getCollection, getEntry } from "astro:content";
+import BaseLayout from "@layouts/BaseLayout.astro";
+
+const { slug } = Astro.params;
+
+if (!slug) {
+  return Astro.redirect("/explore-act");
+}
+
+const entry = await getEntry("explore-act", slug);
+
+if (!entry) {
+  return new Response(null, { status: 404, statusText: "Not Found" });
+}
+
+const { Content } = await entry.render();
+
+const allEntries = await getCollection("explore-act");
+const sorted = allEntries.sort((a, b) => a.data.order - b.data.order);
+const currentIndex = sorted.findIndex((e) => e.id === entry.id);
+const prev = currentIndex > 0 ? sorted[currentIndex - 1] : null;
+const next = currentIndex < sorted.length - 1 ? sorted[currentIndex + 1] : null;
+
+// Section display configuration
+const sectionMeta: Record<string, { label: string; badgeClass: string }> = {
+  legislative: { label: "Legislative Background", badgeClass: "badge-primary" },
+  provisions: { label: "Key Provisions", badgeClass: "badge-secondary" },
+  implementation: { label: "Implementation", badgeClass: "badge-accent" },
+};
+
+const section = sectionMeta[entry.data.section] ?? {
+  label: entry.data.section,
+  badgeClass: "badge-ghost",
+};
+---
+
+<BaseLayout
+  title={`${entry.data.title} — EXPLORE Act — EXPLORE Disc Golf`}
+  description={entry.data.description}
+>
+  <article class="section-padding">
+    <div class="content-width">
+
+      <!-- Breadcrumbs -->
+      <div class="breadcrumbs text-sm mb-8">
+        <ul>
+          <li><a href="/" class="text-primary hover:text-primary/80">Home</a></li>
+          <li><a href="/explore-act" class="text-primary hover:text-primary/80">EXPLORE Act</a></li>
+          <li class="text-base-content/60">{entry.data.title}</li>
+        </ul>
+      </div>
+
+      <!-- Article header -->
+      <header class="mb-8">
+        <div class="flex items-center gap-3 mb-4">
+          <span class={`badge ${section.badgeClass} badge-sm`}>
+            {section.label}
+          </span>
+          <span class="text-sm text-base-content/50">
+            Article {entry.data.order} of {sorted.length}
+          </span>
+        </div>
+        <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-base-content leading-tight mb-4">
+          {entry.data.title}
+        </h1>
+        <p class="text-lg md:text-xl text-base-content/70 max-w-3xl leading-relaxed">
+          {entry.data.description}
+        </p>
+      </header>
+
+      <!-- Prose content card -->
+      <div class="card bg-base-200 shadow-sm">
+        <div class="card-body p-6 md:p-10 lg:p-12">
+          <div class="article-prose max-w-none">
+            <Content />
+          </div>
+        </div>
+      </div>
+
+      <!-- Prev / Next navigation -->
+      <nav class="flex flex-col sm:flex-row justify-between gap-4 mt-10" aria-label="Article navigation">
+        {prev ? (
+          <a
+            href={`/explore-act/${prev.id.replace(/\.md$/, "")}`}
+            class="group flex items-center gap-3 rounded-xl bg-base-200 px-5 py-4 transition-shadow hover:shadow-md flex-1"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0 text-primary transition-transform group-hover:-translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+            <div class="min-w-0">
+              <span class="block text-xs text-base-content/50 uppercase tracking-wide">Previous</span>
+              <span class="block text-sm font-semibold text-primary truncate">{prev.data.title}</span>
+            </div>
+          </a>
+        ) : (
+          <div class="flex-1"></div>
+        )}
+
+        {next ? (
+          <a
+            href={`/explore-act/${next.id.replace(/\.md$/, "")}`}
+            class="group flex items-center justify-end gap-3 rounded-xl bg-base-200 px-5 py-4 transition-shadow hover:shadow-md flex-1 text-right"
+          >
+            <div class="min-w-0">
+              <span class="block text-xs text-base-content/50 uppercase tracking-wide">Next</span>
+              <span class="block text-sm font-semibold text-primary truncate">{next.data.title}</span>
+            </div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0 text-primary transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+          </a>
+        ) : (
+          <div class="flex-1"></div>
+        )}
+      </nav>
+
+      <!-- Back link -->
+      <div class="mt-8 text-center">
+        <a href="/explore-act" class="btn btn-ghost btn-sm text-primary">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11 17l-5-5m0 0l5-5m-5 5h12" />
+          </svg>
+          All EXPLORE Act Articles
+        </a>
+      </div>
+
+    </div>
+  </article>
+</BaseLayout>
+
+<!-- Prose styles are in global.css .article-prose -->

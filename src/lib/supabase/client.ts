@@ -1,40 +1,62 @@
 /**
  * Supabase Client — explore_discgolf
  *
- * Provides a configured Supabase client for browser / SSR usage.
- * Reads connection details from environment variables exposed by Astro.
+ * Provides configured Supabase clients for browser/SSR usage.
+ * Returns null when env vars are missing so the site runs without Supabase.
  */
 
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
+let _warned = false;
+
+function warnOnce(msg: string) {
+  if (!_warned) {
+    console.warn(`[supabase/client] ${msg}`);
+    _warned = true;
+  }
+}
+
 const supabaseUrl = import.meta.env.SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.SUPABASE_ANON_KEY;
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error(
-    "Missing SUPABASE_URL or SUPABASE_ANON_KEY environment variables. " +
-      "Copy .env.example to .env and fill in your Supabase project credentials.",
-  );
+let _anonClient: SupabaseClient | null = null;
+let _serviceClient: SupabaseClient | null = null;
+
+/**
+ * Returns the public (anon-key) Supabase client, or null when env vars are
+ * missing. Callers must handle the null case — query helpers in queries.ts
+ * fall back to static data. The client is cached after first creation.
+ */
+export function getSupabaseClient(): SupabaseClient | null {
+  if (_anonClient) return _anonClient;
+  if (!supabaseUrl || !supabaseAnonKey) {
+    warnOnce(
+      "Missing SUPABASE_URL or SUPABASE_ANON_KEY — Supabase disabled. " +
+        "Copy .env.example to .env and fill in your credentials.",
+    );
+    return null;
+  }
+  _anonClient = createClient(supabaseUrl, supabaseAnonKey);
+  return _anonClient;
 }
 
 /**
- * Returns the public (anon-key) Supabase client.
- * Safe for use in both client-side components and SSR pages — RLS policies
- * determine what data is accessible.
+ * Returns a service-role Supabase client for server-side operations that
+ * bypass RLS (admin writes, background jobs). Returns null when key is
+ * missing. This client must NEVER be exposed to the browser. Cached after
+ * first creation.
  */
-export function getSupabaseClient(): SupabaseClient {
-  return createClient(supabaseUrl, supabaseAnonKey);
+export function getSupabaseServiceClient(): SupabaseClient | null {
+  if (_serviceClient) return _serviceClient;
+  if (!supabaseUrl || !supabaseAnonKey) {
+    warnOnce("Missing Supabase credentials — service client unavailable.");
+    return null;
+  }
+  const serviceRoleKey = import.meta.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!serviceRoleKey) {
+    warnOnce("Missing SUPABASE_SERVICE_ROLE_KEY — service client unavailable.");
+    return null;
+  }
+  _serviceClient = createClient(supabaseUrl, serviceRoleKey);
+  return _serviceClient;
 }
-
-// TODO: Add a getSupabaseServiceClient() that uses SUPABASE_SERVICE_ROLE_KEY
-// for server-side operations that need to bypass RLS (e.g., admin writes to
-// blm_offices, background jobs). This client must NEVER be exposed to the
-// browser. Example:
-//
-// import { createClient } from "@supabase/supabase-js";
-//
-// export function getSupabaseServiceClient(): SupabaseClient {
-//   const serviceRoleKey = import.meta.env.SUPABASE_SERVICE_ROLE_KEY;
-//   if (!serviceRoleKey) throw new Error("Missing SUPABASE_SERVICE_ROLE_KEY");
-//   return createClient(supabaseUrl, serviceRoleKey);
-// }

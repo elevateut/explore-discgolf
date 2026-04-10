@@ -1,0 +1,145 @@
+---
+/**
+ * Resources — detail page for a single downloadable resource.
+ *
+ * Renders markdown content from the "resources" collection with:
+ *   - Breadcrumb navigation
+ *   - Category badge
+ *   - Download button (or "coming soon" badge if no file available)
+ *   - Styled prose content on a Sandstone card
+ */
+
+import { getEntry } from "astro:content";
+import BaseLayout from "@layouts/BaseLayout.astro";
+
+const { slug } = Astro.params;
+
+if (!slug) {
+  return Astro.redirect("/resources");
+}
+
+const entry = await getEntry("resources", slug);
+
+if (!entry) {
+  return new Response(null, { status: 404, statusText: "Not Found" });
+}
+
+const { Content } = await entry.render();
+
+// Category display configuration
+const categoryMeta: Record<string, { label: string; badgeClass: string }> = {
+  template: { label: "Template", badgeClass: "badge-primary" },
+  "one-pager": { label: "One-Pager", badgeClass: "badge-secondary" },
+  guide: { label: "Guide", badgeClass: "badge-accent" },
+  "talking-points": { label: "Talking Points", badgeClass: "badge-info" },
+};
+
+const category = categoryMeta[entry.data.category] ?? {
+  label: entry.data.category,
+  badgeClass: "badge-ghost",
+};
+
+const hasDownload = entry.data.downloadable && entry.data.filePath;
+---
+
+<BaseLayout
+  title={`${entry.data.title} — Resources — EXPLORE Disc Golf`}
+  description={entry.data.description}
+>
+  <article class="section-padding">
+    <div class="content-width">
+
+      <!-- Breadcrumbs -->
+      <div class="breadcrumbs text-sm mb-8">
+        <ul>
+          <li><a href="/" class="text-primary hover:text-primary/80">Home</a></li>
+          <li><a href="/resources" class="text-primary hover:text-primary/80">Resources</a></li>
+          <li class="text-base-content/60">{entry.data.title}</li>
+        </ul>
+      </div>
+
+      <!-- Article header -->
+      <header class="mb-8">
+        <div class="flex flex-wrap items-center gap-3 mb-4">
+          <span class={`badge ${category.badgeClass} badge-sm`}>
+            {category.label}
+          </span>
+          {hasDownload ? (
+            <span class="badge badge-success badge-sm badge-outline">Downloadable</span>
+          ) : (
+            <span class="badge badge-ghost badge-sm">Download coming soon</span>
+          )}
+        </div>
+        <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-base-content leading-tight mb-4">
+          {entry.data.title}
+        </h1>
+        <p class="text-lg md:text-xl text-base-content/70 max-w-3xl leading-relaxed mb-6">
+          {entry.data.description}
+        </p>
+
+        <!-- Download action -->
+        {hasDownload ? (
+          <a
+            href={entry.data.filePath}
+            class="btn btn-primary gap-2"
+            download
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            Download Resource
+          </a>
+        ) : (
+          <div class="inline-flex items-center gap-2 rounded-lg bg-base-200 border border-base-300 px-4 py-3 text-sm text-base-content/60">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Download coming soon — read the full content below
+          </div>
+        )}
+      </header>
+
+      <!-- Prose content card -->
+      <div class="card bg-base-200 shadow-sm">
+        <div class="card-body p-6 md:p-10 lg:p-12">
+          <div class="article-prose max-w-none">
+            <Content />
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom download CTA (only if downloadable) -->
+      {hasDownload && (
+        <div class="mt-8 rounded-xl bg-base-200 border border-base-300 p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div>
+            <p class="font-semibold text-base-content">Ready to use this resource?</p>
+            <p class="text-sm text-base-content/60">Download and customize it for your BLM field office engagement.</p>
+          </div>
+          <a
+            href={entry.data.filePath}
+            class="btn btn-primary gap-2 shrink-0"
+            download
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            Download
+          </a>
+        </div>
+      )}
+
+      <!-- Back link -->
+      <div class="mt-8 text-center">
+        <a href="/resources" class="btn btn-ghost btn-sm text-primary">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11 17l-5-5m0 0l5-5m-5 5h12" />
+          </svg>
+          All Resources
+        </a>
+      </div>
+
+    </div>
+  </article>
+</BaseLayout>
+
+<!-- Prose styles are in global.css .article-prose -->

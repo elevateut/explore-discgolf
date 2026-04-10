@@ -3,31 +3,83 @@
  * Homepage — EXPLORE Disc Golf
  *
  * Landing page with hero, EXPLORE Act summary, BLM Office Finder,
- * Get Involved CTA, and Latest News.
+ * Case Studies teaser, Get Involved CTA, and Latest News.
  */
 
+import { getCollection } from "astro:content";
 import BaseLayout from "@layouts/BaseLayout.astro";
 import BLMOfficeFinder from "@components/BLMOfficeFinder.svelte";
+import officesData from "@data/blm-offices.json";
+import { caseStudyBadges } from "@lib/badges";
+
+// Fetch latest 3 case studies, sorted by date descending
+const allCaseStudies = await getCollection("case-studies");
+const latestCaseStudies = allCaseStudies
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+  .slice(0, 3);
+
+// Fetch latest news entry
+const allNews = await getCollection("news");
+const latestNews = allNews
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+  .at(0);
+
 ---
 
 <BaseLayout>
   <!-- Hero -->
-  <section class="hero min-h-[70vh] bg-base-200">
-    <div class="hero-content text-center">
-      <div class="max-w-2xl">
-        <h1 class="text-5xl font-bold leading-tight">
-          Disc Golf on America's<br />
-          <span class="text-primary">Public Lands.</span>
+  <section class="relative overflow-hidden bg-neutral text-neutral-content">
+    <!-- Gradient overlay -->
+    <div class="absolute inset-0 bg-gradient-to-br from-neutral via-neutral/95 to-primary/20"></div>
+    <!-- Subtle grid pattern -->
+    <div class="absolute inset-0 opacity-[0.03]" style="background-image: url('data:image/svg+xml,%3Csvg width=&quot;60&quot; height=&quot;60&quot; viewBox=&quot;0 0 60 60&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;%3E%3Cg fill=&quot;none&quot; fill-rule=&quot;evenodd&quot;%3E%3Cg fill=&quot;%23ffffff&quot; fill-opacity=&quot;1&quot;%3E%3Cpath d=&quot;M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z&quot;/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+
+    <div class="relative max-w-7xl mx-auto px-4 lg:px-8 py-24 md:py-32 lg:py-40">
+      <div class="max-w-3xl">
+        <!-- Nonprofit badge -->
+        <div class="inline-flex items-center gap-2 rounded-full bg-neutral-content/10 border border-neutral-content/10 px-4 py-1.5 text-xs font-medium text-neutral-content/70 mb-8">
+          <span class="inline-block w-1.5 h-1.5 rounded-full bg-secondary"></span>
+          501(c)(3) nonprofit initiative by ElevateUT
+        </div>
+
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.1] tracking-tight">
+          Disc golf on<br />
+          America's <span class="text-primary">public lands.</span>
         </h1>
-        <p class="py-2 text-xl italic text-primary/80">Where the wild things fly.</p>
-        <p class="py-4 text-lg text-base-content/80">
-          The EXPLORE Act created new authorities for recreation on BLM land.
-          Disc golf fits those authorities unusually well. We're building the
-          tools and partnerships to make it happen.
+
+        <p class="mt-4 text-lg sm:text-xl text-neutral-content/60 italic font-heading">
+          Where the wild things fly.
         </p>
-        <div class="flex gap-3 justify-center flex-wrap">
-          <a href="/offices" class="btn btn-primary btn-lg">Find Your BLM Office</a>
-          <a href="/explore-act" class="btn btn-outline btn-lg">Learn About the EXPLORE Act</a>
+
+        <p class="mt-6 text-base sm:text-lg text-neutral-content/70 max-w-2xl leading-relaxed">
+          The EXPLORE Act created new federal authorities for recreation on BLM land.
+          Disc golf fits those authorities unusually well. We're building the open source
+          tools and partnerships to make it happen -- across 245 million acres.
+        </p>
+
+        <div class="mt-10 flex flex-wrap gap-4">
+          <a href="/offices" class="btn btn-primary btn-lg shadow-lg shadow-primary/20 font-semibold">
+            Find Your BLM Office
+          </a>
+          <a href="/explore-act" class="btn btn-outline btn-lg border-neutral-content/30 text-neutral-content hover:bg-neutral-content/10 hover:border-neutral-content/50 font-semibold">
+            Learn About the EXPLORE Act
+          </a>
+        </div>
+
+        <!-- Quick stats -->
+        <div class="mt-14 flex flex-wrap gap-8 sm:gap-12 text-sm">
+          <div>
+            <p class="text-2xl sm:text-3xl font-extrabold text-primary font-heading">245M</p>
+            <p class="text-neutral-content/70 mt-0.5">acres of BLM land</p>
+          </div>
+          <div>
+            <p class="text-2xl sm:text-3xl font-extrabold text-accent font-heading">5</p>
+            <p class="text-neutral-content/70 mt-0.5">existing BLM courses</p>
+          </div>
+          <div>
+            <p class="text-2xl sm:text-3xl font-extrabold text-primary-content font-heading">21.2M</p>
+            <p class="text-neutral-content/70 mt-0.5">annual rounds played</p>
+          </div>
         </div>
       </div>
     </div>
@@ -36,42 +88,72 @@ import BLMOfficeFinder from "@components/BLMOfficeFinder.svelte";
   <!-- What is the EXPLORE Act -->
   <section class="section-padding bg-base-100">
     <div class="content-width">
-      <h2 class="text-3xl font-bold mb-6 text-center">What is the EXPLORE Act?</h2>
-      <div class="grid md:grid-cols-3 gap-6">
-        <div class="card bg-base-200">
+      <div class="text-center max-w-2xl mx-auto mb-10">
+        <p class="text-sm font-semibold uppercase tracking-wider text-primary mb-2">Federal Legislation</p>
+        <h2 class="text-3xl sm:text-4xl font-extrabold">What is the EXPLORE Act?</h2>
+        <p class="mt-3 text-base-content/60 text-lg">
+          Signed into law January 4, 2025, the EXPLORE Act (P.L. 118-234) gives BLM
+          new tools for recreation development. Three provisions matter most for disc golf.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6 lg:gap-8">
+        <div class="card bg-base-200 border border-base-300/50 hover:shadow-md transition-shadow">
           <div class="card-body">
-            <h3 class="card-title text-secondary">Recreation Expansion</h3>
-            <p>
-              <!-- TODO: Add concise summary of recreation expansion provisions -->
-              The EXPLORE Act directs federal agencies to expand outdoor recreation
-              opportunities on public lands, including new types of recreation
-              like disc golf.
+            <div class="w-10 h-10 rounded-lg bg-secondary/10 flex items-center justify-center mb-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <h3 class="card-title text-secondary text-lg">Recreation Inventory</h3>
+            <p class="text-base-content/70 leading-relaxed">
+              Section 112 mandates BLM inventory all recreation assets and opportunities
+              on public lands. Disc golf courses and potential sites should be part of that
+              inventory -- creating a formal pathway to recognition.
             </p>
           </div>
         </div>
-        <div class="card bg-base-200">
+
+        <div class="card bg-base-200 border border-base-300/50 hover:shadow-md transition-shadow">
           <div class="card-body">
-            <h3 class="card-title text-secondary">Simplified Permitting</h3>
-            <p>
-              <!-- TODO: Add concise summary of permitting provisions -->
-              Streamlined permit processes make it easier for organizations to
-              propose and develop recreation facilities on BLM-managed land.
+            <div class="w-10 h-10 rounded-lg bg-secondary/10 flex items-center justify-center mb-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </div>
+            <h3 class="card-title text-secondary text-lg">Simplified Permitting</h3>
+            <p class="text-base-content/70 leading-relaxed">
+              Streamlined permit processes and expanded volunteer stewardship authority
+              (Section 341) make it easier for local organizations to propose, build, and
+              maintain disc golf courses on BLM-managed land.
             </p>
           </div>
         </div>
-        <div class="card bg-base-200">
+
+        <div class="card bg-base-200 border border-base-300/50 hover:shadow-md transition-shadow">
           <div class="card-body">
-            <h3 class="card-title text-secondary">Community Partnerships</h3>
-            <p>
-              <!-- TODO: Add concise summary of partnership provisions -->
-              The Act encourages partnerships between federal agencies and local
-              organizations to maintain and improve recreation sites.
+            <div class="w-10 h-10 rounded-lg bg-secondary/10 flex items-center justify-center mb-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+            </div>
+            <h3 class="card-title text-secondary text-lg">Community Partnerships</h3>
+            <p class="text-base-content/70 leading-relaxed">
+              Good Neighbor Authority (Section 321) enables county and nonprofit
+              partnerships to construct and maintain recreation infrastructure --
+              the exact model that built every existing BLM disc golf course.
             </p>
           </div>
         </div>
       </div>
-      <div class="text-center mt-8">
-        <a href="/explore-act" class="btn btn-secondary">Read the Full Breakdown</a>
+
+      <div class="text-center mt-10">
+        <a href="/explore-act" class="btn btn-secondary font-semibold">
+          Read the Full Breakdown
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+          </svg>
+        </a>
       </div>
     </div>
   </section>
@@ -79,43 +161,133 @@ import BLMOfficeFinder from "@components/BLMOfficeFinder.svelte";
   <!-- Find Your BLM Office -->
   <section class="section-padding bg-base-200">
     <div class="content-width">
-      <h2 class="text-3xl font-bold mb-2 text-center">Find Your BLM Office</h2>
-      <p class="text-center text-base-content/70 mb-8 max-w-xl mx-auto">
-        Enter your zip code or browse the map to find the BLM field office
-        managing land near you. Each office page includes contact info,
-        engagement status, and a free AI-generated proposal packet.
-      </p>
-      <BLMOfficeFinder client:visible />
+      <div class="text-center max-w-2xl mx-auto mb-10">
+        <p class="text-sm font-semibold uppercase tracking-wider text-primary mb-2">Office Finder</p>
+        <h2 class="text-3xl sm:text-4xl font-extrabold">Find Your BLM Office</h2>
+        <p class="mt-3 text-base-content/60 text-lg">
+          Every disc golf proposal starts with a local BLM field office. Search by
+          name, state, or browse to find the office managing land near you.
+          Each office page includes contact info and engagement resources.
+        </p>
+      </div>
+      <BLMOfficeFinder client:visible offices={officesData} />
+    </div>
+  </section>
+
+  <!-- Case Studies -->
+  <section class="section-padding bg-base-100">
+    <div class="content-width">
+      <div class="text-center max-w-2xl mx-auto mb-10">
+        <p class="text-sm font-semibold uppercase tracking-wider text-primary mb-2">Proof It Works</p>
+        <h2 class="text-3xl sm:text-4xl font-extrabold">Case Studies</h2>
+        <p class="mt-3 text-base-content/60 text-lg">
+          Disc golf already exists on BLM land. These courses prove the model works --
+          and provide the precedent for your next proposal.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6 lg:gap-8">
+        {latestCaseStudies.map((study) => {
+          const slug = study.id.replace(/\.md$/, "");
+          return (
+            <a href={`/case-studies/${slug}`} class="card bg-base-200 border border-base-300/50 hover:shadow-lg hover:-translate-y-0.5 transition-all group">
+              <div class="card-body">
+                <div class="flex items-start justify-between gap-3 mb-1">
+                  <span class={`badge ${caseStudyBadges[study.data.status]?.class ?? "badge-ghost"} badge-sm font-medium`}>
+                    {caseStudyBadges[study.data.status]?.label ?? study.data.status}
+                  </span>
+                  <span class="text-xs text-base-content/40 shrink-0">
+                    {study.data.state}
+                  </span>
+                </div>
+                <h3 class="card-title text-lg group-hover:text-primary transition-colors">
+                  {study.data.title}
+                </h3>
+                <p class="text-base-content/60 text-sm leading-relaxed">
+                  {study.data.description}
+                </p>
+                <div class="mt-auto pt-3 flex items-center justify-between text-xs text-base-content/40">
+                  <span>{study.data.blm_office}</span>
+                  {study.data.course_holes && (
+                    <span>{study.data.course_holes} holes</span>
+                  )}
+                </div>
+              </div>
+            </a>
+          );
+        })}
+      </div>
+
+      <div class="text-center mt-10">
+        <a href="/case-studies" class="btn btn-outline btn-primary font-semibold">
+          View All Case Studies
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+          </svg>
+        </a>
+      </div>
     </div>
   </section>
 
   <!-- Get Involved -->
-  <section class="section-padding bg-base-100">
-    <div class="content-width text-center">
-      <h2 class="text-3xl font-bold mb-6">Get Involved</h2>
-      <div class="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
-        <div class="card bg-primary text-primary-content">
+  <section class="section-padding bg-base-200">
+    <div class="content-width">
+      <div class="text-center max-w-2xl mx-auto mb-10">
+        <p class="text-sm font-semibold uppercase tracking-wider text-primary mb-2">Take Action</p>
+        <h2 class="text-3xl sm:text-4xl font-extrabold">Get Involved</h2>
+        <p class="mt-3 text-base-content/60 text-lg">
+          You don't need permission to advocate for public lands recreation.
+          Pick a path and start building.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6 lg:gap-8 max-w-4xl mx-auto">
+        <!-- Proposal Packet card -->
+        <div class="card bg-neutral text-neutral-content border border-neutral-content/10 shadow-lg">
           <div class="card-body">
-            <h3 class="card-title">Build a Proposal Packet</h3>
-            <p>
+            <div class="w-10 h-10 rounded-lg bg-primary/20 flex items-center justify-center mb-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </div>
+            <h3 class="card-title text-xl font-heading">Build a Proposal Packet</h3>
+            <p class="text-neutral-content/70 leading-relaxed">
               Use our AI-powered packet generator to create a customized
-              engagement packet for your local BLM office — complete with
-              EXPLORE Act references and talking points.
+              engagement packet for your local BLM office -- complete with
+              EXPLORE Act references, talking points, and site analysis.
             </p>
-            <div class="card-actions justify-end">
-              <a href="/offices" class="btn btn-ghost">Get Started</a>
+            <div class="card-actions mt-4">
+              <a href="/offices" class="btn btn-primary btn-sm font-semibold">
+                Get Started
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </a>
             </div>
           </div>
         </div>
-        <div class="card bg-secondary text-secondary-content">
+
+        <!-- Resources card -->
+        <div class="card bg-neutral text-neutral-content border border-neutral-content/10 shadow-lg">
           <div class="card-body">
-            <h3 class="card-title">Download Resources</h3>
-            <p>
-              Access one-pagers, letter templates, talking points, and guides
-              for advocating for disc golf on public lands.
+            <div class="w-10 h-10 rounded-lg bg-secondary/20 flex items-center justify-center mb-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </div>
+            <h3 class="card-title text-xl font-heading">Download Resources</h3>
+            <p class="text-neutral-content/70 leading-relaxed">
+              Access one-pagers, letter templates, talking points, and step-by-step
+              guides for advocating for disc golf on public lands. Everything is
+              free and open source.
             </p>
-            <div class="card-actions justify-end">
-              <a href="/resources" class="btn btn-ghost">Browse Resources</a>
+            <div class="card-actions mt-4">
+              <a href="/resources" class="btn btn-secondary btn-sm font-semibold">
+                Browse Resources
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </a>
             </div>
           </div>
         </div>
@@ -124,12 +296,69 @@ import BLMOfficeFinder from "@components/BLMOfficeFinder.svelte";
   </section>
 
   <!-- Latest News -->
-  <section class="section-padding bg-base-200">
-    <div class="content-width">
-      <h2 class="text-3xl font-bold mb-6 text-center">Latest News</h2>
-      <!-- TODO: Fetch latest news entries from the news content collection -->
-      <div class="text-center text-base-content/60">
-        <p>News and updates coming soon.</p>
+  {latestNews && (
+    <section class="section-padding bg-base-100">
+      <div class="content-width">
+        <div class="text-center max-w-2xl mx-auto mb-10">
+          <p class="text-sm font-semibold uppercase tracking-wider text-primary mb-2">Updates</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold">Latest News</h2>
+        </div>
+
+        <div class="max-w-2xl mx-auto">
+          <article class="card bg-base-200 border border-base-300/50">
+            <div class="card-body">
+              <div class="flex items-center gap-3 mb-2">
+                <time
+                  datetime={new Date(latestNews.data.date).toISOString().split("T")[0]}
+                  class="text-xs font-medium text-base-content/40 uppercase tracking-wide"
+                >
+                  {new Date(latestNews.data.date).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </time>
+                {latestNews.data.author && (
+                  <span class="text-xs text-base-content/30">
+                    by {latestNews.data.author}
+                  </span>
+                )}
+              </div>
+              <h3 class="card-title text-xl">
+                {latestNews.data.title}
+              </h3>
+              <p class="text-base-content/60 leading-relaxed">
+                {latestNews.data.description}
+              </p>
+            </div>
+          </article>
+        </div>
+
+        <div class="text-center mt-8">
+          <!-- News listing page deferred to Phase 5 -->
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Final CTA -->
+  <section class="relative overflow-hidden bg-neutral text-neutral-content">
+    <div class="absolute inset-0 bg-gradient-to-r from-neutral via-neutral to-primary/10"></div>
+    <div class="relative max-w-7xl mx-auto px-4 lg:px-8 py-16 lg:py-24 text-center">
+      <h2 class="text-3xl sm:text-4xl font-extrabold max-w-2xl mx-auto leading-tight">
+        Find your land. Build your course.
+      </h2>
+      <p class="mt-4 text-neutral-content/60 text-lg max-w-xl mx-auto">
+        245 million acres of BLM land. A new federal law supporting recreation.
+        The only missing piece is you.
+      </p>
+      <div class="mt-8 flex flex-wrap justify-center gap-4">
+        <a href="/offices" class="btn btn-primary btn-lg shadow-lg shadow-primary/20 font-semibold">
+          Find Your BLM Office
+        </a>
+        <a href="https://github.com/elevateut/explore-discgolf" class="btn btn-outline btn-lg border-neutral-content/30 text-neutral-content hover:bg-neutral-content/10 hover:border-neutral-content/50 font-semibold" target="_blank" rel="noopener">
+          Contribute on GitHub
+        </a>
       </div>
     </div>
   </section>

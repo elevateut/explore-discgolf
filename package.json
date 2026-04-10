@@ -21,6 +21,7 @@
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.0",
     "daisyui": "^5.0.0",
+    "playwright": "^1.59.1",
     "tailwindcss": "^4.1.0"
   }
 }
