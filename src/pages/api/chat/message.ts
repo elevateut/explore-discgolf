@@ -22,6 +22,7 @@ import officesJson from "@data/blm-offices.json";
 
 const CHAT_MAX_TOKENS = 4096;
 const MAX_TOOL_ROUNDS = 3; // per message, to stay within Vercel timeout
+const MAX_MESSAGES_PER_CONVERSATION = 20; // cap to control costs
 
 export const POST: APIRoute = async ({ request }) => {
   // Parse request
@@ -99,6 +100,15 @@ Please use your tools to research this specific office before responding. Start 
 
   priorMessages.push({ role: "user", content: userMessage });
 
+  // Check message limit
+  const userMessageCount = priorMessages.filter((m) => m.role === "user").length;
+  if (userMessageCount >= MAX_MESSAGES_PER_CONVERSATION) {
+    return jsonResponse({
+      type: "error",
+      message: `This conversation has reached the ${MAX_MESSAGES_PER_CONVERSATION}-message limit. Please start a new conversation or generate your packet from the ideas discussed so far.`,
+    }, 429);
+  }
+
   // Save user message to DB
   if (conversationId) {
     saveConversationMessage(conversationId, "user", userMessage).catch(() => {});
@@ -114,6 +124,11 @@ Please use your tools to research this specific office before responding. Start 
       const send = (event: Record<string, unknown>) => {
         controller.enqueue(encoder.encode(JSON.stringify(event) + "\n"));
       };
+
+      let totalInputTokens = 0;
+      let totalOutputTokens = 0;
+      let cacheReadTokens = 0;
+      let cacheCreationTokens = 0;
 
       try {
         send({ type: "message_start", conversationId });
@@ -135,6 +150,16 @@ Please use your tools to research this specific office before responding. Start 
           let currentToolUse: { id: string; name: string; inputJson: string } | null = null;
 
           for await (const event of response) {
+            // Track token usage
+            if (event.type === "message_start" && (event as any).message?.usage) {
+              const u = (event as any).message.usage;
+              totalInputTokens += u.input_tokens ?? 0;
+              cacheReadTokens += u.cache_read_input_tokens ?? 0;
+              cacheCreationTokens += u.cache_creation_input_tokens ?? 0;
+            } else if (event.type === "message_delta" && (event as any).usage) {
+              totalOutputTokens += (event as any).usage.output_tokens ?? 0;
+            }
+
             if (event.type === "content_block_start") {
               if (event.content_block.type === "text") {
                 // Text block starting
@@ -219,7 +244,24 @@ Please use your tools to research this specific office before responding. Start 
           saveConversationMessage(conversationId, "assistant", fullAssistantText).catch(() => {});
         }
 
-        send({ type: "done", conversationId });
+        // Estimate cost (Sonnet 4 pricing)
+        const inputCost = (totalInputTokens / 1_000_000) * 3;
+        const outputCost = (totalOutputTokens / 1_000_000) * 15;
+        const cacheSavings = (cacheReadTokens / 1_000_000) * (3 - 0.30); // saved vs full price
+        const estimatedCost = inputCost + outputCost;
+
+        send({
+          type: "done",
+          conversationId,
+          usage: {
+            inputTokens: totalInputTokens,
+            outputTokens: totalOutputTokens,
+            cacheReadTokens,
+            cacheCreationTokens,
+            estimatedCostUSD: Math.round(estimatedCost * 10000) / 10000,
+            cacheSavingsUSD: Math.round(cacheSavings * 10000) / 10000,
+          },
+        });
       } catch (err: any) {
         send({ type: "error", message: err.message ?? "Stream failed" });
       } finally {
