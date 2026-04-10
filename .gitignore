@@ -28,6 +28,13 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# screenshots (dev tooling)
+# screenshots and dev tooling
 screenshots/
+screenshot-all.mjs
+take-screenshots.mjs
+
+# supabase CLI
+supabase/
+
+# vercel
 .vercel
