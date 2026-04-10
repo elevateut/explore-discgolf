@@ -39,7 +39,7 @@ const CW = PAGE_W - ML - MR; // content width
 // Font + Asset Resolution
 // ---------------------------------------------------------------------------
 
-function resolve(...segments: string[]): string {
+function resolvePath(...segments: string[]): string {
   // Try multiple paths for different environments
   for (const base of [
     path.resolve(process.cwd(), "public"),
@@ -53,12 +53,12 @@ function resolve(...segments: string[]): string {
 }
 
 function registerFonts(doc: PDFKit.PDFDocument) {
-  doc.registerFont("Jakarta", resolve("fonts", "PlusJakartaSans-Bold.ttf"));
-  doc.registerFont("Jakarta-XB", resolve("fonts", "PlusJakartaSans-ExtraBold.ttf"));
-  doc.registerFont("Inter", resolve("fonts", "Inter-Regular.ttf"));
-  doc.registerFont("Inter-Med", resolve("fonts", "Inter-Medium.ttf"));
-  doc.registerFont("Inter-SB", resolve("fonts", "Inter-SemiBold.ttf"));
-  doc.registerFont("Inter-B", resolve("fonts", "Inter-Bold.ttf"));
+  doc.registerFont("Jakarta", resolvePath("fonts", "PlusJakartaSans-Bold.ttf"));
+  doc.registerFont("Jakarta-XB", resolvePath("fonts", "PlusJakartaSans-ExtraBold.ttf"));
+  doc.registerFont("Inter", resolvePath("fonts", "Inter-Regular.ttf"));
+  doc.registerFont("Inter-Med", resolvePath("fonts", "Inter-Medium.ttf"));
+  doc.registerFont("Inter-SB", resolvePath("fonts", "Inter-SemiBold.ttf"));
+  doc.registerFont("Inter-B", resolvePath("fonts", "Inter-Bold.ttf"));
 }
 
 // ---------------------------------------------------------------------------
@@ -71,7 +71,7 @@ function pageHeader(doc: PDFKit.PDFDocument, title: string, subtitle?: string) {
   doc.rect(0, 108, PAGE_W, 4).fill(C.terraCotta);
 
   // Logo
-  const logo = resolve("images", "brand", "explore-disc-golf-white.png");
+  const logo = resolvePath("images", "brand", "explore-disc-golf-white.png");
   if (fs.existsSync(logo)) doc.image(logo, ML, 20, { height: 26 });
 
   // Title
@@ -237,8 +237,9 @@ export interface PacketPDFInput {
   generatedAt: string;
 }
 
-export function generatePacketPDF(input: PacketPDFInput): Promise<Buffer> {
+export async function generatePacketPDF(input: PacketPDFInput): Promise<Buffer> {
   return new Promise((resolve, reject) => {
+    try {
     const doc = new PDFDocument({
       size: "LETTER",
       margins: { top: MT, bottom: MB, left: ML, right: MR },
@@ -252,10 +253,27 @@ export function generatePacketPDF(input: PacketPDFInput): Promise<Buffer> {
 
     const chunks: Buffer[] = [];
     doc.on("data", (c: Buffer) => chunks.push(c));
-    doc.on("end", () => resolve(Buffer.concat(chunks)));
-    doc.on("error", reject);
+    doc.on("end", () => {
+      const result = Buffer.concat(chunks);
+      resolve(result);
+    });
+    doc.on("error", (err: Error) => {
+      console.error("[pdf] Document error:", err);
+      reject(err);
+    });
 
-    try { registerFonts(doc); } catch { /* use defaults */ }
+    try {
+      registerFonts(doc);
+    } catch (fontErr) {
+      console.warn("[pdf] Font registration failed, using Helvetica:", fontErr);
+      // Register fallback font names pointing to Helvetica
+      doc.registerFont("Jakarta", "Helvetica-Bold");
+      doc.registerFont("Jakarta-XB", "Helvetica-Bold");
+      doc.registerFont("Inter", "Helvetica");
+      doc.registerFont("Inter-Med", "Helvetica");
+      doc.registerFont("Inter-SB", "Helvetica-Bold");
+      doc.registerFont("Inter-B", "Helvetica-Bold");
+    }
 
     // =================================================================
     // Cover Page
@@ -263,7 +281,7 @@ export function generatePacketPDF(input: PacketPDFInput): Promise<Buffer> {
     doc.rect(0, 0, PAGE_W, PAGE_H).fill(C.nightSky);
     doc.rect(0, 0, PAGE_W, 5).fill(C.terraCotta);
 
-    const logo = resolve("images", "brand", "explore-disc-golf-white.png");
+    const logo = resolvePath("images", "brand", "explore-disc-golf-white.png");
     if (fs.existsSync(logo)) doc.image(logo, ML, 72, { height: 34 });
 
     doc.fillColor(C.snow).font("Jakarta-XB").fontSize(42)
@@ -351,5 +369,8 @@ export function generatePacketPDF(input: PacketPDFInput): Promise<Buffer> {
     }
 
     doc.end();
+    } catch (err) {
+      reject(err instanceof Error ? err : new Error(String(err)));
+    }
   });
 }

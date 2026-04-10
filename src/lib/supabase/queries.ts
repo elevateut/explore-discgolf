@@ -7,7 +7,7 @@
  *   - Writes require a connected client and fail with clear errors
  */
 
-import { getSupabaseClient } from "./client";
+import { getSupabaseClient, getSupabaseServiceClient } from "./client";
 import officesJson from "@data/blm-offices.json";
 
 // ---------------------------------------------------------------------------
@@ -147,16 +147,16 @@ export async function getOfficeEngagementStatus(
   return (data as EngagementStatusRow) ?? null;
 }
 
-/** Insert a new engagement status record (append-only). Requires connected client. */
+/** Insert a new engagement status record (append-only). Uses service client to bypass RLS. */
 export async function updateEngagementStatus(
   officeId: string,
   status: string,
   notes: string | null,
   userId: string,
 ): Promise<EngagementStatusRow> {
-  const supabase = getSupabaseClient();
+  const supabase = getSupabaseServiceClient();
   if (!supabase) {
-    throw new Error("Supabase is not configured. Cannot write engagement status.");
+    throw new Error("Supabase service client is not configured. Cannot write engagement status.");
   }
   const { data, error } = await supabase
     .from("engagement_status")
@@ -199,7 +199,7 @@ export async function getCachedPacket(
   return (data as GeneratedPacket) ?? null;
 }
 
-/** Cache a newly generated proposal packet. Requires connected client. */
+/** Cache a newly generated proposal packet. Uses service client to bypass RLS. */
 export async function saveGeneratedPacket(
   officeId: string,
   context: Record<string, unknown>,
@@ -207,9 +207,9 @@ export async function saveGeneratedPacket(
   pdfUrl: string | null,
   model: string,
 ): Promise<GeneratedPacket> {
-  const supabase = getSupabaseClient();
+  const supabase = getSupabaseServiceClient();
   if (!supabase) {
-    throw new Error("Supabase is not configured. Cannot save generated packet.");
+    throw new Error("Supabase service client is not configured. Cannot save generated packet.");
   }
   const { data, error } = await supabase
     .from("generated_packets")
