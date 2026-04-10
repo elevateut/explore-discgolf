@@ -18,7 +18,7 @@ gallery:
     alt: "Players throwing with snow-capped mountains in the background at Ward Mountain"
 ---
 
-Ward Mountain Recreation Area in Ely, Nevada, is home to a 14-hole disc golf course on BLM land managed by the **Bristlecone Field Office**. While less documented than Stewart Pond or Three Peaks, Ward Mountain represents an important data point: disc golf on BLM land isn't limited to large offices or high-profile recreation areas.
+Ward Mountain Recreation Area in Ely, Nevada, is home to a 14-hole disc golf course on BLM land managed by the **[Bristlecone Field Office](/offices/NVL06000)**. While less documented than [Stewart Pond](/case-studies/stewart-pond) or [Three Peaks](/case-studies/three-peaks), Ward Mountain represents an important data point: disc golf on BLM land isn't limited to large offices or high-profile recreation areas.
 
 ## What we know
 
@@ -39,7 +39,7 @@ Ely is exactly the kind of gateway community the EXPLORE Act targets — a small
 
 ### Expansion potential
 
-A 14-hole course suggests an opportunity for expansion to a full 18-hole layout. Under EXPLORE Act authorities — particularly volunteer stewardship (Section 341) and accessibility requirements (Sections 214–215) — an upgrade project with accessible features could be a strong proposal.
+A 14-hole course suggests an opportunity for expansion to a full 18-hole layout. Under EXPLORE Act authorities — particularly [volunteer stewardship](/explore-act/volunteer-stewardship) (Section 341) and [accessibility requirements](/explore-act/accessibility) (Sections 214–215) — an upgrade project with accessible features could be a strong proposal.
 
 ## Strategic significance
 

@@ -9,7 +9,7 @@ downloadable: true
 
 ### 1. Pilot one office first
 
-Utah is the strongest pilot state. BLM Utah was the first state used in the accessibility-page rollout, and Cedar City Field Office already publicly features disc golf at Three Peaks. Start where credibility already exists.
+Utah is the strongest pilot state. BLM Utah was the first state used in the accessibility-page rollout, and [Cedar City Field Office](/offices/UTC01000) already publicly features disc golf at [Three Peaks](/case-studies/three-peaks). Start where credibility already exists.
 
 ### 2. Use a local champion, not a cold mail blast
 
@@ -17,7 +17,7 @@ Each packet should go in through a person who lives in that field office's orbit
 
 ### 3. Request a meeting, not an approval
 
-For events, use RAPTOR pre-consultation or direct office contact. For site proposals, ask for a screening or scoping meeting with the recreation planner. BLM explicitly encourages early coordination. Do not advertise, collect fees, or begin operations until written authorization is in hand where a permit is needed.
+For events, use [RAPTOR](https://permits.blm.gov/raptor/home-srp) pre-consultation or direct office contact. For site proposals, ask for a screening or scoping meeting with the recreation planner. BLM explicitly encourages early coordination. Do not advertise, collect fees, or begin operations until written authorization is in hand where a permit is needed.
 
 ### 4. Revise the packet after office feedback
 
@@ -29,11 +29,11 @@ Once one office engages, turn that into a public case study. Awareness spreads f
 
 ## How to identify candidate BLM sites
 
-1. Use **BLM Navigator** (navigator.blm.gov) to identify BLM-managed parcels within 30 minutes of your community
+1. Use **[BLM Navigator](https://navigator.blm.gov)** to identify BLM-managed parcels within 30 minutes of your community
 2. Look for: existing road access, gentle to moderate terrain, existing recreation designations (SRMA or ERMA), proximity to population centers, absence of WSA/ACEC/T&E designations
-3. Cross-reference with the **UDisc Disc Golf Health Index** to identify underserved areas
+3. Cross-reference with the **[UDisc](https://udisc.com) Disc Golf Health Index** to identify underserved areas
 4. Prioritize sites near gateway communities (Section 131) or underserved urban areas (Section 156)
-5. Use **PAD-US** data (USGS Protected Areas Database) to verify surface management agency
+5. Use **[PAD-US](https://www.usgs.gov/programs/gap-analysis-project/science/pad-us-data-overview)** data (USGS Protected Areas Database) to verify surface management agency
 6. Visit candidate sites; photograph terrain, vegetation, access points; note existing recreation use
 
 ## How to request a field office meeting
@@ -50,16 +50,16 @@ Once one office engages, turn that into a public case study. Awareness spreads f
 
 ### Tier 1: Existing disc golf relationships
 
-- **Cedar City Field Office, UT** — Three Peaks/Ironside courses; strongest existing BLM disc golf relationship
-- **Northwest Oregon District** — Stewart Pond course; active volunteer maintenance partnership
-- **Applegate Field Office, CA/OR** — Barnes Grade 9-hole course approved September 2025
+- **[Cedar City Field Office, UT](/offices/UTC01000)** — [Three Peaks](/case-studies/three-peaks)/[Ironside](/case-studies/ironside) courses; strongest existing BLM disc golf relationship
+- **[Northwest Oregon District](/offices/ORN00000)** — [Stewart Pond](/case-studies/stewart-pond) course; active volunteer maintenance partnership
+- **[Applegate Field Office, CA/OR](/offices/CAN02000)** — [Barnes Grade](/case-studies/barnes-grade) 9-hole course approved September 2025
 
 ### Tier 2: High-opportunity offices
 
 - **Moab Field Office, UT** — Major recreation destination; gateway community opportunities
 - **St. George Field Office, UT** — Growing population, active disc golf community, significant BLM acreage
 - **Boise District, ID** — Growing disc golf scene, substantial BLM lands near population
-- **Bristlecone Field Office, NV** — Existing Ward Mountain course; potential for expansion/upgrade
+- **[Bristlecone Field Office, NV](/offices/NVL06000)** — Existing [Ward Mountain](/case-studies/ward-mountain) course; potential for expansion/upgrade
 
 ### Tier 3: Strategic expansion
 

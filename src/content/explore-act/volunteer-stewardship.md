@@ -41,8 +41,8 @@ This is exactly the kind of "facility construction" that Section 341 authorizes.
 2. **Coordinate with the recreation planner** on scope, timing, and site-specific requirements
 3. **Organize volunteer crews** with tool safety training and Leave No Trace orientation
 4. **Document everything** — volunteer hours valued at DOL rates count as non-federal match for Challenge Cost Share and other partnership agreements
-5. **Combine with GNA** (Section 351) if a county or tribal partner is involved
+5. **Combine with [GNA](/explore-act/good-neighbor-authority)** (Section 351) if a county or tribal partner is involved
 
 ## Maintenance, not just construction
 
-Section 341 covers ongoing maintenance as well. A volunteer agreement can authorize regular course maintenance: basket inspection and repair, sign replacement, tee pad repair, mulching, litter removal, erosion monitoring, and invasive species management. Stewart Pond DGC in Oregon has operated under volunteer maintenance since 2016.
+Section 341 covers ongoing maintenance as well. A volunteer agreement can authorize regular course maintenance: basket inspection and repair, sign replacement, tee pad repair, mulching, litter removal, erosion monitoring, and invasive species management. [Stewart Pond DGC](/case-studies/stewart-pond) in Oregon has operated under volunteer maintenance since 2016.

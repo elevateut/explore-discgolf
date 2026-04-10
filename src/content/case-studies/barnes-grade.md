@@ -17,7 +17,7 @@ gallery:
     alt: "Wildflower bloom across the high desert managed by the Applegate Field Office"
 ---
 
-In September 2025, the **Applegate Field Office** issued a decision authorizing the Barnes Grade Recreation Area in southern Oregon, including three parking areas, one day-use area, **a nine-hole disc golf course**, and related infrastructure.
+In September 2025, the **[Applegate Field Office](/offices/CAN02000)** issued a decision authorizing the Barnes Grade Recreation Area in southern Oregon, including three parking areas, one day-use area, **a nine-hole disc golf course**, and related infrastructure.
 
 ## Why this is significant
 

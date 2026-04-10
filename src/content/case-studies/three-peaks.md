@@ -32,7 +32,7 @@ Three Peaks Disc Golf Course is one of two 18-hole courses in BLM's Three Peaks 
 
 ## BLM's public promotion
 
-What makes Three Peaks significant beyond the physical course is BLM's active promotion. BLM Utah and Cedar City Field Office pages **currently promote disc golf at Three Peaks Recreation Area**, with separate BLM pages for the Three Peaks and Ironside courses. This means BLM isn't just permitting disc golf — it's marketing it as a visitor amenity.
+What makes Three Peaks significant beyond the physical course is BLM's active promotion. BLM Utah and [Cedar City Field Office](/offices/UTC01000) pages **currently promote disc golf at [Three Peaks Recreation Area](https://www.blm.gov/visit/three-peaks-disc-golf-course)**, with separate BLM pages for the Three Peaks and [Ironside](/case-studies/ironside) courses. This means BLM isn't just permitting disc golf — it's marketing it as a visitor amenity.
 
 ## Why this matters for advocacy
 

@@ -19,7 +19,7 @@ A categorical exclusion means no Environmental Assessment or Environmental Impac
 
 For organized group recreation activities or events, the law requires BLM to make a **nominal-effects determination** in certain circumstances. In some low-impact cases, BLM may conclude no permit is required at all.
 
-BLM's updated SRP page (implemented February 2, 2026 through the RAPTOR system) specifically asks organizers:
+BLM's updated [SRP page](https://www.blm.gov/programs/recreation/permits-and-passes/special-recreation-permits) (implemented February 2, 2026 through the [RAPTOR system](https://permits.blm.gov/raptor/home-srp)) specifically asks organizers:
 
 - Whether there will be a **competition**
 - Whether they will **mark a course**

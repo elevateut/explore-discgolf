@@ -48,6 +48,7 @@ const navLinks = [
 
     <!-- Open Graph / Social -->
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="EXPLORE Disc Golf" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={new URL(ogImage, Astro.site).href} />
@@ -55,6 +56,9 @@ const navLinks = [
     <meta property="og:image:height" content="630" />
     <meta property="og:url" content={canonicalURL} />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL(ogImage, Astro.site).href} />
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/favicon.png" />
@@ -174,7 +178,7 @@ const navLinks = [
           </div>
 
           <!-- Link columns -->
-          <div class="lg:col-span-7 grid sm:grid-cols-3 gap-8">
+          <div class="lg:col-span-7 grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
             <!-- Advocacy -->
             <div>
               <h3 class="text-xs font-semibold uppercase tracking-wider text-neutral-content/40 mb-3">
@@ -195,7 +199,35 @@ const navLinks = [
               <ul class="space-y-2 text-sm">
                 <li><a href="/resources" class="text-neutral-content/70 hover:text-neutral-content transition-colors">Downloads</a></li>
                 <li><a href="/about" class="text-neutral-content/70 hover:text-neutral-content transition-colors">About</a></li>
-                <!-- News listing page deferred to Phase 5 -->
+              </ul>
+            </div>
+
+            <!-- Source Materials -->
+            <div>
+              <h3 class="text-xs font-semibold uppercase tracking-wider text-neutral-content/40 mb-3">
+                Source Materials
+              </h3>
+              <ul class="space-y-2 text-sm">
+                <li>
+                  <a href="https://www.congress.gov/bill/118th-congress/house-bill/6492/text" class="text-neutral-content/70 hover:text-neutral-content transition-colors" target="_blank" rel="noopener">
+                    Full Bill Text
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.doi.gov/document-library/secretary-order/so-3435-implementation-expanding-public-lands-outdoor-recreation" class="text-neutral-content/70 hover:text-neutral-content transition-colors" target="_blank" rel="noopener">
+                    Secretary's Order 3435
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.blm.gov/about/laws-and-regulations/explore-act" class="text-neutral-content/70 hover:text-neutral-content transition-colors" target="_blank" rel="noopener">
+                    BLM EXPLORE Act Page
+                  </a>
+                </li>
+                <li>
+                  <a href="https://permits.blm.gov/raptor/home-srp" class="text-neutral-content/70 hover:text-neutral-content transition-colors" target="_blank" rel="noopener">
+                    RAPTOR Permits
+                  </a>
+                </li>
               </ul>
             </div>
 

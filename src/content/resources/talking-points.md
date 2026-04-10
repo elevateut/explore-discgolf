@@ -9,7 +9,7 @@ When you meet with a BLM field office, staff will raise practical concerns. Thes
 
 ## "What about erosion and vegetation damage?"
 
-Disc golf's environmental impacts — soil compaction at tees and around baskets, vegetation trampling — are concentrated and manageable. Standard mitigation: concrete tee pads (eliminating tee-area erosion), dual pin placements (distributing wear across multiple locations per hole), mulching around high-traffic zones, and seasonal modifications. Stewart Pond in Oregon reduces to 9 holes during wet conditions.
+Disc golf's environmental impacts — soil compaction at tees and around baskets, vegetation trampling — are concentrated and manageable. Standard mitigation: concrete tee pads (eliminating tee-area erosion), dual pin placements (distributing wear across multiple locations per hole), mulching around high-traffic zones, and seasonal modifications. [Stewart Pond](/case-studies/stewart-pond) in Oregon reduces to 9 holes during wet conditions.
 
 No irrigation, no fertilizers or pesticides, no mowing. 97% of disc golfers are willing to modify behavior to offset environmental impacts (peer-reviewed study).
 
@@ -21,7 +21,7 @@ Research documents displacement (not elimination) of wildlife in the immediate a
 
 The model is explicitly designed so BLM provides zero ongoing maintenance labor. The partner organization commits to multi-year volunteer maintenance (4–8 work days per year). Metal baskets last 10–15 years. Concrete tee pads are permanent. No mowing, watering, or chemicals required.
 
-Stewart Pond has operated under volunteer maintenance since 2016. Section 341 of the EXPLORE Act provides statutory authority for BLM volunteer programs with no volunteer insurance requirement.
+Stewart Pond has operated under volunteer maintenance since 2016. [Section 341](/explore-act/volunteer-stewardship) of the EXPLORE Act provides statutory authority for BLM volunteer programs with no volunteer insurance requirement.
 
 ## "Is this consistent with our land use plan?"
 
@@ -33,7 +33,7 @@ Disc golf is compatible with multi-use areas. At Stewart Pond, disc golfers shar
 
 ## "What's the liability exposure?"
 
-The federal government is self-insured on federal land. Disc golf carries inherently low injury risk compared to most outdoor recreation activities. The partner organization carries general liability insurance naming BLM as additional insured. Under Section 341, volunteers are covered by the Federal Tort Claims Act with no personal insurance requirement. PDGA-sanctioned events carry tour insurance with $50 Certificate of Insurance.
+The federal government is self-insured on federal land. Disc golf carries inherently low injury risk compared to most outdoor recreation activities. The partner organization carries general liability insurance naming BLM as additional insured. Under Section 341, volunteers are covered by the Federal Tort Claims Act with no personal insurance requirement. [PDGA](https://www.pdga.com)-sanctioned events carry tour insurance with $50 Certificate of Insurance.
 
 ## "We've never done disc golf."
 

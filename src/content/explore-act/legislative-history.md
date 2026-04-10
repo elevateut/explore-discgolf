@@ -5,7 +5,7 @@ order: 2
 section: legislative
 ---
 
-**H.R. 6492** was introduced on November 29, 2023, by House Natural Resources Committee Chairman **Bruce Westerman (R-AR)**, with Ranking Member **Raul Grijalva (D-AZ)** as principal co-lead. The bill compiled dozens of individual bills into a single omnibus package with **51 bipartisan cosponsors** — 27 Democrats and 24 Republicans — including Reps. Curtis (R-UT), Neguse (D-CO), Lamborn (R-CO), Barragan (D-CA), Peltola (D-AK), Dingell (D-MI), and Leger Fernandez (D-NM).
+**[H.R. 6492](https://www.congress.gov/bill/118th-congress/house-bill/6492)** was introduced on November 29, 2023, by House Natural Resources Committee Chairman **Bruce Westerman (R-AR)**, with Ranking Member **Raul Grijalva (D-AZ)** as principal co-lead. The bill compiled dozens of individual bills into a single omnibus package with **51 bipartisan cosponsors** — 27 Democrats and 24 Republicans — including Reps. Curtis (R-UT), Neguse (D-CO), Lamborn (R-CO), Barragan (D-CA), Peltola (D-AK), Dingell (D-MI), and Leger Fernandez (D-NM).
 
 The Senate companion, the America's Outdoor Recreation Act, was led by Energy and Natural Resources Committee Chairman **Joe Manchin (D-WV)** and Ranking Member **John Barrasso (R-WY)**.
 
@@ -14,12 +14,12 @@ The Senate companion, the America's Outdoor Recreation Act, was led by Energy an
 | Date | Action |
 |------|--------|
 | November 29, 2023 | H.R. 6492 introduced in the House |
-| April 5, 2024 | Reported by House Natural Resources Committee (H. Rept. 118-441) |
+| April 5, 2024 | Reported by House Natural Resources Committee ([H. Rept. 118-441](https://www.congress.gov/committee-report/118th-congress/house-report/441/1)) |
 | April 9, 2024 | **House passed by voice vote** |
 | December 19, 2024 | **Senate passed by unanimous consent** |
-| January 4, 2025 | **Signed by President Biden as Public Law 118-234** |
+| January 4, 2025 | **Signed by President Biden as [Public Law 118-234](https://www.congress.gov/bill/118th-congress/house-bill/6492/text)** |
 
-The Act is codified principally at 16 U.S.C. Chapter 103 (138 Stat. 2836).
+The Act is codified principally at [16 U.S.C. Chapter 103](https://uscode.house.gov/view.xhtml?path=/prelim@title16/chapter103&edition=prelim) (138 Stat. 2836).
 
 ## Structure
 

@@ -11,17 +11,17 @@ Use this one-pager as the lead document when engaging a BLM field office. Custom
 
 ## Disc Golf on BLM Land: A Low-Cost, Accessible, Stewardship-Ready Recreation Opportunity
 
-*Aligned with the EXPLORE Act (P.L. 118-234)*
+*Aligned with the EXPLORE Act ([P.L. 118-234](https://www.congress.gov/bill/118th-congress/house-bill/6492))*
 
 ### What the EXPLORE Act enables
 
 The EXPLORE Act creates new authorities for recreation infrastructure development on BLM land:
 
-- **Section 112** mandates identification of underutilized lands suitable for new recreation
-- **Sections 214–215** require selection of new accessible recreation opportunities in each BLM region — including "any other" recreation opportunities identified with stakeholders
-- **Section 351** (Good Neighbor Authority) allows counties to carry out recreation infrastructure improvements
-- **Section 341** extends volunteer authority to BLM for facility construction and maintenance, with no volunteer liability insurance requirement
-- **Section 312** expands categorical exclusions for recreation permits
+- **[Section 112](/explore-act/key-provisions)** mandates identification of underutilized lands suitable for new recreation
+- **[Sections 214–215](/explore-act/accessibility)** require selection of new accessible recreation opportunities in each BLM region — including "any other" recreation opportunities identified with stakeholders
+- **[Section 351](/explore-act/good-neighbor-authority)** (Good Neighbor Authority) allows counties to carry out recreation infrastructure improvements
+- **[Section 341](/explore-act/volunteer-stewardship)** extends volunteer authority to BLM for facility construction and maintenance, with no volunteer liability insurance requirement
+- **[Section 312](/explore-act/permitting-reform)** expands categorical exclusions for recreation permits
 
 ### Why disc golf is an ideal fit
 
@@ -47,7 +47,7 @@ A 9-hole course costs $9,000–$18,000 to build. Daily capacity: 432 player-slot
 
 ### Existing BLM precedent
 
-Stewart Pond DGC (BLM Oregon), Three Peaks/Ironside DGC (BLM Utah), Ward Mountain DGC (BLM Nevada), Barnes Grade Recreation Area (BLM Applegate, approved September 2025).
+[Stewart Pond DGC](/case-studies/stewart-pond) (BLM Oregon), [Three Peaks](/case-studies/three-peaks)/[Ironside](/case-studies/ironside) DGC (BLM Utah), [Ward Mountain DGC](/case-studies/ward-mountain) (BLM Nevada), [Barnes Grade Recreation Area](/case-studies/barnes-grade) (BLM Applegate, approved September 2025).
 
 ### Contact
 

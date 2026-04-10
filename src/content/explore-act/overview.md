@@ -5,13 +5,13 @@ order: 1
 section: legislative
 ---
 
-The EXPLORE Act (Public Law 118-234) is not a disc-golf-specific statute. It is a public-lands recreation law that gives the Bureau of Land Management new tools around inventories, accessibility, permitting, gateway communities, visitor data, and partnerships. Those tools fit disc golf unusually well — but disc golf is one of many recreation uses that can leverage these authorities.
+The EXPLORE Act ([Public Law 118-234](https://www.congress.gov/bill/118th-congress/house-bill/6492)) is not a disc-golf-specific statute. It is a public-lands recreation law that gives the Bureau of Land Management new tools around inventories, accessibility, permitting, gateway communities, visitor data, and partnerships. Those tools fit disc golf unusually well — but disc golf is one of many recreation uses that can leverage these authorities.
 
 Signed by President Biden on January 4, 2025, this 83-page law authorizes mandatory recreation inventories, expanded categorical exclusions for recreation permits, volunteer-built facilities on BLM land, Good Neighbor Authority for recreation construction, and 30-year partnership agreements.
 
 ## Why disc golf fits
 
-Disc golf is already a recognized BLM recreation use. BLM's public "Visit" system includes disc golf as an activity category, and BLM Utah's Cedar City pages currently promote disc golf at Three Peaks Recreation Area. A disc golf proposal starts from an activity the agency already recognizes — not a brand-new concept.
+Disc golf is already a recognized BLM recreation use. BLM's public ["Visit" system](https://www.blm.gov/visit) includes disc golf as an activity category, and BLM Utah's Cedar City pages currently promote disc golf at [Three Peaks Recreation Area](/case-studies/three-peaks). A disc golf proposal starts from an activity the agency already recognizes — not a brand-new concept.
 
 The Act's authorities map directly onto disc golf's development model:
 
@@ -33,4 +33,4 @@ The EXPLORE Act is an **authorization bill, not an appropriations bill**. It cre
 
 ## The gap
 
-No disc golf entity participates in federal recreation policy. The PDGA is not a member of the Outdoor Recreation Roundtable or Outdoor Alliance. No disc golf manufacturer has any involvement in federal recreation policy. No disc golf organization submitted comments during the Act's development. The current situation is analogous to where climbing was in 1985–1990 — before the Access Fund existed.
+No disc golf entity participates in federal recreation policy. The [PDGA](https://www.pdga.com) is not a member of the [Outdoor Recreation Roundtable](https://recreationroundtable.org) or [Outdoor Alliance](https://www.outdooralliance.org). No disc golf manufacturer has any involvement in federal recreation policy. No disc golf organization submitted comments during the Act's development. The current situation is analogous to where climbing was in 1985–1990 — before the [Access Fund](https://www.accessfund.org) existed.

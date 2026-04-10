@@ -25,7 +25,7 @@ A typical GNA disc golf project would:
 2. **Bundle disc golf** with other recreation improvements: parking, signage, restrooms, trail connections, accessible features
 3. **Keep the framing broad:** "recreation infrastructure improvement" rather than "disc golf course"
 4. **Leverage the county's capacity** for procurement, labor coordination, and insurance
-5. **Pair with volunteer authority** (Section 341) for installation labor
+5. **Pair with [volunteer authority](/explore-act/volunteer-stewardship)** (Section 341) for installation labor
 
 ## Current status
 

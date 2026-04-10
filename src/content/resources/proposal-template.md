@@ -24,12 +24,12 @@ Use this template as the foundation for a formal disc golf course development pr
 
 Address each relevant section:
 
-- **Section 112** (recreation inventory): How this site fits underutilized recreation identification
-- **Sections 214–215** (accessibility): Specific accessible features proposed
+- **[Section 112](/explore-act/key-provisions)** (recreation inventory): How this site fits underutilized recreation identification
+- **[Sections 214–215](/explore-act/accessibility)** (accessibility): Specific accessible features proposed
 - **Sections 221–222** (youth/veterans): Planned programming
 - **Section 131** (gateway communities): Relationship to nearby communities
-- **Section 341** (volunteers): Volunteer capacity and plan
-- **Section 351** (GNA): If applicable, county/tribal partner identified
+- **[Section 341](/explore-act/volunteer-stewardship)** (volunteers): Volunteer capacity and plan
+- **[Section 351](/explore-act/good-neighbor-authority)** (GNA): If applicable, county/tribal partner identified
 
 ## III. Site Assessment
 
@@ -67,7 +67,7 @@ Select the recommended approach:
 - **Environmental Assessment** — Most likely pathway for new permanent installation. Estimated 12–24 months.
 - **Environmental Impact Statement** — Flag only if significant resource conflicts.
 
-Complete the extraordinary circumstances screening (43 CFR 46.215) for all 12 factors.
+Complete the extraordinary circumstances screening ([43 CFR 46.215](https://www.ecfr.gov/current/title-43/subtitle-A/part-46/subpart-C/section-46.215)) for all 12 factors.
 
 ## V. Course Design Specifications
 
@@ -130,7 +130,7 @@ Proposed agreement type (select applicable):
 
 ## X. Monitoring and Reporting
 
-- Visitor tracking: UDisc app data + manual trail counter
+- Visitor tracking: [UDisc](https://udisc.com) app data + manual trail counter
 - Quarterly usage reports
 - Annual environmental condition assessment
 - Adaptive management: Modify or close holes if resource damage documented
