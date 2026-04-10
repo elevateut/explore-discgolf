@@ -1,129 +1,214 @@
 /**
  * Astro Action: Generate Engagement Packet
  *
- * Server-side action that generates (or retrieves a cached) BLM engagement
- * packet for a specific field office. This runs ONLY on the server — the
- * Anthropic API key and Supabase service credentials never reach the browser.
- *
- * Astro Actions are the recommended way to handle form submissions and
- * server-side mutations in Astro 5. They are automatically exposed as
- * type-safe callable functions on the client via `actions.generatePacket()`.
- *
- * Flow:
- *   1. Accept officeId from the client
- *   2. Check Supabase for a cached packet (avoid redundant API calls)
- *   3. If cache miss or stale, call generatePacket() from the LLM layer
- *   4. Return the generated packet to the client
- *
- * Cost control: Each Claude API call costs ~$0.03–0.15 depending on tool_use
- * rounds and output length. Caching in Supabase ensures we only regenerate
- * when the underlying data has changed or the cache TTL expires.
+ * Server-side action that generates (or retrieves cached) BLM engagement
+ * packets. Runs ONLY on the server — API keys never reach the browser.
  */
 
 import { defineAction } from "astro:actions";
 import { z } from "astro:schema";
+import { isLLMAvailable } from "@lib/llm/client";
+import { generatePacket } from "@lib/llm/packet-generator";
+import type { OfficeContext } from "@lib/llm/packet-generator";
+import { getOfficeByUnitCode, getOfficeEngagementStatus, getCachedPacket, saveGeneratedPacket } from "@lib/supabase/queries";
+import { getRecreationSites } from "@lib/blm/client";
+import type { BBox } from "@lib/blm/types";
+import officesJson from "@data/blm-offices.json";
 
-// TODO: Uncomment these imports once the LLM layer and Supabase client are
-// fully implemented:
-// import { generatePacket } from "@lib/llm/packet-generator";
-// import type { OfficeContext, GeneratedPacket } from "@lib/llm/packet-generator";
-// import { getSupabaseClient } from "@lib/supabase/client";
-
-/** Cache TTL in milliseconds — 7 days. */
+/** Cache TTL — 7 days. */
 const CACHE_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 
 export const generatePacketAction = defineAction({
-  /**
-   * Accept: only needs the BLM office identifier.
-   * Additional context is gathered server-side from Supabase and BLM GIS.
-   */
   accept: "json",
   input: z.object({
     officeId: z.string().min(1, "officeId is required"),
-    /** Force regeneration even if a cached packet exists. */
     forceRegenerate: z.boolean().optional().default(false),
   }),
 
   handler: async (input) => {
     const { officeId, forceRegenerate } = input;
 
-    // -----------------------------------------------------------------------
-    // Step 1: Check for cached packet in Supabase
-    // -----------------------------------------------------------------------
-    // TODO: Query the generated_packets table for this officeId.
-    // If a non-stale result exists and forceRegenerate is false, return it.
-    //
-    // const supabase = getSupabaseClient();
-    // const { data: cached } = await supabase
-    //   .from("generated_packets")
-    //   .select("*")
-    //   .eq("office_id", officeId)
-    //   .order("generated_at", { ascending: false })
-    //   .limit(1)
-    //   .single();
-    //
-    // if (cached && !forceRegenerate) {
-    //   const age = Date.now() - new Date(cached.generated_at).getTime();
-    //   if (age < CACHE_TTL_MS) {
-    //     return {
-    //       source: "cache" as const,
-    //       packet: {
-    //         officeId: cached.office_id,
-    //         onePager: cached.one_pager,
-    //         alignmentMemo: cached.alignment_memo,
-    //         coverLetter: cached.cover_letter,
-    //         suggestedContacts: cached.suggested_contacts,
-    //         generatedAt: new Date(cached.generated_at),
-    //       },
-    //     };
-    //   }
-    // }
+    // Check LLM availability
+    if (!isLLMAvailable()) {
+      return {
+        error: "AI packet generation is not available. The Anthropic API key is not configured.",
+        packet: null,
+      };
+    }
 
-    // -----------------------------------------------------------------------
-    // Step 2: Gather office context from Supabase and external sources
-    // -----------------------------------------------------------------------
-    // TODO: Build the OfficeContext object by querying:
-    //   - blm_offices table for office metadata and contacts
-    //   - BLM ArcGIS for recreation sites in the office's jurisdiction
-    //   - UDisc data for nearby disc golf courses
-    //   - engagement_status table for our outreach history
-    //   - Census/population data for nearby population estimates
-    //
-    // const officeContext: OfficeContext = {
-    //   officeId,
-    //   officeName: "TODO",
-    //   state: "TODO",
-    //   contacts: [],
-    //   recreationSites: [],
-    //   existingDiscGolf: [],
-    //   engagementHistory: [],
-    //   nearbyPopulation: {
-    //     within25Miles: 0,
-    //     within50Miles: 0,
-    //     majorCities: [],
-    //   },
-    // };
+    // Look up office data
+    const dbOffice = await getOfficeByUnitCode(officeId);
+    const staticOffice = officesJson.find((o: any) => o.id === officeId);
 
-    // -----------------------------------------------------------------------
-    // Step 3: Generate the packet via Claude API
-    // -----------------------------------------------------------------------
-    // TODO: Call the LLM packet generator.
-    // const packet = await generatePacket(officeContext);
+    if (!dbOffice && !staticOffice) {
+      return { error: `Office ${officeId} not found.`, packet: null };
+    }
 
-    // -----------------------------------------------------------------------
-    // Step 4: Return the generated packet
-    // -----------------------------------------------------------------------
-    // TODO: Replace this stub with the actual generated packet.
-    return {
-      source: "generated" as const,
-      packet: {
-        officeId,
-        onePager: "TODO: stub — packet generation not yet implemented",
-        alignmentMemo: "TODO: stub — packet generation not yet implemented",
-        coverLetter: "TODO: stub — packet generation not yet implemented",
-        suggestedContacts: [],
-        generatedAt: new Date(),
-      },
+    const officeName = dbOffice?.name ?? staticOffice?.name ?? officeId;
+    const officeUuid = dbOffice?.id;
+
+    // Check cache (if Supabase has the office UUID)
+    if (officeUuid && !forceRegenerate) {
+      const cached = await getCachedPacket(officeUuid);
+      if (cached?.created_at) {
+        const age = Date.now() - new Date(cached.created_at).getTime();
+        if (age < CACHE_TTL_MS && cached.output_markdown) {
+          // Parse the cached markdown back into sections
+          const sections = parseCachedMarkdown(cached.output_markdown);
+          return {
+            source: "cache" as const,
+            packet: {
+              officeId,
+              ...sections,
+              generatedAt: cached.created_at,
+            },
+          };
+        }
+      }
+    }
+
+    // Gather context
+    const lat = dbOffice?.lat ? Number(dbOffice.lat) : staticOffice?.lat ?? 0;
+    const lng = dbOffice?.lng ? Number(dbOffice.lng) : staticOffice?.lng ?? 0;
+
+    // Fetch recreation sites near this office
+    let recreationSites: OfficeContext["recreationSites"] = [];
+    if (lat && lng) {
+      try {
+        const radius = 0.5; // ~35 miles
+        const bbox: BBox = [lng - radius, lat - radius, lng + radius, lat + radius];
+        const sites = await getRecreationSites(bbox);
+        recreationSites = sites.slice(0, 30).map((s) => ({
+          name: s.name,
+          lat: s.lat,
+          lng: s.lng,
+          activities: s.activities,
+        }));
+      } catch {
+        // Non-fatal — proceed without recreation data
+      }
+    }
+
+    // Fetch engagement history
+    let engagementHistory: OfficeContext["engagementHistory"] = [];
+    if (officeUuid) {
+      const status = await getOfficeEngagementStatus(officeUuid);
+      if (status) {
+        engagementHistory = [{
+          date: status.updated_at,
+          status: status.status,
+          notes: status.notes ?? undefined,
+        }];
+      }
+    }
+
+    const context: OfficeContext = {
+      officeId,
+      officeName,
+      state: dbOffice?.state ?? staticOffice?.state ?? "",
+      officeType: dbOffice?.office_type ?? staticOffice?.type ?? "field",
+      lat,
+      lng,
+      phone: dbOffice?.phone ?? (staticOffice as any)?.phone ?? null,
+      email: dbOffice?.email ?? (staticOffice as any)?.email ?? null,
+      websiteUrl: dbOffice?.website_url ?? (staticOffice as any)?.websiteUrl ?? null,
+      recreationSites,
+      nearbyDiscGolf: [], // FLiPT integration coming
+      engagementHistory,
     };
+
+    // Generate
+    try {
+      const packet = await generatePacket(context);
+
+      // Cache the result
+      if (officeUuid) {
+        const markdown = serializePacketToMarkdown(packet);
+        try {
+          await saveGeneratedPacket(
+            officeUuid,
+            context as unknown as Record<string, unknown>,
+            markdown,
+            null,
+            packet.modelUsed,
+          );
+        } catch {
+          // Non-fatal — packet was generated even if caching fails
+        }
+      }
+
+      return {
+        source: "generated" as const,
+        packet: {
+          officeId: packet.officeId,
+          onePager: packet.onePager,
+          alignmentMemo: packet.alignmentMemo,
+          coverLetter: packet.coverLetter,
+          suggestedContacts: packet.suggestedContacts,
+          generatedAt: packet.generatedAt.toISOString(),
+        },
+      };
+    } catch (err: any) {
+      return {
+        error: `Packet generation failed: ${err.message}`,
+        packet: null,
+      };
+    }
   },
 });
+
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+function serializePacketToMarkdown(packet: {
+  onePager: string;
+  alignmentMemo: string;
+  coverLetter: string;
+  suggestedContacts: string;
+}): string {
+  return [
+    "--- SECTION: one-pager ---",
+    packet.onePager,
+    "--- SECTION: explore-act-alignment ---",
+    packet.alignmentMemo,
+    "--- SECTION: cover-letter ---",
+    packet.coverLetter,
+    "--- SECTION: suggested-contacts ---",
+    packet.suggestedContacts,
+  ].join("\n\n");
+}
+
+function parseCachedMarkdown(markdown: string): {
+  onePager: string;
+  alignmentMemo: string;
+  coverLetter: string;
+  suggestedContacts: string;
+} {
+  const sections: Record<string, string> = {};
+  const ids = ["one-pager", "explore-act-alignment", "cover-letter", "suggested-contacts"];
+
+  for (let i = 0; i < ids.length; i++) {
+    const marker = `--- SECTION: ${ids[i]} ---`;
+    const start = markdown.indexOf(marker);
+    if (start === -1) continue;
+
+    const contentStart = start + marker.length;
+    let contentEnd = markdown.length;
+    for (let j = i + 1; j < ids.length; j++) {
+      const nextIdx = markdown.indexOf(`--- SECTION: ${ids[j]} ---`, contentStart);
+      if (nextIdx !== -1) {
+        contentEnd = nextIdx;
+        break;
+      }
+    }
+    sections[ids[i]] = markdown.slice(contentStart, contentEnd).trim();
+  }
+
+  return {
+    onePager: sections["one-pager"] ?? "",
+    alignmentMemo: sections["explore-act-alignment"] ?? "",
+    coverLetter: sections["cover-letter"] ?? "",
+    suggestedContacts: sections["suggested-contacts"] ?? "",
+  };
+}

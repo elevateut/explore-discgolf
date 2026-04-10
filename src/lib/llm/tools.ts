@@ -1,110 +1,78 @@
 /**
- * Claude tool_use tool definitions for packet generation.
- *
- * These tools allow Claude to gather live data during packet generation by
- * calling back into our server-side functions. The Anthropic SDK sends these
- * definitions in the `tools` parameter of messages.create(), and when Claude
- * invokes a tool we execute the corresponding handler and return the result.
- *
- * See: https://docs.anthropic.com/en/docs/build-with-claude/tool-use
+ * Claude tool_use definitions and handlers for packet generation.
  */
 
 import type Anthropic from "@anthropic-ai/sdk";
+import { getRecreationSites } from "@lib/blm/client";
+import { getOfficeEngagementStatus } from "@lib/supabase/queries";
+import { getSupabaseClient } from "@lib/supabase/client";
+import type { BBox } from "@lib/blm/types";
 
 // ---------------------------------------------------------------------------
 // Tool Definitions
 // ---------------------------------------------------------------------------
 
-/**
- * Tool definitions array passed to the Claude API via `tools` parameter.
- * Each tool has a name, description, and JSON Schema input definition.
- */
 export const PACKET_GENERATION_TOOLS: Anthropic.Tool[] = [
   {
     name: "query_blm_recreation_sites",
     description:
-      "Search BLM ArcGIS REST services for recreation sites managed by or near a " +
-      "specific BLM field office. Returns site names, locations, activities, and " +
-      "fee information. Use this to understand the office's current recreation " +
-      "portfolio and identify potential disc golf locations.",
-    input_schema: {
-      type: "object" as const,
-      properties: {
-        office_id: {
-          type: "string",
-          description:
-            "BLM administrative unit code for the field office (e.g., 'LLAZP' for " +
-            "Arizona Phoenix District).",
-        },
-        bbox: {
-          type: "object",
-          description:
-            "Optional bounding box to limit the spatial search. If omitted, searches " +
-            "the office's full administrative boundary.",
-          properties: {
-            west: { type: "number", description: "Western longitude" },
-            south: { type: "number", description: "Southern latitude" },
-            east: { type: "number", description: "Eastern longitude" },
-            north: { type: "number", description: "Northern latitude" },
-          },
-          required: ["west", "south", "east", "north"],
-        },
-        activity_filter: {
-          type: "string",
-          description:
-            "Optional activity name to filter by (e.g., 'Disc Golf', 'Hiking'). " +
-            "Leave empty to return all recreation sites.",
-        },
-      },
-      required: ["office_id"],
-    },
-  },
-  {
-    name: "query_blm_office_page",
-    description:
-      "Fetch and parse the BLM.gov web page for a specific field office to extract " +
-      "contact information, staff names, mailing address, phone numbers, and current " +
-      "projects or announcements. Returns structured contact data.",
-    input_schema: {
-      type: "object" as const,
-      properties: {
-        office_name: {
-          type: "string",
-          description:
-            "Full name of the BLM office as it appears on BLM.gov (e.g., " +
-            "'Moab Field Office', 'Royal Gorge Field Office').",
-        },
-        state: {
-          type: "string",
-          description:
-            "Two-letter state code where the office is located (e.g., 'UT', 'CO').",
-        },
-      },
-      required: ["office_name", "state"],
-    },
-  },
-  {
-    name: "query_udisc_courses",
-    description:
-      "Search for existing disc golf courses near a set of coordinates. Returns " +
-      "course names, ratings, hole counts, and distances from the search point. " +
-      "Use this to understand the existing disc golf infrastructure near a BLM " +
-      "office and identify gaps in coverage.",
+      "Search BLM ArcGIS for recreation sites near a BLM field office. " +
+      "Returns site names, locations, and activities. Use this to understand " +
+      "the office's recreation portfolio and identify disc golf locations.",
     input_schema: {
       type: "object" as const,
       properties: {
         latitude: {
           type: "number",
-          description: "Latitude of the search center point (WGS84 / EPSG:4326).",
+          description: "Center latitude for the search.",
         },
         longitude: {
           type: "number",
-          description: "Longitude of the search center point (WGS84 / EPSG:4326).",
+          description: "Center longitude for the search.",
+        },
+        radius_degrees: {
+          type: "number",
+          description: "Search radius in degrees (default 0.5, roughly 35 miles).",
+        },
+      },
+      required: ["latitude", "longitude"],
+    },
+  },
+  {
+    name: "query_blm_office_page",
+    description:
+      "Fetch the BLM.gov web page for a field office to extract contact info, " +
+      "staff names, address, and current projects.",
+    input_schema: {
+      type: "object" as const,
+      properties: {
+        website_url: {
+          type: "string",
+          description: "Full URL of the BLM office page (e.g., https://www.blm.gov/office/cedar-city-field-office).",
+        },
+      },
+      required: ["website_url"],
+    },
+  },
+  {
+    name: "query_nearby_courses",
+    description:
+      "Search for existing disc golf courses near coordinates. Powered by FLiPT. " +
+      "Returns course names, hole counts, and distances.",
+    input_schema: {
+      type: "object" as const,
+      properties: {
+        latitude: {
+          type: "number",
+          description: "Latitude of the search center.",
+        },
+        longitude: {
+          type: "number",
+          description: "Longitude of the search center.",
         },
         radius_miles: {
           type: "number",
-          description:
-            "Search radius in miles from the center point. Defaults to 50 if not specified.",
+          description: "Search radius in miles (default 50).",
         },
       },
       required: ["latitude", "longitude"],
@@ -113,16 +81,13 @@ export const PACKET_GENERATION_TOOLS: Anthropic.Tool[] = [
   {
     name: "get_engagement_history",
     description:
-      "Retrieve ElevateUT's engagement history and outreach status records for a " +
-      "specific BLM office from our Supabase database. Returns the current " +
-      "engagement status (no-contact, initial-outreach, meeting-scheduled, etc.), " +
-      "timeline of interactions, and any notes from previous outreach attempts.",
+      "Retrieve EXPLORE Disc Golf's engagement history with a specific BLM office.",
     input_schema: {
       type: "object" as const,
       properties: {
         office_id: {
           type: "string",
-          description: "BLM administrative unit code for the field office.",
+          description: "BLM administrative unit code.",
         },
       },
       required: ["office_id"],
@@ -134,70 +99,169 @@ export const PACKET_GENERATION_TOOLS: Anthropic.Tool[] = [
 // Tool Handlers
 // ---------------------------------------------------------------------------
 
-/**
- * Dispatch a tool call from Claude to the appropriate handler.
- *
- * Called during the agentic loop when Claude responds with a tool_use block.
- * The result is sent back as a tool_result message so Claude can continue
- * generating the packet with real data.
- *
- * TODO: Implement each handler:
- *   - query_blm_recreation_sites → call BLM ArcGIS client (src/lib/blm/client.ts)
- *   - query_blm_office_page → fetch + parse BLM.gov office page (cheerio or similar)
- *   - query_udisc_courses → call UDisc API or scrape UDisc course directory
- *   - get_engagement_history → query Supabase engagement_status table
- */
 export async function handleToolCall(
   toolName: string,
   toolInput: Record<string, unknown>,
 ): Promise<string> {
   switch (toolName) {
     case "query_blm_recreation_sites": {
-      // TODO: Call getRecreationSites() from @lib/blm/client with the
-      // office boundary or bbox. Transform ArcGIS response into a concise
-      // text summary for Claude.
-      return JSON.stringify({
-        stub: true,
-        message: "TODO: query BLM ArcGIS recreation sites",
-        input: toolInput,
-      });
+      const lat = toolInput.latitude as number;
+      const lng = toolInput.longitude as number;
+      const radius = (toolInput.radius_degrees as number) ?? 0.5;
+
+      try {
+        const bbox: BBox = [
+          lng - radius,
+          lat - radius,
+          lng + radius,
+          lat + radius,
+        ];
+        const sites = await getRecreationSites(bbox);
+        const summary = sites.slice(0, 30).map((s) => ({
+          name: s.name,
+          activities: s.activities,
+          state: s.state,
+        }));
+        return JSON.stringify({
+          total: sites.length,
+          sites: summary,
+        });
+      } catch (err: any) {
+        return JSON.stringify({
+          error: "Failed to query BLM recreation sites: " + err.message,
+        });
+      }
     }
 
     case "query_blm_office_page": {
-      // TODO: Fetch the BLM.gov office page (construct URL from office_name
-      // and state), parse HTML with cheerio, extract contact info, staff
-      // names, mailing address, and current projects.
-      return JSON.stringify({
-        stub: true,
-        message: "TODO: fetch and parse BLM.gov office page",
-        input: toolInput,
-      });
+      const url = toolInput.website_url as string;
+      if (!url) {
+        return JSON.stringify({ error: "No website URL provided." });
+      }
+
+      try {
+        const res = await fetch(url, {
+          headers: { "User-Agent": "EXPLOREDiscGolf/1.0" },
+          signal: AbortSignal.timeout(10000),
+        });
+        if (!res.ok) {
+          return JSON.stringify({ error: `HTTP ${res.status}` });
+        }
+        const html = await res.text();
+
+        // Extract key info from the page
+        const info: Record<string, string> = {};
+
+        // Phone
+        const phoneMatch = html.match(/(\d{3}[-.)]\s*\d{3}[-.)]\s*\d{4})/);
+        if (phoneMatch) info.phone = phoneMatch[1];
+
+        // Address
+        const addrMatch = html.match(
+          /Address:<\/strong>\s*<\/div>\s*<div>([\s\S]*?)<\/div>/i
+        );
+        if (addrMatch) {
+          info.address = addrMatch[1]
+            .replace(/<br\s*\/?>/gi, ", ")
+            .replace(/<[^>]+>/g, "")
+            .replace(/\s+/g, " ")
+            .trim();
+        }
+
+        // Email (decode Cloudflare obfuscation)
+        const cfMatch = html.match(/data-cfemail="([a-f0-9]+)"/);
+        if (cfMatch) {
+          const hex = cfMatch[1];
+          const key = parseInt(hex.substr(0, 2), 16);
+          let email = "";
+          for (let i = 2; i < hex.length; i += 2) {
+            email += String.fromCharCode(parseInt(hex.substr(i, 2), 16) ^ key);
+          }
+          info.email = email;
+        }
+
+        // Page text content (trimmed for context)
+        const textContent = html
+          .replace(/<script[\s\S]*?<\/script>/gi, "")
+          .replace(/<style[\s\S]*?<\/style>/gi, "")
+          .replace(/<[^>]+>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim()
+          .slice(0, 2000);
+
+        return JSON.stringify({
+          url,
+          ...info,
+          pageExcerpt: textContent,
+        });
+      } catch (err: any) {
+        return JSON.stringify({
+          error: "Failed to fetch office page: " + err.message,
+        });
+      }
     }
 
-    case "query_udisc_courses": {
-      // TODO: Query UDisc course data near the given coordinates. This may
-      // use the UDisc API (if available) or a cached dataset. Return course
-      // names, ratings, hole counts, and distances.
+    case "query_nearby_courses": {
+      // FLiPT integration coming — return placeholder
       return JSON.stringify({
-        stub: true,
-        message: "TODO: search UDisc for nearby disc golf courses",
-        input: toolInput,
+        message:
+          "Nearby disc golf course search is powered by FLiPT (coming soon). " +
+          "For now, reference the BLM recreation sites data and known BLM disc " +
+          "golf courses: Stewart Pond (OR), Three Peaks (UT), Ironside (UT), " +
+          "Ward Mountain (NV), Barnes Grade (OR).",
+        knownBLMCourses: [
+          { name: "Stewart Pond DGC", state: "OR", holes: 18, office: "Northwest Oregon District" },
+          { name: "Three Peaks DGC", state: "UT", holes: 18, office: "Cedar City Field Office" },
+          { name: "Ironside DGC", state: "UT", holes: 18, office: "Cedar City Field Office" },
+          { name: "Ward Mountain DGC", state: "NV", holes: 14, office: "Bristlecone Field Office" },
+          { name: "Barnes Grade DGC", state: "OR", holes: 9, office: "Applegate Field Office" },
+        ],
       });
     }
 
     case "get_engagement_history": {
-      // TODO: Query the engagement_status table in Supabase for this
-      // office_id. Return the current status, last contact date, and notes.
-      return JSON.stringify({
-        stub: true,
-        message: "TODO: query Supabase engagement history",
-        input: toolInput,
-      });
+      const officeCode = toolInput.office_id as string;
+
+      try {
+        // Look up the office UUID from the unit code
+        const supabase = getSupabaseClient();
+        if (!supabase) {
+          return JSON.stringify({
+            status: "no-contact",
+            history: [],
+            note: "Supabase not configured — no engagement history available.",
+          });
+        }
+
+        const { data: office } = await supabase
+          .from("blm_offices")
+          .select("id")
+          .eq("blm_unit_code", officeCode)
+          .maybeSingle();
+
+        if (!office) {
+          return JSON.stringify({
+            status: "no-contact",
+            history: [],
+            note: "Office not found in database.",
+          });
+        }
+
+        const engagement = await getOfficeEngagementStatus(office.id);
+        return JSON.stringify({
+          status: engagement?.status ?? "no-contact",
+          lastUpdated: engagement?.updated_at ?? null,
+          notes: engagement?.notes ?? null,
+        });
+      } catch (err: any) {
+        return JSON.stringify({
+          status: "no-contact",
+          error: err.message,
+        });
+      }
     }
 
     default:
-      return JSON.stringify({
-        error: `Unknown tool: ${toolName}`,
-      });
+      return JSON.stringify({ error: `Unknown tool: ${toolName}` });
   }
 }
