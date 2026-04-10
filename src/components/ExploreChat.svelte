@@ -185,7 +185,14 @@
       let assistantIndex = messages.length - 1;
 
       while (true) {
-        const { done, value } = await reader.read();
+        let readResult: ReadableStreamReadResult<Uint8Array>;
+        try {
+          readResult = await reader.read();
+        } catch (readErr) {
+          console.error("[ExploreChat] Stream read error:", readErr);
+          break;
+        }
+        const { done, value } = readResult;
         if (done) break;
         buffer += decoder.decode(value, { stream: true });
 

@@ -214,6 +214,8 @@ Please use your tools to research this specific office before responding. Start 
               input: tool.input,
             });
 
+            // Send a keepalive before potentially slow tool execution
+            send({ type: "tool_executing", name: tool.name });
             const result = await handleToolCall(tool.name, tool.input);
             send({ type: "tool_done", name: tool.name, success: true });
 
@@ -227,6 +229,9 @@ Please use your tools to research this specific office before responding. Start 
           messages.push({ role: "assistant", content: assistantContent });
           messages.push({ role: "user", content: toolResults });
           fullAssistantText = ""; // reset for next round
+
+          // Signal that we're continuing with tool results
+          send({ type: "tool_round_complete", round: toolRound + 1 });
 
           toolRound++;
         }
