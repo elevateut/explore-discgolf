@@ -69,8 +69,10 @@ export const POST: APIRoute = async ({ request }) => {
     }));
 
   // On first message, inject office context as a preceding user+assistant exchange
-  // so Claude knows exactly which office we're discussing
-  if (priorMessages.length === 0) {
+  // so Claude knows exactly which office we're discussing.
+  // Check for no prior assistant messages (first real exchange).
+  const hasAssistantHistory = priorMessages.some((m) => m.role === "assistant");
+  if (!hasAssistantHistory) {
     const phone = dbOffice?.phone ?? (staticOffice as any)?.phone ?? "";
     const email = dbOffice?.email ?? (staticOffice as any)?.email ?? "";
     const website = dbOffice?.website_url ?? (staticOffice as any)?.websiteUrl ?? "";
@@ -88,11 +90,11 @@ export const POST: APIRoute = async ({ request }) => {
 
 Please use your tools to research this specific office before responding. Start by looking up their BLM website and recreation sites. The user's question is below.`;
 
-    priorMessages.push({ role: "user", content: contextMsg });
-    priorMessages.push({
-      role: "assistant",
-      content: `I'll research the ${officeName} right away. Let me look up their recreation portfolio and contact details.`,
-    });
+    // Prepend context before any client messages
+    priorMessages.unshift(
+      { role: "user", content: contextMsg },
+      { role: "assistant", content: `I'll research the ${officeName} right away. Let me look up their recreation portfolio and contact details.` },
+    );
   }
 
   priorMessages.push({ role: "user", content: userMessage });
