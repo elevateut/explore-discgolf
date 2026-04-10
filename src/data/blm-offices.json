@@ -13,7 +13,10 @@
     "type": "district",
     "state": "AK",
     "lat": 61.156,
-    "lng": -149.7958
+    "lng": -149.7958,
+    "phone": "907-267-1246",
+    "email": "blm_ak_afo_general_delivery@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/anchorage-district-office"
   },
   {
     "id": "AKR00000",
@@ -21,7 +24,9 @@
     "type": "district",
     "state": "AK",
     "lat": 64.8404,
-    "lng": -147.8147
+    "lng": -147.8147,
+    "phone": "907-271-5960",
+    "websiteUrl": "https://www.blm.gov/office/arctic-district-office"
   },
   {
     "id": "AKF00000",
@@ -29,7 +34,10 @@
     "type": "district",
     "state": "AK",
     "lat": 64.8404,
-    "lng": -147.8147
+    "lng": -147.8147,
+    "phone": "907-474-2200",
+    "email": "CentralYukon@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/fairbanks-district-office"
   },
   {
     "id": "AKA01000",
@@ -37,7 +45,10 @@
     "type": "field",
     "state": "AK",
     "lat": 61.156,
-    "lng": -149.7958
+    "lng": -149.7958,
+    "phone": "541-440-4930",
+    "email": "BLM_OR_RB_Mail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/swiftwater-field-office"
   },
   {
     "id": "AKF02000",
@@ -45,7 +56,10 @@
     "type": "field",
     "state": "AK",
     "lat": 64.8404,
-    "lng": -147.8147
+    "lng": -147.8147,
+    "phone": "907-474-2200",
+    "email": "EasternInterior@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/eastern-interior-field-office"
   },
   {
     "id": "AKA02000",
@@ -53,7 +67,10 @@
     "type": "field",
     "state": "AK",
     "lat": 62.1094,
-    "lng": -145.5466
+    "lng": -145.5466,
+    "phone": "907-822-3217",
+    "email": "blm_ak_gfo_general_delivery@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/glennallen-field-office"
   },
   {
     "id": "AKF03000",
@@ -61,7 +78,10 @@
     "type": "other",
     "state": "AK",
     "lat": 65.8792,
-    "lng": -149.7147
+    "lng": -149.7147,
+    "phone": "907-474-2200",
+    "email": "CentralYukon@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/central-yukon-field-office"
   },
   {
     "id": "AZ000000",
@@ -77,7 +97,10 @@
     "type": "district",
     "state": "AZ",
     "lat": 37.0827,
-    "lng": -113.5768
+    "lng": -113.5768,
+    "phone": "435-688-3200",
+    "email": "blm_az_asdoweb@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/arizona-strip-district-office"
   },
   {
     "id": "AZC00000",
@@ -85,7 +108,10 @@
     "type": "district",
     "state": "AZ",
     "lat": 34.5035,
-    "lng": -114.3531
+    "lng": -114.3531,
+    "phone": "928-718-3700",
+    "email": "BLM_AZ_KFOWEB@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/colorado-river-district-office"
   },
   {
     "id": "AZG00000",
@@ -93,7 +119,10 @@
     "type": "district",
     "state": "AZ",
     "lat": 32.1329,
-    "lng": -110.9239
+    "lng": -110.9239,
+    "phone": "928-348-4400",
+    "email": "blm_az_sfoweb@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/gila-district-office"
   },
   {
     "id": "AZP00000",
@@ -101,7 +130,10 @@
     "type": "district",
     "state": "AZ",
     "lat": 33.6418,
-    "lng": -112.0383
+    "lng": -112.0383,
+    "phone": "602-867-5400",
+    "email": "blm_az_pdoweb@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/phoenix-district-office"
   },
   {
     "id": "AZA01000",
@@ -109,7 +141,10 @@
     "type": "field",
     "state": "AZ",
     "lat": 37.0827,
-    "lng": -113.5768
+    "lng": -113.5768,
+    "phone": "435-688-3200",
+    "email": "blm_az_asdoweb@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/arizona-strip-field-office"
   },
   {
     "id": "AZP01000",
@@ -117,7 +152,10 @@
     "type": "field",
     "state": "AZ",
     "lat": 33.6419,
-    "lng": -112.0383
+    "lng": -112.0383,
+    "phone": "602-867-5400",
+    "email": "blm_az_pdoweb@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/hassayampa-field-office"
   },
   {
     "id": "AZC01000",
@@ -125,7 +163,10 @@
     "type": "field",
     "state": "AZ",
     "lat": 35.19,
-    "lng": -114.0146
+    "lng": -114.0146,
+    "phone": "928-718-3700",
+    "email": "BLM_AZ_KFOWEB@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/kingman-field-office"
   },
   {
     "id": "AZC03000",
@@ -133,7 +174,10 @@
     "type": "field",
     "state": "AZ",
     "lat": 34.5035,
-    "lng": -114.3531
+    "lng": -114.3531,
+    "phone": "928-412-5965",
+    "email": "BLM_AZ_LHFOWeb@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/lake-havasu-field-office"
   },
   {
     "id": "AZP02000",
@@ -141,7 +185,10 @@
     "type": "field",
     "state": "AZ",
     "lat": 33.6418,
-    "lng": -112.0383
+    "lng": -112.0383,
+    "phone": "602-867-5400",
+    "email": "blm_az_pdoweb@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/lower-sonoran-field-office"
   },
   {
     "id": "AZG01000",
@@ -149,7 +196,10 @@
     "type": "field",
     "state": "AZ",
     "lat": 32.8319,
-    "lng": -109.7242
+    "lng": -109.7242,
+    "phone": "928-348-4400",
+    "email": "blm_az_sfoweb@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/safford-field-office"
   },
   {
     "id": "AZG02000",
@@ -157,7 +207,10 @@
     "type": "field",
     "state": "AZ",
     "lat": 32.1329,
-    "lng": -110.9239
+    "lng": -110.9239,
+    "phone": "520-258-7200",
+    "email": "blm_az_tfoweb@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/tucson-field-office"
   },
   {
     "id": "AZC02000",
@@ -165,7 +218,10 @@
     "type": "field",
     "state": "AZ",
     "lat": 32.6731,
-    "lng": -114.5071
+    "lng": -114.5071,
+    "phone": "928-317-3200",
+    "email": "blm_az_yfoweb@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/yuma-field-office"
   },
   {
     "id": "AZA03000",
@@ -189,7 +245,10 @@
     "type": "state",
     "state": "CA",
     "lat": 38.6024,
-    "lng": -121.3988
+    "lng": -121.3988,
+    "phone": "307-775-6146",
+    "email": "blm_wy_state_office_wymail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/wyoming-state-office"
   },
   {
     "id": "CAD01000",
@@ -197,7 +256,10 @@
     "type": "district",
     "state": "CA",
     "lat": 33.8399,
-    "lng": -116.5053
+    "lng": -116.5053,
+    "phone": "760-252-6000",
+    "email": "BLM_CA_Web_CD@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/california-desert-district-office"
   },
   {
     "id": "CAC01000",
@@ -205,7 +267,10 @@
     "type": "district",
     "state": "CA",
     "lat": 38.6204,
-    "lng": -121.0607
+    "lng": -121.0607,
+    "phone": "916-941-3101",
+    "email": "BLM_CA_Web_ML@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/central-california-district-office"
   },
   {
     "id": "CAN01000",
@@ -213,7 +278,10 @@
     "type": "district",
     "state": "CA",
     "lat": 40.5094,
-    "lng": -122.3035
+    "lng": -122.3035,
+    "phone": "530-224-2100",
+    "email": "BLM_CA_Web_RE@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/northern-california-district-office"
   },
   {
     "id": "CAN02000",
@@ -221,7 +289,10 @@
     "type": "field",
     "state": "CA",
     "lat": 41.495,
-    "lng": -120.5528
+    "lng": -120.5528,
+    "phone": "530-279-6101",
+    "email": "BLM_CA_Web_AP@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/applegate-field-office"
   },
   {
     "id": "CAN03000",
@@ -229,7 +300,10 @@
     "type": "field",
     "state": "CA",
     "lat": 40.9032,
-    "lng": -124.0879
+    "lng": -124.0879,
+    "phone": "707-825-2300",
+    "email": "BLM_CA_Web_AR@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/arcata-field-office"
   },
   {
     "id": "CAC06000",
@@ -237,7 +311,10 @@
     "type": "field",
     "state": "CA",
     "lat": 35.4443,
-    "lng": -119.0755
+    "lng": -119.0755,
+    "phone": "541-523-1256",
+    "email": "BLM_OR_BK_Mail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/baker-field-office"
   },
   {
     "id": "CAD08000",
@@ -245,7 +322,10 @@
     "type": "field",
     "state": "CA",
     "lat": 34.8726,
-    "lng": -117.0206
+    "lng": -117.0206,
+    "phone": "760-252-6000",
+    "email": "BLM_CA_Web_BA@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/barstow-field-office"
   },
   {
     "id": "CAC07000",
@@ -253,7 +333,10 @@
     "type": "field",
     "state": "CA",
     "lat": 37.3626,
-    "lng": -118.4109
+    "lng": -118.4109,
+    "phone": "760-872-5000",
+    "email": "BLM_CA_Web_BI@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/bishop-field-office"
   },
   {
     "id": "CAC09000",
@@ -261,7 +344,10 @@
     "type": "field",
     "state": "CA",
     "lat": 36.668,
-    "lng": -121.8077
+    "lng": -121.8077,
+    "phone": "760-833-7100",
+    "email": "BLM_CA_Web_PS@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/palm-springs-south-coast-field-office"
   },
   {
     "id": "CAN05000",
@@ -269,7 +355,10 @@
     "type": "field",
     "state": "CA",
     "lat": 40.4067,
-    "lng": -120.6373
+    "lng": -120.6373,
+    "phone": "530-257-0456",
+    "email": "BLM_CA_Web_EL@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/eagle-lake-field-office"
   },
   {
     "id": "CAD07000",
@@ -277,7 +366,10 @@
     "type": "field",
     "state": "CA",
     "lat": 32.7795,
-    "lng": -115.5519
+    "lng": -115.5519,
+    "phone": "760-337-4400",
+    "email": "BLM_CA_Web_EC@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/el-centro-field-office"
   },
   {
     "id": "CAC08000",
@@ -285,7 +377,10 @@
     "type": "field",
     "state": "CA",
     "lat": 38.6204,
-    "lng": -121.0607
+    "lng": -121.0607,
+    "phone": "916-941-3101",
+    "email": "BLM_CA_Web_ML@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/mother-lode-field-office"
   },
   {
     "id": "CAD09000",
@@ -293,7 +388,10 @@
     "type": "field",
     "state": "CA",
     "lat": 34.8184,
-    "lng": -114.6012
+    "lng": -114.6012,
+    "phone": "760-326-7000",
+    "email": "BLM_CA_Web_NE@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/needles-field-office"
   },
   {
     "id": "CAD06000",
@@ -309,7 +407,10 @@
     "type": "field",
     "state": "CA",
     "lat": 40.5094,
-    "lng": -122.3035
+    "lng": -122.3035,
+    "phone": "530-224-2100",
+    "email": "BLM_CA_Web_RE@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/redding-field-office"
   },
   {
     "id": "CAD05000",
@@ -317,7 +418,10 @@
     "type": "field",
     "state": "CA",
     "lat": 35.618,
-    "lng": -117.6476
+    "lng": -117.6476,
+    "phone": "(760) 384-5430",
+    "email": "BLM_CA_Web_RI@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/ridgecrest-field-office"
   },
   {
     "id": "CAC05000",
@@ -325,7 +429,10 @@
     "type": "field",
     "state": "CA",
     "lat": 39.1836,
-    "lng": -123.2105
+    "lng": -123.2105,
+    "phone": "707-468-4000",
+    "email": "BLM_CA_Web_UK@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/ukiah-field-office"
   },
   {
     "id": "CAC06900",
@@ -373,7 +480,10 @@
     "type": "state",
     "state": "CO",
     "lat": 39.7175,
-    "lng": -105.1162
+    "lng": -105.1162,
+    "phone": "303-239-3700",
+    "email": "blm_co_statedirector@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/colorado-state-office"
   },
   {
     "id": "CON00000",
@@ -381,7 +491,10 @@
     "type": "district",
     "state": "CO",
     "lat": 40.5141,
-    "lng": -107.5316
+    "lng": -107.5316,
+    "phone": "541-683-6600",
+    "email": "blm_or_no_mail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/northwest-oregon-district-office"
   },
   {
     "id": "COF00000",
@@ -389,7 +502,10 @@
     "type": "district",
     "state": "CO",
     "lat": 38.4454,
-    "lng": -105.1966
+    "lng": -105.1966,
+    "phone": "970-819-8823",
+    "email": "blm_co_rg_visitorinfo@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/rocky-mountain-district"
   },
   {
     "id": "COS00000",
@@ -397,7 +513,9 @@
     "type": "district",
     "state": "CO",
     "lat": 38.459,
-    "lng": -107.8672
+    "lng": -107.8672,
+    "phone": "970-240-5300",
+    "websiteUrl": "https://www.blm.gov/office/southwest-district-office"
   },
   {
     "id": "COG00000",
@@ -405,7 +523,10 @@
     "type": "district",
     "state": "CO",
     "lat": 39.1181,
-    "lng": -108.5317
+    "lng": -108.5317,
+    "phone": "970-244-3000",
+    "email": "blm_co_gj_web_mail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/upper-colorado-river-district-office"
   },
   {
     "id": "COG02000",
@@ -413,7 +534,10 @@
     "type": "field",
     "state": "CO",
     "lat": 39.5434,
-    "lng": -107.6371
+    "lng": -107.6371,
+    "phone": "541-440-4930",
+    "email": "BLM_OR_RB_Mail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/south-river-field-office"
   },
   {
     "id": "COG01000",
@@ -421,7 +545,10 @@
     "type": "field",
     "state": "CO",
     "lat": 39.1181,
-    "lng": -108.5317
+    "lng": -108.5317,
+    "phone": "970-244-3000",
+    "email": "scolon@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/grand-junction-field-office"
   },
   {
     "id": "COS06000",
@@ -429,7 +556,10 @@
     "type": "field",
     "state": "CO",
     "lat": 38.5555,
-    "lng": -106.9283
+    "lng": -106.9283,
+    "phone": "(970) 642-4940",
+    "email": "jkaminsky@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/gunnison-field-office"
   },
   {
     "id": "CON02000",
@@ -437,7 +567,10 @@
     "type": "field",
     "state": "CO",
     "lat": 40.0575,
-    "lng": -106.369
+    "lng": -106.369,
+    "phone": "970-724-3000",
+    "email": "blm_co_kr_webmail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/kremmling-field-office"
   },
   {
     "id": "CON01000",
@@ -445,7 +578,10 @@
     "type": "field",
     "state": "CO",
     "lat": 40.5141,
-    "lng": -107.5316
+    "lng": -107.5316,
+    "phone": "970-826-5000",
+    "email": "BLM_CO_LSFO_Web@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/little-snake-field-office"
   },
   {
     "id": "COF03000",
@@ -453,7 +589,10 @@
     "type": "field",
     "state": "CO",
     "lat": 37.5733,
-    "lng": -106.1251
+    "lng": -106.1251,
+    "phone": "719-852-8171",
+    "email": "BLM_CO_SLVPLC_Mail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/san-luis-valley-field-office"
   },
   {
     "id": "COS05000",
@@ -461,7 +600,10 @@
     "type": "field",
     "state": "CO",
     "lat": 38.459,
-    "lng": -107.8672
+    "lng": -107.8672,
+    "phone": "970-240-5300",
+    "email": "dbenhorin@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/uncompahgre-field-office"
   },
   {
     "id": "CON05000",
@@ -469,7 +611,10 @@
     "type": "field",
     "state": "CO",
     "lat": 40.0372,
-    "lng": -107.9054
+    "lng": -107.9054,
+    "phone": "970-878-3800",
+    "email": "BLM_CO_White_River@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/white-river-field-office"
   },
   {
     "id": "COF02400",
@@ -509,7 +654,10 @@
     "type": "other",
     "state": "CO",
     "lat": 38.4454,
-    "lng": -105.1966
+    "lng": -105.1966,
+    "phone": "719-269-8515",
+    "email": "blm_co_rg_visitorinfo@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/royal-gorge-field-office"
   },
   {
     "id": "COS01000",
@@ -517,7 +665,10 @@
     "type": "other",
     "state": "CO",
     "lat": 37.2732,
-    "lng": -107.8932
+    "lng": -107.8932,
+    "phone": "(970) 882-7296",
+    "email": "dpadilla@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/tres-rios-field-office"
   },
   {
     "id": "ES000000",
@@ -525,7 +676,10 @@
     "type": "state",
     "state": "ES",
     "lat": 38.8768,
-    "lng": -77.0079
+    "lng": -77.0079,
+    "phone": "414-297-4401",
+    "email": "BLM_ES_NSDO_PublicInquiry@BLM.GOV",
+    "websiteUrl": "https://www.blm.gov/office/eastern-states-state-office"
   },
   {
     "id": "ESM00000",
@@ -533,7 +687,10 @@
     "type": "district",
     "state": "ES",
     "lat": 43.039,
-    "lng": -87.9031
+    "lng": -87.9031,
+    "phone": "414-297-4401",
+    "email": "BLM_ES_NSDO_PublicInquiry@BLM.GOV",
+    "websiteUrl": "https://www.blm.gov/office/northeastern-states"
   },
   {
     "id": "ESJ00000",
@@ -541,7 +698,10 @@
     "type": "district",
     "state": "ES",
     "lat": 32.3357,
-    "lng": -90.0672
+    "lng": -90.0672,
+    "phone": "(601) 919-4650",
+    "email": "BLM_ES_SSDO_Comments@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/southeastern-states"
   },
   {
     "id": "ESJ02400",
@@ -549,7 +709,10 @@
     "type": "field",
     "state": "ES",
     "lat": 26.954,
-    "lng": -80.0825
+    "lng": -80.0825,
+    "phone": "561-295-5953",
+    "email": "pdewitt@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/jupiter-inlet-lighthouse-outstanding-natural-area"
   },
   {
     "id": "ESM03400",
@@ -557,7 +720,10 @@
     "type": "field",
     "state": "ES",
     "lat": 38.6716,
-    "lng": -77.1979
+    "lng": -77.1979,
+    "phone": "435-896-1500",
+    "email": "utrfmail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/henry-mountains-field-station"
   },
   {
     "id": "ID000000",
@@ -565,7 +731,10 @@
     "type": "state",
     "state": "ID",
     "lat": 43.5925,
-    "lng": -116.2869
+    "lng": -116.2869,
+    "phone": "208-373-3889",
+    "email": "blm_id_infoaccesscenter@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/idaho-state-office"
   },
   {
     "id": "IDB00000",
@@ -573,7 +742,10 @@
     "type": "district",
     "state": "ID",
     "lat": 43.5667,
-    "lng": -116.2067
+    "lng": -116.2067,
+    "phone": "208-384-3300",
+    "email": "BLM_ID_BruneauOffice@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/boise-district-office"
   },
   {
     "id": "IDC00000",
@@ -581,7 +753,10 @@
     "type": "district",
     "state": "ID",
     "lat": 47.7145,
-    "lng": -116.8013
+    "lng": -116.8013,
+    "phone": "208-769-5000",
+    "email": "BLM_ID_CoeurdAleneOffice@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/coeur-dalene-district-office"
   },
   {
     "id": "IDI00000",
@@ -589,7 +764,10 @@
     "type": "district",
     "state": "ID",
     "lat": 43.509,
-    "lng": -112.007
+    "lng": -112.007,
+    "phone": "208-524-7540",
+    "email": "kfoster@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/idaho-falls-district-office"
   },
   {
     "id": "IDT00000",
@@ -597,7 +775,10 @@
     "type": "district",
     "state": "ID",
     "lat": 42.548,
-    "lng": -114.4326
+    "lng": -114.4326,
+    "phone": "208-677-6600",
+    "email": "BLM_ID_BurleyOffice@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/twin-falls-district-office"
   },
   {
     "id": "IDB02000",
@@ -605,7 +786,10 @@
     "type": "field",
     "state": "ID",
     "lat": 43.5667,
-    "lng": -116.2065
+    "lng": -116.2065,
+    "phone": "208-384-3300",
+    "email": "BLM_ID_BruneauOffice@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/bruneau-field-office"
   },
   {
     "id": "IDT02000",
@@ -613,7 +797,10 @@
     "type": "field",
     "state": "ID",
     "lat": 42.5034,
-    "lng": -113.7915
+    "lng": -113.7915,
+    "phone": "208-677-6600",
+    "email": "BLM_ID_BurleyOffice@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/burley-field-office"
   },
   {
     "id": "IDI03000",
@@ -621,7 +808,10 @@
     "type": "field",
     "state": "ID",
     "lat": 44.5047,
-    "lng": -114.2319
+    "lng": -114.2319,
+    "phone": "208-756-5499",
+    "email": "vguyer@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/challis-field-office"
   },
   {
     "id": "IDC01000",
@@ -629,7 +819,10 @@
     "type": "field",
     "state": "ID",
     "lat": 47.7146,
-    "lng": -116.8013
+    "lng": -116.8013,
+    "phone": "208-769-5000",
+    "email": "BLM_ID_CoeurdAleneOffice@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/coeur-dalene-field-office"
   },
   {
     "id": "IDC02000",
@@ -637,7 +830,10 @@
     "type": "field",
     "state": "ID",
     "lat": 46.0631,
-    "lng": -116.3483
+    "lng": -116.3483,
+    "phone": "208-962-3245",
+    "email": "BLM_ID_CottonwoodOffice@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/cottonwood-field-office"
   },
   {
     "id": "IDB01000",
@@ -645,7 +841,10 @@
     "type": "field",
     "state": "ID",
     "lat": 43.5667,
-    "lng": -116.2064
+    "lng": -116.2064,
+    "phone": "208-384-3300",
+    "email": "BLM_ID_FourRiversOffice@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/four-rivers-field-office"
   },
   {
     "id": "IDT01000",
@@ -653,7 +852,10 @@
     "type": "field",
     "state": "ID",
     "lat": 42.548,
-    "lng": -114.4327
+    "lng": -114.4327,
+    "phone": "208-735-2060",
+    "email": "BLM_ID_JarbidgeOffice@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/jarbidge-field-office"
   },
   {
     "id": "IDB03000",
@@ -661,7 +863,10 @@
     "type": "field",
     "state": "ID",
     "lat": 43.5446,
-    "lng": -116.8022
+    "lng": -116.8022,
+    "phone": "208-896-5912",
+    "email": "BLM_ID_OwyheeOffice@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/owyhee-field-office"
   },
   {
     "id": "IDI02000",
@@ -669,7 +874,10 @@
     "type": "field",
     "state": "ID",
     "lat": 42.8345,
-    "lng": -112.4055
+    "lng": -112.4055,
+    "phone": "208-478-6340",
+    "email": "bnewman@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/pocatello-field-office"
   },
   {
     "id": "IDI04000",
@@ -677,7 +885,10 @@
     "type": "field",
     "state": "ID",
     "lat": 45.16,
-    "lng": -113.8922
+    "lng": -113.8922,
+    "phone": "208-756-5400",
+    "email": "vguyer@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/salmon-field-office"
   },
   {
     "id": "IDT03000",
@@ -685,7 +896,10 @@
     "type": "field",
     "state": "ID",
     "lat": 42.9321,
-    "lng": -114.4137
+    "lng": -114.4137,
+    "phone": "208-732-7200",
+    "email": "BLM_ID_ShoshoneOffice@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/shoshone-field-office"
   },
   {
     "id": "IDI01000",
@@ -693,7 +907,10 @@
     "type": "field",
     "state": "ID",
     "lat": 43.5088,
-    "lng": -112.007
+    "lng": -112.007,
+    "phone": "208-524-7500",
+    "email": "jreffit@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/upper-snake-field-office"
   },
   {
     "id": "MT000000",
@@ -709,7 +926,10 @@
     "type": "district",
     "state": "MT",
     "lat": 46.3979,
-    "lng": -105.8644
+    "lng": -105.8644,
+    "phone": "406-233-2800",
+    "email": "BLM_MT_Billings_FO@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/eastern-montanadakotas-district-office"
   },
   {
     "id": "MTL00000",
@@ -717,7 +937,10 @@
     "type": "district",
     "state": "MT",
     "lat": 47.0708,
-    "lng": -109.4007
+    "lng": -109.4007,
+    "phone": "406-538-1900",
+    "email": "BLM_MT_NorthCentral_DO@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/north-central-district-office"
   },
   {
     "id": "MTB00000",
@@ -725,7 +948,10 @@
     "type": "district",
     "state": "MT",
     "lat": 45.928,
-    "lng": -112.5113
+    "lng": -112.5113,
+    "phone": "406-533-7600",
+    "email": "BLM_MT_Butte_FO@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/western-montana-district-office"
   },
   {
     "id": "MTC01000",
@@ -733,7 +959,10 @@
     "type": "field",
     "state": "MT",
     "lat": 45.7544,
-    "lng": -108.5424
+    "lng": -108.5424,
+    "phone": "406-896-5013",
+    "email": "BLM_MT_Billings_FO@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/billings-field-office"
   },
   {
     "id": "MTB07000",
@@ -741,7 +970,10 @@
     "type": "field",
     "state": "MT",
     "lat": 45.928,
-    "lng": -112.5113
+    "lng": -112.5113,
+    "phone": "406-533-7600",
+    "email": "BLM_MT_Butte_FO@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/butte-field-office"
   },
   {
     "id": "MTB05000",
@@ -749,7 +981,10 @@
     "type": "field",
     "state": "MT",
     "lat": 45.2294,
-    "lng": -112.6288
+    "lng": -112.6288,
+    "phone": "406-683-8000",
+    "email": "BLM_MT_Dillon_FO@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/dillon-field-office"
   },
   {
     "id": "MTL02000",
@@ -757,7 +992,10 @@
     "type": "field",
     "state": "MT",
     "lat": 48.1956,
-    "lng": -106.6206
+    "lng": -106.6206,
+    "phone": "406-228-3750",
+    "email": "BLM_MT_Glasgow_FO@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/glasgow-field-office"
   },
   {
     "id": "MTL03000",
@@ -765,7 +1003,10 @@
     "type": "field",
     "state": "MT",
     "lat": 48.5547,
-    "lng": -109.7437
+    "lng": -109.7437,
+    "phone": "406-262-2820",
+    "email": "BLM_MT_Havre_FO@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/havre-field-office"
   },
   {
     "id": "MTL06000",
@@ -773,7 +1014,10 @@
     "type": "field",
     "state": "MT",
     "lat": 47.0708,
-    "lng": -109.4007
+    "lng": -109.4007,
+    "phone": "406-538-1900",
+    "email": "BLM_MT_NorthCentral_DO@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/lewistown-field-office"
   },
   {
     "id": "MTL01000",
@@ -781,7 +1025,10 @@
     "type": "field",
     "state": "MT",
     "lat": 48.3588,
-    "lng": -107.8662
+    "lng": -107.8662,
+    "phone": "406-228-3750",
+    "email": "BLM_MT_Malta_FO@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/malta-field-office"
   },
   {
     "id": "MTC02000",
@@ -789,7 +1036,10 @@
     "type": "field",
     "state": "MT",
     "lat": 46.3979,
-    "lng": -105.8644
+    "lng": -105.8644,
+    "phone": "406-233-2800",
+    "email": "BLM_MT_Miles_City_FO@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/miles-city-field-office"
   },
   {
     "id": "MTB01000",
@@ -797,7 +1047,10 @@
     "type": "field",
     "state": "MT",
     "lat": 46.843,
-    "lng": -114.0544
+    "lng": -114.0544,
+    "phone": "406-329-3914",
+    "email": "BLM_MT_Missoula_FO@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/missoula-field-office"
   },
   {
     "id": "MTC03000",
@@ -805,7 +1058,10 @@
     "type": "field",
     "state": "MT",
     "lat": 46.8807,
-    "lng": -102.8199
+    "lng": -102.8199,
+    "phone": "701-227-7700",
+    "email": "BLM_MT_North_Dakota_FO@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/north-dakota-field-office"
   },
   {
     "id": "MTC04000",
@@ -813,7 +1069,10 @@
     "type": "field",
     "state": "MT",
     "lat": 44.6825,
-    "lng": -103.8598
+    "lng": -103.8598,
+    "phone": "605-892-7000",
+    "email": "BLM_MT_South_Dakota_FO@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/south-dakota-field-office"
   },
   {
     "id": "MT001200",
@@ -845,7 +1104,10 @@
     "type": "district",
     "state": "NM",
     "lat": 35.1663,
-    "lng": -106.5866
+    "lng": -106.5866,
+    "phone": "505-761-8700",
+    "email": "blm_nm_comments@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/albuquerque-district-office"
   },
   {
     "id": "NMF00000",
@@ -853,7 +1115,10 @@
     "type": "district",
     "state": "NM",
     "lat": 36.7861,
-    "lng": -108.1583
+    "lng": -108.1583,
+    "phone": "505-564-7600",
+    "email": "blm_nm_comments@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/farmington-district-office"
   },
   {
     "id": "NML00000",
@@ -861,7 +1126,10 @@
     "type": "district",
     "state": "NM",
     "lat": 32.288,
-    "lng": -106.7777
+    "lng": -106.7777,
+    "phone": "575-525-4300",
+    "email": "BLM_NM_LCDO_Mail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/las-cruces-district-office"
   },
   {
     "id": "NMP00000",
@@ -869,7 +1137,10 @@
     "type": "district",
     "state": "NM",
     "lat": 33.395,
-    "lng": -104.5655
+    "lng": -104.5655,
+    "phone": "575-627-0272",
+    "email": "BLM_NM_PDO_Mail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/pecos-district-office"
   },
   {
     "id": "NM006000",
@@ -885,7 +1156,10 @@
     "type": "field",
     "state": "NM",
     "lat": 32.4203,
-    "lng": -104.2175
+    "lng": -104.2175,
+    "phone": "575-234-5972",
+    "email": "dmjones@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/carlsbad-field-office"
   },
   {
     "id": "NMF01000",
@@ -893,7 +1167,10 @@
     "type": "field",
     "state": "NM",
     "lat": 36.7861,
-    "lng": -108.1583
+    "lng": -108.1583,
+    "phone": "505-564-7600",
+    "email": "blm_nm_comments@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/farmington-field-office"
   },
   {
     "id": "NMP01400",
@@ -909,7 +1186,10 @@
     "type": "field",
     "state": "NM",
     "lat": 35.1857,
-    "lng": -97.4391
+    "lng": -97.4391,
+    "phone": "405-579-7100",
+    "email": "blm_nm_comments@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/oklahoma-field-office"
   },
   {
     "id": "NMA01000",
@@ -917,7 +1197,10 @@
     "type": "field",
     "state": "NM",
     "lat": 35.1663,
-    "lng": -106.5866
+    "lng": -106.5866,
+    "phone": "505-761-8700",
+    "email": "alujan@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/rio-puerco-field-office"
   },
   {
     "id": "NMP01000",
@@ -925,7 +1208,10 @@
     "type": "field",
     "state": "NM",
     "lat": 33.395,
-    "lng": -104.5655
+    "lng": -104.5655,
+    "phone": "575-627-0272",
+    "email": "cschmidt@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/roswell-field-office"
   },
   {
     "id": "NMA02000",
@@ -933,7 +1219,10 @@
     "type": "field",
     "state": "NM",
     "lat": 34.0469,
-    "lng": -106.8929
+    "lng": -106.8929,
+    "phone": "575-835-0412",
+    "email": "matencio@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/socorro-field-office"
   },
   {
     "id": "NMF02000",
@@ -941,7 +1230,10 @@
     "type": "field",
     "state": "NM",
     "lat": 36.385,
-    "lng": -105.5869
+    "lng": -105.5869,
+    "phone": "(575) 758-8851",
+    "email": "blm_nm_tafo_admin@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/taos-field-office"
   },
   {
     "id": "NV000000",
@@ -957,7 +1249,10 @@
     "type": "district",
     "state": "NV",
     "lat": 40.6305,
-    "lng": -116.9553
+    "lng": -116.9553,
+    "phone": "775-635-4000",
+    "email": "BLM_NV_BMDOwebmail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/battle-mountain-district-office"
   },
   {
     "id": "NVC00000",
@@ -965,7 +1260,10 @@
     "type": "district",
     "state": "NV",
     "lat": 39.1834,
-    "lng": -119.7014
+    "lng": -119.7014,
+    "phone": "775-885-6000",
+    "email": "BLM_NV_CCDOwebmail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/carson-city-district-office"
   },
   {
     "id": "NVE00000",
@@ -973,7 +1271,10 @@
     "type": "district",
     "state": "NV",
     "lat": 40.8621,
-    "lng": -115.7344
+    "lng": -115.7344,
+    "phone": "775-753-0200",
+    "email": "BLM_NV_ELDOwebmail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/elko-district-office"
   },
   {
     "id": "NVL00000",
@@ -981,7 +1282,10 @@
     "type": "district",
     "state": "NV",
     "lat": 39.2937,
-    "lng": -114.8366
+    "lng": -114.8366,
+    "phone": "775-289-1800",
+    "email": "BLM_NV_EYDOWebmail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/ely-district-office"
   },
   {
     "id": "NVS00000",
@@ -989,7 +1293,10 @@
     "type": "district",
     "state": "NV",
     "lat": 36.2456,
-    "lng": -115.2345
+    "lng": -115.2345,
+    "phone": "702-515-5000",
+    "email": "blm_nv_sndo_web_mail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/southern-nevada-district-office"
   },
   {
     "id": "NVW00000",
@@ -997,7 +1304,10 @@
     "type": "district",
     "state": "NV",
     "lat": 40.9768,
-    "lng": -117.7137
+    "lng": -117.7137,
+    "phone": "775-623-1500",
+    "email": "wfoweb@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/winnemucca-district-office"
   },
   {
     "id": "NVW03000",
@@ -1005,7 +1315,10 @@
     "type": "field",
     "state": "NV",
     "lat": 40.9768,
-    "lng": -117.7137
+    "lng": -117.7137,
+    "phone": "775-623-1500",
+    "email": "wfoweb@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/black-rock-station"
   },
   {
     "id": "NVL06000",
@@ -1013,7 +1326,10 @@
     "type": "field",
     "state": "NV",
     "lat": 39.2937,
-    "lng": -114.8366
+    "lng": -114.8366,
+    "phone": "775-289-1800",
+    "email": "BLM_NV_EYDOWebmail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/bristlecone-field-office"
   },
   {
     "id": "NVL03000",
@@ -1021,7 +1337,10 @@
     "type": "field",
     "state": "NV",
     "lat": 37.6111,
-    "lng": -114.5278
+    "lng": -114.5278,
+    "phone": "775-726-8100",
+    "email": "BLM_NV_EYDOWebmail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/caliente-field-office"
   },
   {
     "id": "NVW01000",
@@ -1029,7 +1348,10 @@
     "type": "field",
     "state": "NV",
     "lat": 40.9768,
-    "lng": -117.7137
+    "lng": -117.7137,
+    "phone": "775-623-1500",
+    "email": "wfoweb@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/humboldt-river-field-office"
   },
   {
     "id": "NVS01000",
@@ -1037,7 +1359,10 @@
     "type": "field",
     "state": "NV",
     "lat": 36.2456,
-    "lng": -115.2345
+    "lng": -115.2345,
+    "phone": "702-515-5000",
+    "email": "blm_nv_sndo_web_mail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/las-vegas-field-office"
   },
   {
     "id": "NVB01000",
@@ -1045,7 +1370,10 @@
     "type": "field",
     "state": "NV",
     "lat": 40.6305,
-    "lng": -116.9553
+    "lng": -116.9553,
+    "phone": "775-635-4000",
+    "email": "BLM_NV_BMDOwebmail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/mount-lewis-field-office"
   },
   {
     "id": "NVS03000",
@@ -1053,7 +1381,10 @@
     "type": "field",
     "state": "NV",
     "lat": 36.2456,
-    "lng": -115.2345
+    "lng": -115.2345,
+    "phone": "702-515-5000",
+    "email": "blm_nv_sndo_web_mail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/pahrump-field-office"
   },
   {
     "id": "NVS02000",
@@ -1061,7 +1392,10 @@
     "type": "field",
     "state": "NV",
     "lat": 36.1357,
-    "lng": -115.4279
+    "lng": -115.4279,
+    "phone": "702-515-5350",
+    "email": "blm_nv_sndo_web_mail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/red-rock-sloan-field-office"
   },
   {
     "id": "NVC02000",
@@ -1069,7 +1403,10 @@
     "type": "field",
     "state": "NV",
     "lat": 39.1834,
-    "lng": -119.7014
+    "lng": -119.7014,
+    "phone": "775-885-6000",
+    "email": "mmagalet@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/sierra-front-field-office"
   },
   {
     "id": "NVC01000",
@@ -1077,7 +1414,10 @@
     "type": "field",
     "state": "NV",
     "lat": 39.1834,
-    "lng": -119.7014
+    "lng": -119.7014,
+    "phone": "775-885-6000",
+    "email": "ztreichold@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/stillwater-field-office"
   },
   {
     "id": "NVB02000",
@@ -1085,7 +1425,10 @@
     "type": "field",
     "state": "NV",
     "lat": 38.053,
-    "lng": -117.2171
+    "lng": -117.2171,
+    "phone": "775-482-7800",
+    "email": "BLM_NV_BMDOwebmail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/tonopah-field-office"
   },
   {
     "id": "NVE02000",
@@ -1093,7 +1436,10 @@
     "type": "field",
     "state": "NV",
     "lat": 40.8621,
-    "lng": -115.7344
+    "lng": -115.7344,
+    "phone": "775-753-0200",
+    "email": "BLM_NV_ELDOwebmail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/tuscarora-field-office"
   },
   {
     "id": "NVE03000",
@@ -1101,7 +1447,10 @@
     "type": "field",
     "state": "NV",
     "lat": 40.8621,
-    "lng": -115.7344
+    "lng": -115.7344,
+    "phone": "775-753-0200",
+    "email": "BLM_NV_ELDOwebmail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/wells-field-office"
   },
   {
     "id": "NVL05000",
@@ -1125,7 +1474,10 @@
     "type": "district",
     "state": "OR",
     "lat": 43.5233,
-    "lng": -119.0966
+    "lng": -119.0966,
+    "phone": "541-573-4400",
+    "email": "BLM_OR_BU_Mail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/burns-district-office"
   },
   {
     "id": "ORC00000",
@@ -1133,7 +1485,10 @@
     "type": "district",
     "state": "OR",
     "lat": 43.4154,
-    "lng": -124.2511
+    "lng": -124.2511,
+    "phone": "541-756-0100",
+    "email": "BLM_OR_CB_Mail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/coos-bay-district-office"
   },
   {
     "id": "ORL00000",
@@ -1141,7 +1496,10 @@
     "type": "district",
     "state": "OR",
     "lat": 42.1709,
-    "lng": -120.3465
+    "lng": -120.3465,
+    "phone": "541-883-6916",
+    "email": "BLM_OR_KF_MAIL@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/lakeview-district-office"
   },
   {
     "id": "ORM00000",
@@ -1149,7 +1507,10 @@
     "type": "district",
     "state": "OR",
     "lat": 42.3616,
-    "lng": -122.8746
+    "lng": -122.8746,
+    "phone": "541-618-2200",
+    "email": "BLM_OR_MD_Mail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/medford-district-office"
   },
   {
     "id": "ORN00000",
@@ -1165,7 +1526,10 @@
     "type": "district",
     "state": "OR",
     "lat": 44.3029,
-    "lng": -120.8099
+    "lng": -120.8099,
+    "phone": "541-416-6700",
+    "email": "BLM_OR_PR_Mail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/prineville-district-office"
   },
   {
     "id": "ORR00000",
@@ -1173,7 +1537,10 @@
     "type": "district",
     "state": "OR",
     "lat": 43.2276,
-    "lng": -123.364
+    "lng": -123.364,
+    "phone": "541-440-4930",
+    "email": "BLM_OR_RB_Mail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/roseburg-district-office"
   },
   {
     "id": "ORW00000",
@@ -1181,7 +1548,10 @@
     "type": "district",
     "state": "OR",
     "lat": 47.6679,
-    "lng": -117.3255
+    "lng": -117.3255,
+    "phone": "509-536-1200",
+    "email": "BLM_OR_SP_Mail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/spokane-district-office"
   },
   {
     "id": "ORV00000",
@@ -1189,7 +1559,10 @@
     "type": "district",
     "state": "OR",
     "lat": 43.9867,
-    "lng": -117.2404
+    "lng": -117.2404,
+    "phone": "541-523-1256",
+    "email": "BLM_OR_BK_Mail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/vale-district-office"
   },
   {
     "id": "ORB06000",
@@ -1197,7 +1570,10 @@
     "type": "field",
     "state": "OR",
     "lat": 43.5233,
-    "lng": -119.0966
+    "lng": -119.0966,
+    "phone": "541-573-4400",
+    "email": "BLM_OR_BU_Mail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/andrews-steens-field-office"
   },
   {
     "id": "ORB05000",
@@ -1205,7 +1581,10 @@
     "type": "field",
     "state": "OR",
     "lat": 43.5233,
-    "lng": -119.0966
+    "lng": -119.0966,
+    "phone": "541-573-4400",
+    "email": "BLM_OR_BU_Mail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/three-rivers-field-office"
   },
   {
     "id": "ORC04000",
@@ -1213,7 +1592,10 @@
     "type": "field",
     "state": "OR",
     "lat": 43.4154,
-    "lng": -124.2511
+    "lng": -124.2511,
+    "phone": "541-756-0100",
+    "email": "BLM_OR_CB_Mail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/myrtlewood-field-office"
   },
   {
     "id": "ORC03000",
@@ -1237,7 +1619,10 @@
     "type": "field",
     "state": "OR",
     "lat": 42.1814,
-    "lng": -121.7548
+    "lng": -121.7548,
+    "phone": "541-947-6100",
+    "email": "BLM_OR_LV_Mailbox@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/lakeview-field-office"
   },
   {
     "id": "ORM06000",
@@ -1245,7 +1630,10 @@
     "type": "field",
     "state": "OR",
     "lat": 42.3616,
-    "lng": -122.8746
+    "lng": -122.8746,
+    "phone": "541-618-2200",
+    "email": "BLM_OR_MD_Mail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/ashland-field-office"
   },
   {
     "id": "ORM05000",
@@ -1253,7 +1641,10 @@
     "type": "field",
     "state": "OR",
     "lat": 42.3616,
-    "lng": -122.8746
+    "lng": -122.8746,
+    "phone": "541-618-2200",
+    "email": "BLM_OR_MD_Mail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/butte-falls-field-office"
   },
   {
     "id": "ORM07000",
@@ -1261,7 +1652,10 @@
     "type": "field",
     "state": "OR",
     "lat": 42.4308,
-    "lng": -123.2941
+    "lng": -123.2941,
+    "phone": "541-471-6500",
+    "email": "BLM_OR_MD_Mail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/grants-pass-interagency-office"
   },
   {
     "id": "ORN01000",
@@ -1293,7 +1687,10 @@
     "type": "field",
     "state": "OR",
     "lat": 45.4569,
-    "lng": -123.8153
+    "lng": -123.8153,
+    "phone": "503-815-1100",
+    "email": "blm_or_no_mail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/tillamook-field-office"
   },
   {
     "id": "ORN05000",
@@ -1341,7 +1738,10 @@
     "type": "field",
     "state": "OR",
     "lat": 47.6679,
-    "lng": -117.3255
+    "lng": -117.3255,
+    "phone": "509-536-1200",
+    "email": "BLM_OR_SP_Mail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/border-field-office"
   },
   {
     "id": "ORW02000",
@@ -1349,7 +1749,10 @@
     "type": "field",
     "state": "OR",
     "lat": 47.4373,
-    "lng": -120.3161
+    "lng": -120.3161,
+    "phone": "509-665-2100",
+    "email": "BLM_OR_WN_Mail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/wenatchee-field-office"
   },
   {
     "id": "ORV05000",
@@ -1365,7 +1768,10 @@
     "type": "field",
     "state": "OR",
     "lat": 43.9867,
-    "lng": -117.2404
+    "lng": -117.2404,
+    "phone": "541-473-3144",
+    "email": "BLM_OR_VL_Mail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/malheur-field-office"
   },
   {
     "id": "UT000000",
@@ -1381,7 +1787,10 @@
     "type": "district",
     "state": "UT",
     "lat": 38.5607,
-    "lng": -109.5493
+    "lng": -109.5493,
+    "phone": "435-259-2100",
+    "email": "blm_ut_mb_mail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/canyon-country-district-office"
   },
   {
     "id": "UTC00000",
@@ -1389,7 +1798,10 @@
     "type": "district",
     "state": "UT",
     "lat": 37.7149,
-    "lng": -113.059
+    "lng": -113.059,
+    "phone": "435-865-3000",
+    "email": "BLM_UT_Cedar_City@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/color-country-district-office"
   },
   {
     "id": "UTG00000",
@@ -1397,7 +1809,10 @@
     "type": "district",
     "state": "UT",
     "lat": 40.4535,
-    "lng": -109.5194
+    "lng": -109.5194,
+    "phone": "435-781-4400",
+    "email": "utvnmail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/green-river-district"
   },
   {
     "id": "UTP00000",
@@ -1405,7 +1820,10 @@
     "type": "district",
     "state": "UT",
     "lat": 37.037,
-    "lng": -112.5242
+    "lng": -112.5242,
+    "phone": "435-644-1200",
+    "email": "BLM_UT_ES_Interagency@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/paria-river-district"
   },
   {
     "id": "UTW00000",
@@ -1413,7 +1831,10 @@
     "type": "district",
     "state": "UT",
     "lat": 40.7791,
-    "lng": -112.0373
+    "lng": -112.0373,
+    "phone": "801-320-8300",
+    "email": "BLM_UT_SL_Mail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/west-desert-district-office"
   },
   {
     "id": "UTC01000",
@@ -1421,7 +1842,10 @@
     "type": "field",
     "state": "UT",
     "lat": 37.7149,
-    "lng": -113.059
+    "lng": -113.059,
+    "phone": "435-865-3000",
+    "email": "BLM_UT_Cedar_City@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/cedar-city-field-office"
   },
   {
     "id": "UTW02000",
@@ -1429,7 +1853,10 @@
     "type": "field",
     "state": "UT",
     "lat": 38.9803,
-    "lng": -112.3214
+    "lng": -112.3214,
+    "phone": "435-743-3100",
+    "email": "utfmmail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/fillmore-field-office"
   },
   {
     "id": "UTP02000",
@@ -1437,7 +1864,10 @@
     "type": "field",
     "state": "UT",
     "lat": 37.037,
-    "lng": -112.5242
+    "lng": -112.5242,
+    "phone": "435-644-1200",
+    "email": "BLM_UT_KN_Mail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/kanab-field-office"
   },
   {
     "id": "UTY01000",
@@ -1445,7 +1875,10 @@
     "type": "field",
     "state": "UT",
     "lat": 38.5607,
-    "lng": -109.5493
+    "lng": -109.5493,
+    "phone": "435-259-2100",
+    "email": "utmbmail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/moab-field-office"
   },
   {
     "id": "UTY02000",
@@ -1453,7 +1886,10 @@
     "type": "field",
     "state": "UT",
     "lat": 37.8778,
-    "lng": -109.3434
+    "lng": -109.3434,
+    "phone": "435-587-1500",
+    "email": "blm_ut_mt_mail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/monticello-field-office"
   },
   {
     "id": "UTG02000",
@@ -1461,7 +1897,10 @@
     "type": "field",
     "state": "UT",
     "lat": 39.5986,
-    "lng": -110.8196
+    "lng": -110.8196,
+    "phone": "435-636-3600",
+    "email": "nlafazio@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/price-field-office"
   },
   {
     "id": "UTC02000",
@@ -1469,7 +1908,10 @@
     "type": "field",
     "state": "UT",
     "lat": 38.7805,
-    "lng": -112.0826
+    "lng": -112.0826,
+    "phone": "435-896-1500",
+    "email": "utrfmail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/richfield-field-office"
   },
   {
     "id": "UTW01000",
@@ -1477,7 +1919,10 @@
     "type": "field",
     "state": "UT",
     "lat": 40.7791,
-    "lng": -112.0369
+    "lng": -112.0369,
+    "phone": "801-320-8300",
+    "email": "utslmail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/salt-lake-field-office"
   },
   {
     "id": "UTC03000",
@@ -1485,7 +1930,10 @@
     "type": "field",
     "state": "UT",
     "lat": 37.0828,
-    "lng": -113.5768
+    "lng": -113.5768,
+    "phone": "435-688-3200",
+    "email": "utsgmail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/st-george-field-office"
   },
   {
     "id": "UTG01000",
@@ -1493,7 +1941,10 @@
     "type": "field",
     "state": "UT",
     "lat": 40.4535,
-    "lng": -109.5194
+    "lng": -109.5194,
+    "phone": "(435) 781-4501",
+    "email": "utvnmail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/vernal-field-office"
   },
   {
     "id": "UTP01000",
@@ -1525,7 +1976,10 @@
     "type": "district",
     "state": "WY",
     "lat": 44.0164,
-    "lng": -107.9386
+    "lng": -107.9386,
+    "phone": "(307) 522-8127",
+    "email": "jkramer@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/wind-riverbighorn-basin-district-office"
   },
   {
     "id": "WYD00000",
@@ -1533,7 +1987,10 @@
     "type": "district",
     "state": "WY",
     "lat": 41.6278,
-    "lng": -109.2306
+    "lng": -109.2306,
+    "phone": "(307) 352-0202",
+    "email": "fkeeler@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/high-desert-district-office"
   },
   {
     "id": "WYP00000",
@@ -1541,7 +1998,10 @@
     "type": "district",
     "state": "WY",
     "lat": 42.8193,
-    "lng": -106.3843
+    "lng": -106.3843,
+    "phone": "307-684-1100",
+    "email": "blm_wy_casper_wymail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/high-plains-district-office"
   },
   {
     "id": "WYP07000",
@@ -1549,7 +2009,10 @@
     "type": "field",
     "state": "WY",
     "lat": 44.3422,
-    "lng": -106.7243
+    "lng": -106.7243,
+    "phone": "307-684-1100",
+    "email": "BLM_WY_Buffalo_WYMail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/buffalo-field-office"
   },
   {
     "id": "WYP06000",
@@ -1557,7 +2020,10 @@
     "type": "field",
     "state": "WY",
     "lat": 42.8193,
-    "lng": -106.3843
+    "lng": -106.3843,
+    "phone": "307-261-7600",
+    "email": "lsandoval@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/casper-field-office"
   },
   {
     "id": "WYR02000",
@@ -1565,7 +2031,10 @@
     "type": "field",
     "state": "WY",
     "lat": 44.5277,
-    "lng": -109.042
+    "lng": -109.042,
+    "phone": "307-578-5900",
+    "email": "rcpowell@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/cody-field-office"
   },
   {
     "id": "WYD09000",
@@ -1573,7 +2042,10 @@
     "type": "field",
     "state": "WY",
     "lat": 41.8125,
-    "lng": -110.5336
+    "lng": -110.5336,
+    "phone": "(307) 828-4502",
+    "email": "bteppo@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/kemmerer-field-office"
   },
   {
     "id": "WYR05000",
@@ -1581,7 +2053,10 @@
     "type": "field",
     "state": "WY",
     "lat": 42.8402,
-    "lng": -108.7456
+    "lng": -108.7456,
+    "phone": "(307) 332-8400",
+    "email": "ramiller@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/lander-field-office"
   },
   {
     "id": "WYP08000",
@@ -1589,7 +2064,10 @@
     "type": "field",
     "state": "WY",
     "lat": 43.8493,
-    "lng": -104.1897
+    "lng": -104.1897,
+    "phone": "307-746-6602",
+    "email": "ckrause@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/newcastle-field-office"
   },
   {
     "id": "WYD01000",
@@ -1597,7 +2075,10 @@
     "type": "field",
     "state": "WY",
     "lat": 42.8674,
-    "lng": -109.8846
+    "lng": -109.8846,
+    "phone": "307- 367-5302",
+    "email": "scogswell@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/pinedale-field-office"
   },
   {
     "id": "WYD03000",
@@ -1605,7 +2086,10 @@
     "type": "field",
     "state": "WY",
     "lat": 41.7999,
-    "lng": -107.2413
+    "lng": -107.2413,
+    "phone": "307-328-4209",
+    "email": "tnovotny@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/rawlins-field-office"
   },
   {
     "id": "WYD04000",
@@ -1613,7 +2097,10 @@
     "type": "field",
     "state": "WY",
     "lat": 41.6278,
-    "lng": -109.2306
+    "lng": -109.2306,
+    "phone": "307-352-0201",
+    "email": "kfoster@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/rock-springs-field-office"
   },
   {
     "id": "WYR01000",
@@ -1621,6 +2108,9 @@
     "type": "field",
     "state": "WY",
     "lat": 44.0164,
-    "lng": -107.9386
+    "lng": -107.9386,
+    "phone": "307-347-5100",
+    "email": "BLM_WY_Worland_WYMail@blm.gov",
+    "websiteUrl": "https://www.blm.gov/office/worland-field-office"
   }
 ]
