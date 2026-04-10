@@ -9,6 +9,27 @@
 import type { BLMOffice, BLMRecreationSite, BLMBoundary, BBox } from "./types";
 
 // ---------------------------------------------------------------------------
+// Input validation
+// ---------------------------------------------------------------------------
+
+/**
+ * Validates and sanitizes a BLM admin unit code to prevent injection in
+ * ArcGIS REST where-clauses. Codes are uppercase alphanumeric strings
+ * (e.g. "UTC01000", "NM000000").
+ */
+const BLM_UNIT_CODE_RE = /^[A-Z0-9]{2,20}$/;
+
+function sanitizeOfficeId(officeId: string): string {
+  const trimmed = officeId.trim().toUpperCase();
+  if (!BLM_UNIT_CODE_RE.test(trimmed)) {
+    throw new Error(
+      `Invalid BLM unit code: "${officeId}". Expected alphanumeric (e.g. "UTC01000").`,
+    );
+  }
+  return trimmed;
+}
+
+// ---------------------------------------------------------------------------
 // Base URLs
 // ---------------------------------------------------------------------------
 
@@ -184,8 +205,9 @@ export async function getFieldOffices(): Promise<BLMOffice[]> {
 export async function getFieldOfficeBoundary(
   officeId: string,
 ): Promise<BLMBoundary | null> {
+  const safeId = sanitizeOfficeId(officeId);
   const data = await queryLayer(ADMIN_UNIT_BASE, 3, {
-    where: `ADM_UNIT_CD='${officeId}'`,
+    where: `ADM_UNIT_CD='${safeId}'`,
     returnGeometry: "true",
     outSR: "4326",
   });
