@@ -129,21 +129,28 @@
 
     // No existing conversation — auto-start with an intro message
     if (messages.length === 0) {
-      inputText = `What are the best opportunities for disc golf development at this office?`;
-      await sendMessage();
+      autoStart();
     }
+  }
+
+  // --- Auto-start: send the first message without waiting for user ---
+  async function autoStart() {
+    const openingMessage = "What are the best opportunities for disc golf development at this office?";
+    await sendMessageText(openingMessage);
   }
 
   // --- Send message ---
   async function sendMessage() {
     if (!canSend) return;
-
     const userText = inputText.trim();
     inputText = "";
     if (textareaEl) {
       textareaEl.style.height = "auto";
     }
+    await sendMessageText(userText);
+  }
 
+  async function sendMessageText(userText: string) {
     // Add user message
     messages = [...messages, { role: "user", content: userText }];
 
