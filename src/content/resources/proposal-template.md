@@ -91,6 +91,12 @@ Proposed agreement type (select applicable):
 - Volunteer Agreement (Section 341, for installation labor)
 - Special Recreation Permit (for organized events post-installation)
 
+Funding stack (state grant + federal share + match):
+
+- **State recreation grant** — see the [State Grant Funding](/resources/state-grant-funding) guide. Utah's UORG, New Mexico's Trails+, Conserve Nevada, Montana's Trail Stewardship Program, and the state-administered RTP programs are the highest-leverage direct-eligible options for a disc golf 501(c)(3).
+- **Federal share via BLM** — Challenge Cost Share or Recreation Resource Management cooperative agreements (both CFDA 15.225).
+- **Non-federal match** — volunteer hours at DOL rates (Section 341), donated materials, donated professional services, cash, foundation grants.
+
 ## VII. Cost Estimate
 
 | Item | Qty | Unit Cost | Total |

@@ -98,7 +98,8 @@ Prioritize geographic diversity across BLM states: Utah, Colorado, Oregon, Nevad
 - **REI Cooperative Action Fund** — $15K-$100K+ for outdoor access and health equity; Spring/Fall cycles; requires 501(c)(3)
 - **Conservation Alliance** — $34.9M distributed since 1989; 2026 Member Collective Grant Cycle inquiry period March 2-April 10, 2026; applications April 27-May 15
 - **NFWF Five Star Grant Program** — community conservation grants
-- **Land and Water Conservation Fund State Assistance** — 50/50 match through Utah Division of Outdoor Recreation; disc golf qualifies as "development of facilities for public outdoor recreation"
+- **State recreation grants** — usually the largest single line in the funding stack. The two anchors are **Utah's UORG** (up to $1M, disc golf explicitly listed, three courses already funded) and **New Mexico's Trails+** ($500K for nonprofits, $870K+ already awarded to disc golf projects across three sites since FY2024). The **Recreational Trails Program (RTP)** is the cross-cutting federal pass-through that allows direct nonprofit applicants in nearly every state. See [12-state-grant-funding.md](12-state-grant-funding.md) for the full state-by-state inventory and the Top 15 ranking.
+- **Land and Water Conservation Fund State Assistance** — 50/50 match. Note: in most states LWCF is restricted to political subdivisions and tribes; nonprofits must partner with a local government applicant.
 - **BLM Challenge Cost Share (CFDA 15.225)** — $500-$250,000 (average ~$25K); coordinate with BLM state/district offices
 - **BLM Recreation Resource Management (CFDA 15.225)** — cooperative agreements for recreation facility development
 

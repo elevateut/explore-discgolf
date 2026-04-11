@@ -144,6 +144,7 @@ A 9-hole course costs $9,000-$18,000 to build. Daily capacity: 432 player-slots.
 - Cash match: $______
 - Donated materials: $______
 - Professional services donated: $______
+- State recreation grant (named program): $______ — see [12-state-grant-funding.md](12-state-grant-funding.md) for the program inventory and Top 15 ranking; UORG, NM Trails+, Conserve Nevada, Montana TSP, and the state RTPs are usually the highest-leverage options for a nonprofit applicant
 - Total non-federal match: $______
 
 *BLM contributions requested:*
