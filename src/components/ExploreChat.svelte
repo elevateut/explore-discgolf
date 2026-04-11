@@ -496,7 +496,7 @@
       {/if}
 
       {#each messages as message, i}
-        <div class="flex {message.role === 'user' ? 'justify-end' : 'justify-start'}">
+        <div class="flex flex-col {message.role === 'user' ? 'items-end' : 'items-start'}">
           <div class="chat-bubble-wrapper max-w-[85%] sm:max-w-[75%]">
             {#if message.role === "user"}
               <!-- User message -->
@@ -505,25 +505,8 @@
               </div>
             {:else}
               <!-- Assistant message -->
-              <div class="assistant-bubble group relative rounded-lg rounded-bl-sm px-4 py-3">
+              <div class="assistant-bubble rounded-lg rounded-bl-sm px-4 py-3">
                 {#if message.content}
-                  <button
-                    class="copy-btn absolute top-2 right-2 btn btn-ghost btn-xs opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity"
-                    onclick={() => copyMessage(i, message.content)}
-                    aria-label="Copy message"
-                    title="Copy message"
-                  >
-                    {#if copiedIndex === i}
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-success" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                      </svg>
-                    {:else}
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z" />
-                        <path d="M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z" />
-                      </svg>
-                    {/if}
-                  </button>
                 {/if}
                 <!-- Tool status chips -->
                 {#if message.tools && message.tools.length > 0}
@@ -559,6 +542,28 @@
               </div>
             {/if}
           </div>
+          {#if message.content && (message.role !== "assistant" || (status !== "streaming" || i !== messages.length - 1))}
+            <div class="message-actions flex items-center gap-1 mt-1 px-1">
+              <button
+                class="action-btn"
+                onclick={() => copyMessage(i, message.content)}
+                aria-label="Copy message"
+                title="Copy message"
+              >
+                {#if copiedIndex === i}
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-success" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                  </svg>
+                  <span class="text-xs ml-1">Copied</span>
+                {:else}
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                  </svg>
+                  <span class="text-xs ml-1">Copy</span>
+                {/if}
+              </button>
+            </div>
+          {/if}
         </div>
       {/each}
 
@@ -703,6 +708,37 @@
     background-color: rgba(26, 139, 163, 0.1);
     color: #1A8BA3;
     font-weight: 500;
+  }
+
+  /* --- Message action buttons (Copy, etc.) --- */
+  .message-actions {
+    opacity: 0.6;
+    transition: opacity 0.15s;
+  }
+  .message-actions:hover,
+  .message-actions:focus-within {
+    opacity: 1;
+  }
+  .action-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.375rem;
+    background: transparent;
+    color: rgba(30, 45, 59, 0.6);
+    font-size: 0.75rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.15s, color 0.15s;
+  }
+  .action-btn:hover {
+    background-color: rgba(30, 45, 59, 0.08);
+    color: #1E2D3B;
+  }
+  .action-btn:focus-visible {
+    outline: 2px solid #B85C38;
+    outline-offset: 2px;
   }
 
   /* --- Typing indicator --- */
