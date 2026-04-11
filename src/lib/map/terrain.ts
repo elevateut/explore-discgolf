@@ -171,30 +171,27 @@ export function applyTerrain(map: MaplibreMap, showHillshade: boolean): void {
 export const SMA_LAYER_ID = "blm-sma";
 const SMA_SOURCE_ID = "blm-sma";
 
-// Dynamic image export from BLM's ArcGIS MapServer. MapLibre templates
-// `{bbox-epsg-3857}` per tile request, and the server renders a PNG of the
-// Surface Management Agency polygon layer on demand. `layers=show:1` picks
-// just the polygon layer (not the server-side labels, which would clash
-// with Positron's labels and can't be styled client-side).
+// BLM's pre-rendered cached tile pyramid of BLM-administered surface lands.
+// Web Mercator tile scheme (SR 102100), 256px tiles, 24 LODs covering zoom
+// 0–23, singleFusedMapCache=true — drops in as a standard XYZ raster source.
+// ArcGIS tile URL pattern is `tile/{level}/{row}/{column}` which is the same
+// as slippy-map `{z}/{y}/{x}` (note y before x, not OSM's {z}/{x}/{y}).
+//
+// An earlier iteration used the dynamic `/export` endpoint against
+// `BLM_Natl_SMA_LimitedScale`, which looked right until we realized that
+// service has `minScale: 36113` meaning it only renders ZOOMED IN past
+// 1:36K — so at office-overview zooms (8–12) the server returned empty
+// transparent PNGs. The cached BLM_Only service renders at every zoom
+// level we care about and is BLM-specific by construction (no client-
+// or server-side filtering needed).
 const SMA_TILE_URL =
-  "https://gis.blm.gov/arcgis/rest/services/lands/BLM_Natl_SMA_LimitedScale" +
-  "/MapServer/export" +
-  "?bbox={bbox-epsg-3857}&bboxSR=3857&imageSR=3857" +
-  "&size=512,512&format=png32&transparent=true" +
-  "&layers=show:1" +
-  "&f=image";
+  "https://gis.blm.gov/arcgis/rest/services/lands/BLM_Natl_SMA_Cached_BLM_Only" +
+  "/MapServer/tile/{z}/{y}/{x}";
 
 /**
- * Idempotently add the BLM Surface Management Agency overlay — a dynamic
- * raster layer showing every acre of federal land classified by its active
- * surface-managing agency (BLM yellow, USFS green, NPS dark green, FWS,
- * DoD, tribal, etc.) across the continental US, Alaska, Hawaii, and
- * territories.
- *
- * BLM's SMA LimitedScale service only renders below scale ~1:36K (roughly
- * zoom 14 and wider), which is exactly the office-scouting zoom range we
- * care about. Past zoom ~14 the server returns nothing and the overlay
- * effectively hides — by which point a satellite basemap is more useful.
+ * Idempotently add the BLM Surface Management Agency overlay — a raster
+ * layer showing every acre of BLM-administered surface land across the
+ * continental US, Alaska, Hawaii, and territories.
  *
  * Call from a `style.load` handler — sources and layers are wiped on
  * `setStyle()`, so this needs to re-add them on every basemap swap.
@@ -210,9 +207,9 @@ export function applySmaOverlay(
     map.addSource(SMA_SOURCE_ID, {
       type: "raster",
       tiles: [SMA_TILE_URL],
-      tileSize: 512,
+      tileSize: 256,
       attribution:
-        'Surface lands: <a href="https://www.blm.gov" target="_blank" rel="noopener">© Bureau of Land Management</a>',
+        'BLM lands: <a href="https://www.blm.gov" target="_blank" rel="noopener">© Bureau of Land Management</a>',
     });
   }
 
