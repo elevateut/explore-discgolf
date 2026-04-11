@@ -169,14 +169,11 @@
       // Silently fail
     }
 
-    // No existing conversation — auto-start with an intro message
-    if (messages.length === 0) {
-      autoStart();
-    }
+    // No existing conversation — wait for user to click Start Chat
   }
 
-  // --- Auto-start: send the first message without waiting for user ---
-  async function autoStart() {
+  // --- Start chat: user-triggered opening message ---
+  async function startChat() {
     const openingMessage = "What are the best opportunities for disc golf development at this office?";
     await sendMessageText(openingMessage);
   }
@@ -477,7 +474,7 @@
       class="message-list flex flex-col gap-3 p-4 overflow-y-auto"
     >
       {#if messages.length === 0 && status !== "streaming"}
-        <!-- Welcome / empty state -->
+        <!-- Welcome / empty state with start button -->
         <div class="text-center py-10 px-4">
           <div class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-info/10 mb-4">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-info" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -485,12 +482,21 @@
             </svg>
           </div>
           <h3 class="text-base font-semibold text-base-content mb-2">
-            Start Exploring Ideas
+            Brainstorm with AI
           </h3>
-          <p class="text-sm text-base-content/60 max-w-sm mx-auto">
-            Ask about disc golf opportunities on BLM land managed by
-            the {officeName} office. Try topics like trail access,
-            existing recreation areas, or community partnerships.
+          <p class="text-sm text-base-content/60 max-w-md mx-auto mb-5">
+            Get a research-backed analysis of disc golf opportunities at the
+            {officeName}. The AI will look up real recreation sites, contacts,
+            and engagement history.
+          </p>
+          <button class="btn btn-primary" onclick={startChat}>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+            </svg>
+            Start Chat
+          </button>
+          <p class="text-xs text-base-content/40 mt-3">
+            Or type your own question below
           </p>
         </div>
       {/if}
@@ -542,7 +548,7 @@
               </div>
             {/if}
           </div>
-          {#if message.content && (message.role !== "assistant" || (status !== "streaming" || i !== messages.length - 1))}
+          {#if message?.content && message.content.length > 0 && (message.role !== "assistant" || status !== "streaming" || i !== messages.length - 1)}
             <div class="message-actions flex items-center gap-1 mt-1 px-1">
               <button
                 class="action-btn"
