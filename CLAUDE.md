@@ -1,46 +1,35 @@
 # CLAUDE.md — explore-discgolf
 
-## Overview
+> This file is for Claude Code (and other AI coding assistants) working in this repo.
+> For the full project overview, tech stack, and conventions, read **[AGENTS.md](AGENTS.md)** first — that's the source of truth. This file only adds Claude-specific working notes.
 
-Open source project by ElevateUT (501c3) advocating for disc golf on BLM public lands under the EXPLORE Act. Licensed under Apache-2.0.
+## Quick orientation
 
-## Tech Stack
+Open source project by ElevateUT (501c3) advocating for disc golf on BLM public lands under the EXPLORE Act (P.L. 118-234). Astro 5 SSR on Vercel, Svelte 5 islands, Supabase, Anthropic Claude API, MapLibre GL. See AGENTS.md for the full breakdown.
 
-- **Framework:** Astro 5 with SSR (Node adapter, standalone mode)
-- **Styling:** Tailwind CSS v4 + DaisyUI v5 (custom "elevateut" theme)
-- **Interactive UI:** Svelte 5 islands (client-side components via `@astrojs/svelte`)
-- **Database:** Supabase (auth, Postgres, storage)
-- **AI:** Anthropic Claude API (`@anthropic-ai/sdk`)
-- **Maps:** MapLibre GL JS for BLM land and course mapping
+## Working in this codebase
 
-## Project Structure
+- **Start with the right AGENTS.md.** Most `src/lib/*`, `src/components/`, `src/content/`, and `src/pages/` directories have their own layer-specific AGENTS.md. Read those before editing files in that layer — they document conventions you won't get from the code alone.
+- **Path aliases** are configured in `tsconfig.json`: `@components`, `@lib`, `@content`, `@data`, `@styles`, `@layouts`. Always use them instead of relative paths that cross directory boundaries.
+- **Supabase is optional.** Every read path in `src/lib/supabase/queries.ts` falls back to `src/data/blm-offices.json` when credentials are missing. Preserve that pattern when adding new queries — the site must run for contributors who haven't set up Supabase.
+- **Claude client is optional.** `src/lib/llm/client.ts` returns `null` when `ANTHROPIC_API_KEY` is missing. Guard LLM calls with `isLLMAvailable()` and return a clear "not configured" error from API routes.
+- **Astro Actions vs. API routes.** Astro Actions return devalue-encoded bodies, which plain `fetch()` in a Svelte island can't parse. When a Svelte component needs JSON, add an API route under `src/pages/api/` that wraps the underlying library call. See `src/pages/api/packet/generate.ts` for the pattern.
 
-```
-src/
-  components/   — Astro and Svelte components (@components)
-  content/      — Markdown content collections (@content)
-  data/         — Static data files and schemas (@data)
-  layouts/      — Astro layout templates
-  lib/          — Shared utilities, Supabase client, API helpers (@lib)
-  pages/        — File-based routes and Astro Actions
-  styles/       — Global CSS and Tailwind imports (@styles)
-public/         — Static assets (images, fonts, favicons)
-docs/           — Project documentation
-```
+## LLM architecture (where Claude shows up)
 
-## Conventions
+Two paths share `src/lib/llm/`:
 
-- **Content** lives in `src/content/` as Markdown collections managed by Astro Content Collections.
-- **Interactive features** (maps, forms, dynamic UI) are Svelte island components hydrated with `client:*` directives.
-- **Server logic** uses Astro Actions for type-safe server endpoints.
-- **Path aliases** are configured in `tsconfig.json`: `@components`, `@lib`, `@content`, `@data`, `@styles`.
-- **Environment variables** follow the `.env.example` template. Public vars use the `PUBLIC_` prefix.
-- **DaisyUI theme** "elevateut" is defined in `tailwind.config.mjs` with brand colors.
+1. **Packet generator** (`packet-generator.ts`, `/api/packet/generate`, `src/actions/generate-packet.ts`) — one-shot agentic pipeline producing a one-pager, EXPLORE Act alignment memo, cover letter, and suggested contacts. Cached in Supabase `generated_packets` (7-day TTL).
+2. **Interactive chat** (`src/pages/api/chat/message.ts`, `ExploreChat.svelte`) — streaming multi-turn chat with up to 3 tool rounds per message and prompt caching on the ~42K-token reference docs block. Conversations persist in Supabase (`conversations`, `conversation_messages`) and are shareable at `/chat/[id]`.
 
-## Development
+Both share the same `tool_use` toolkit in `src/lib/llm/tools.ts` (`query_blm_recreation_sites`, `query_blm_office_page`, `get_engagement_history`). Default model: `claude-sonnet-4-20250514`.
+
+## Commands
 
 ```bash
-npm run dev      # Start dev server
+npm run dev      # Astro dev server at http://localhost:4321
 npm run build    # Production build
 npm run preview  # Preview production build
 ```
+
+Before reporting a task complete, run `npm run build` to catch type errors and content collection validation failures — content collections enforce Zod schemas at build time.
