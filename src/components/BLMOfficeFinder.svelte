@@ -334,6 +334,8 @@
   let geocodeError = $state<string | null>(null);
   let sortedByDistance = $state<OfficeItem[]>([]);
   let geocodeCenter = $state<[number, number] | null>(null);
+  let geocodeAbort: AbortController | null = null;
+  let debounceTimer: ReturnType<typeof setTimeout> | null = null;
 
   function haversineDistance(
     lat1: number, lng1: number, lat2: number, lng2: number,
@@ -371,6 +373,11 @@
   }
 
   async function geocodeAndSearch(query: string) {
+    // Cancel any in-flight geocode request
+    geocodeAbort?.abort();
+    geocodeAbort = new AbortController();
+    const signal = geocodeAbort.signal;
+
     isGeocoding = true;
     geocodeError = null;
     sortedByDistance = [];
@@ -380,6 +387,7 @@
       const url = `https://nominatim.openstreetmap.org/search?format=json&countrycodes=us&limit=1&q=${encodeURIComponent(query)}`;
       const res = await fetch(url, {
         headers: { "User-Agent": "EXPLOREDiscGolf/1.0 (explorediscgolf.org)" },
+        signal,
       });
       if (!res.ok) throw new Error("Geocoding request failed");
       const results = await res.json();
@@ -393,9 +401,10 @@
       const lng = parseFloat(results[0].lon);
       showNearby(lat, lng);
     } catch (err: any) {
+      if (err.name === "AbortError") return; // superseded by newer request
       geocodeError = err.message || "Geocoding failed";
     } finally {
-      isGeocoding = false;
+      if (!signal.aborted) isGeocoding = false;
     }
   }
 
@@ -440,10 +449,11 @@
       return;
     }
 
-    // If the query looks like a zip code or city/state, geocode it
+    // If the query looks like a zip code or city/state, geocode it with debounce
     const looksLikeLocation = /^\d{5}$/.test(q) || /,\s*[A-Z]{2}$/i.test(q) || /\d/.test(q);
     if (looksLikeLocation) {
-      await geocodeAndSearch(q);
+      if (debounceTimer) clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => geocodeAndSearch(q), 300);
     } else {
       // Text search — just filter (reactive via $derived)
       sortedByDistance = [];

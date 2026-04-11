@@ -65,13 +65,13 @@ const navLinks = [
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
-    <!-- Preload brand fonts -->
-    <link rel="preload" href="/fonts/PlusJakartaSans-Bold.ttf" as="font" type="font/ttf" crossorigin />
-    <link rel="preload" href="/fonts/PlusJakartaSans-ExtraBold.ttf" as="font" type="font/ttf" crossorigin />
-    <link rel="preload" href="/fonts/Inter-Regular.ttf" as="font" type="font/ttf" crossorigin />
-    <link rel="preload" href="/fonts/Inter-Medium.ttf" as="font" type="font/ttf" crossorigin />
-    <link rel="preload" href="/fonts/Inter-SemiBold.ttf" as="font" type="font/ttf" crossorigin />
-    <link rel="preload" href="/fonts/Inter-Bold.ttf" as="font" type="font/ttf" crossorigin />
+    <!-- Preload brand fonts (WOFF2) -->
+    <link rel="preload" href="/fonts/PlusJakartaSans-Bold.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/PlusJakartaSans-ExtraBold.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/Inter-Medium.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/Inter-SemiBold.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/Inter-Bold.woff2" as="font" type="font/woff2" crossorigin />
   </head>
 
   <body class="min-h-screen flex flex-col font-body antialiased">
@@ -270,7 +270,8 @@ const navLinks = [
   /* Brand font-face declarations */
   @font-face {
     font-family: "Plus Jakarta Sans";
-    src: url("/fonts/PlusJakartaSans-Bold.ttf") format("truetype");
+    src: url("/fonts/PlusJakartaSans-Bold.woff2") format("woff2"),
+         url("/fonts/PlusJakartaSans-Bold.ttf") format("truetype");
     font-weight: 700;
     font-style: normal;
     font-display: swap;
@@ -278,7 +279,8 @@ const navLinks = [
 
   @font-face {
     font-family: "Plus Jakarta Sans";
-    src: url("/fonts/PlusJakartaSans-ExtraBold.ttf") format("truetype");
+    src: url("/fonts/PlusJakartaSans-ExtraBold.woff2") format("woff2"),
+         url("/fonts/PlusJakartaSans-ExtraBold.ttf") format("truetype");
     font-weight: 800;
     font-style: normal;
     font-display: swap;
@@ -286,7 +288,8 @@ const navLinks = [
 
   @font-face {
     font-family: "Inter";
-    src: url("/fonts/Inter-Regular.ttf") format("truetype");
+    src: url("/fonts/Inter-Regular.woff2") format("woff2"),
+         url("/fonts/Inter-Regular.ttf") format("truetype");
     font-weight: 400;
     font-style: normal;
     font-display: swap;
@@ -294,7 +297,8 @@ const navLinks = [
 
   @font-face {
     font-family: "Inter";
-    src: url("/fonts/Inter-Medium.ttf") format("truetype");
+    src: url("/fonts/Inter-Medium.woff2") format("woff2"),
+         url("/fonts/Inter-Medium.ttf") format("truetype");
     font-weight: 500;
     font-style: normal;
     font-display: swap;
@@ -302,7 +306,8 @@ const navLinks = [
 
   @font-face {
     font-family: "Inter";
-    src: url("/fonts/Inter-SemiBold.ttf") format("truetype");
+    src: url("/fonts/Inter-SemiBold.woff2") format("woff2"),
+         url("/fonts/Inter-SemiBold.ttf") format("truetype");
     font-weight: 600;
     font-style: normal;
     font-display: swap;
@@ -310,7 +315,8 @@ const navLinks = [
 
   @font-face {
     font-family: "Inter";
-    src: url("/fonts/Inter-Bold.ttf") format("truetype");
+    src: url("/fonts/Inter-Bold.woff2") format("woff2"),
+         url("/fonts/Inter-Bold.ttf") format("truetype");
     font-weight: 700;
     font-style: normal;
     font-display: swap;

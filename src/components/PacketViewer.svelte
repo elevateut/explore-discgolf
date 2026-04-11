@@ -7,6 +7,7 @@
    */
 
   import { marked } from "marked";
+  import DOMPurify from "isomorphic-dompurify";
 
   interface Props {
     officeId: string;
@@ -71,7 +72,7 @@
 
   function renderMarkdown(md: string): string {
     if (!md) return "<p class='text-base-content/50 italic'>No content available.</p>";
-    return marked.parse(md) as string;
+    return DOMPurify.sanitize(marked.parse(md) as string);
   }
 
   function startTimer() {

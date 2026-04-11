@@ -8,6 +8,45 @@ import { getOfficeEngagementStatus } from "@lib/supabase/queries";
 import { getSupabaseClient } from "@lib/supabase/client";
 import type { BBox } from "@lib/blm/types";
 
+// ---------------------------------------------------------------------------
+// Input Validation Helpers
+// ---------------------------------------------------------------------------
+
+/** Whitelist of allowed domains for SSRF-safe URL fetching. */
+const ALLOWED_URL_DOMAINS = [
+  "www.blm.gov",
+  "blm.gov",
+  "doi.gov",
+  "www.doi.gov",
+];
+
+function isAllowedUrl(urlStr: string): boolean {
+  try {
+    const parsed = new URL(urlStr);
+    if (parsed.protocol !== "https:") return false;
+    return ALLOWED_URL_DOMAINS.some(
+      (d) => parsed.hostname === d || parsed.hostname.endsWith(`.${d}`),
+    );
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Parse and clamp a numeric tool_use input to a finite range.
+ * Returns the default if the value is missing, NaN, or Infinity.
+ */
+function toFiniteNumber(
+  value: unknown,
+  defaultVal: number,
+  min: number,
+  max: number,
+): number {
+  const n = Number(value);
+  if (!Number.isFinite(n)) return defaultVal;
+  return Math.max(min, Math.min(max, n));
+}
+
 /** Human-readable display names for tool execution in the chat UI. */
 export const TOOL_DISPLAY_NAMES: Record<string, string> = {
   query_blm_recreation_sites: "Researching BLM recreation sites...",
@@ -89,9 +128,9 @@ export async function handleToolCall(
 ): Promise<string> {
   switch (toolName) {
     case "query_blm_recreation_sites": {
-      const lat = toolInput.latitude as number;
-      const lng = toolInput.longitude as number;
-      const radius = (toolInput.radius_degrees as number) ?? 0.5;
+      const lat = toFiniteNumber(toolInput.latitude, 0, -90, 90);
+      const lng = toFiniteNumber(toolInput.longitude, 0, -180, 180);
+      const radius = toFiniteNumber(toolInput.radius_degrees, 0.5, 0.01, 5);
 
       try {
         const bbox: BBox = [
@@ -121,6 +160,11 @@ export async function handleToolCall(
       const url = toolInput.website_url as string;
       if (!url) {
         return JSON.stringify({ error: "No website URL provided." });
+      }
+      if (!isAllowedUrl(url)) {
+        return JSON.stringify({
+          error: "URL not allowed. Only blm.gov and doi.gov domains are permitted.",
+        });
       }
 
       try {

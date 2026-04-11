@@ -119,7 +119,7 @@ export const generatePacketAction = defineAction({
 
     // Generate
     try {
-      const packet = await generatePacket(context);
+      const packet = await generatePacket(context, { timeoutMs: 25_000 });
 
       // Cache the result
       if (officeUuid) {

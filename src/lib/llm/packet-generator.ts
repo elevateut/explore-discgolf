@@ -103,6 +103,7 @@ function parseSections(text: string): Record<string, string> {
 
 export async function generatePacket(
   context: OfficeContext,
+  options?: { timeoutMs?: number },
 ): Promise<GeneratedPacket> {
   if (!isLLMAvailable() || !anthropic) {
     throw new Error("Anthropic API key is not configured. Cannot generate packets.");
@@ -119,16 +120,27 @@ export async function generatePacket(
   let iterations = 0;
   const maxIterations = 10; // safety limit
 
+  // Optional timeout via AbortController
+  const timeoutMs = options?.timeoutMs;
+  const abortController = timeoutMs ? new AbortController() : undefined;
+  const timer = timeoutMs
+    ? setTimeout(() => abortController!.abort(), timeoutMs)
+    : undefined;
+
+  try {
   while (iterations < maxIterations) {
     iterations++;
 
-    const response = await anthropic.messages.create({
-      model: DEFAULT_MODEL,
-      max_tokens: MAX_TOKENS,
-      system: SYSTEM_PROMPT,
-      tools: PACKET_GENERATION_TOOLS,
-      messages,
-    });
+    const response = await anthropic.messages.create(
+      {
+        model: DEFAULT_MODEL,
+        max_tokens: MAX_TOKENS,
+        system: SYSTEM_PROMPT,
+        tools: PACKET_GENERATION_TOOLS,
+        messages,
+      },
+      abortController ? { signal: abortController.signal as AbortSignal } : undefined,
+    );
 
     // Collect text blocks from the response
     const textBlocks = response.content
@@ -183,4 +195,7 @@ export async function generatePacket(
     generatedAt: new Date(),
     modelUsed: DEFAULT_MODEL,
   };
+  } finally {
+    if (timer) clearTimeout(timer);
+  }
 }

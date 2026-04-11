@@ -28,10 +28,19 @@
   /**
    * Fetch boundary polygon from BLM ArcGIS and convert to GeoJSON.
    */
+  /** Validate office ID to prevent ArcGIS query injection. */
+  const BLM_UNIT_CODE_RE = /^[A-Z0-9]{2,20}$/;
+
   async function fetchBoundary(): Promise<GeoJSON.Feature | null> {
+    const safeId = officeId.trim().toUpperCase();
+    if (!BLM_UNIT_CODE_RE.test(safeId)) {
+      console.warn(`Invalid office ID format: ${officeId}`);
+      return null;
+    }
+
     const url = new URL(`${ADMIN_UNIT_BASE}/3/query`);
     url.searchParams.set("f", "json");
-    url.searchParams.set("where", `ADM_UNIT_CD='${officeId}'`);
+    url.searchParams.set("where", `ADM_UNIT_CD='${safeId}'`);
     url.searchParams.set("outFields", "ADM_UNIT_CD,ADMU_NAME");
     url.searchParams.set("returnGeometry", "true");
     url.searchParams.set("outSR", "4326");

@@ -36,11 +36,10 @@ const MB = 72;
 const CW = PAGE_W - ML - MR; // content width
 
 // ---------------------------------------------------------------------------
-// Font + Asset Resolution
+// Font + Asset Resolution (cached at module level)
 // ---------------------------------------------------------------------------
 
 function resolvePath(...segments: string[]): string {
-  // Try multiple paths for different environments
   for (const base of [
     path.resolve(process.cwd(), "public"),
     path.resolve(process.cwd(), "dist/client"),
@@ -52,13 +51,25 @@ function resolvePath(...segments: string[]): string {
   return path.join(process.cwd(), "public", ...segments);
 }
 
+/** Cached font paths — resolved once at module load, not per PDF. */
+const FONT_PATHS = {
+  jakarta: resolvePath("fonts", "PlusJakartaSans-Bold.ttf"),
+  jakartaXB: resolvePath("fonts", "PlusJakartaSans-ExtraBold.ttf"),
+  inter: resolvePath("fonts", "Inter-Regular.ttf"),
+  interMed: resolvePath("fonts", "Inter-Medium.ttf"),
+  interSB: resolvePath("fonts", "Inter-SemiBold.ttf"),
+  interB: resolvePath("fonts", "Inter-Bold.ttf"),
+};
+
+const LOGO_PATH = resolvePath("images", "brand", "explore-disc-golf-white.png");
+
 function registerFonts(doc: PDFKit.PDFDocument) {
-  doc.registerFont("Jakarta", resolvePath("fonts", "PlusJakartaSans-Bold.ttf"));
-  doc.registerFont("Jakarta-XB", resolvePath("fonts", "PlusJakartaSans-ExtraBold.ttf"));
-  doc.registerFont("Inter", resolvePath("fonts", "Inter-Regular.ttf"));
-  doc.registerFont("Inter-Med", resolvePath("fonts", "Inter-Medium.ttf"));
-  doc.registerFont("Inter-SB", resolvePath("fonts", "Inter-SemiBold.ttf"));
-  doc.registerFont("Inter-B", resolvePath("fonts", "Inter-Bold.ttf"));
+  doc.registerFont("Jakarta", FONT_PATHS.jakarta);
+  doc.registerFont("Jakarta-XB", FONT_PATHS.jakartaXB);
+  doc.registerFont("Inter", FONT_PATHS.inter);
+  doc.registerFont("Inter-Med", FONT_PATHS.interMed);
+  doc.registerFont("Inter-SB", FONT_PATHS.interSB);
+  doc.registerFont("Inter-B", FONT_PATHS.interB);
 }
 
 // ---------------------------------------------------------------------------
@@ -71,8 +82,7 @@ function pageHeader(doc: PDFKit.PDFDocument, title: string, subtitle?: string) {
   doc.rect(0, 108, PAGE_W, 4).fill(C.terraCotta);
 
   // Logo
-  const logo = resolvePath("images", "brand", "explore-disc-golf-white.png");
-  if (fs.existsSync(logo)) doc.image(logo, ML, 20, { height: 26 });
+  if (fs.existsSync(LOGO_PATH)) doc.image(LOGO_PATH, ML, 20, { height: 26 });
 
   // Title
   doc.fillColor(C.snow).font("Jakarta-XB").fontSize(21)
@@ -306,8 +316,7 @@ export async function generatePacketPDF(input: PacketPDFInput): Promise<Buffer> 
     doc.rect(0, 0, PAGE_W, PAGE_H).fill(C.nightSky);
     doc.rect(0, 0, PAGE_W, 5).fill(C.terraCotta);
 
-    const logo = resolvePath("images", "brand", "explore-disc-golf-white.png");
-    if (fs.existsSync(logo)) doc.image(logo, ML, 72, { height: 34 });
+    if (fs.existsSync(LOGO_PATH)) doc.image(LOGO_PATH, ML, 72, { height: 34 });
 
     doc.fillColor(C.snow).font("Jakarta-XB").fontSize(42)
       .text("Engagement", ML, 200, { width: CW })
@@ -360,7 +369,7 @@ export async function generatePacketPDF(input: PacketPDFInput): Promise<Buffer> 
     doc.addPage();
     doc.rect(0, 0, PAGE_W, PAGE_H).fill(C.nightSky);
 
-    if (fs.existsSync(logo)) doc.image(logo, ML, PAGE_H / 2 - 60, { height: 36 });
+    if (fs.existsSync(LOGO_PATH)) doc.image(LOGO_PATH, ML, PAGE_H / 2 - 60, { height: 36 });
 
     doc.fillColor(C.snow).font("Jakarta-XB").fontSize(24)
       .text("Disc golf on America's", ML, PAGE_H / 2, { width: CW });
