@@ -43,6 +43,18 @@
     generatedAt: string;
   }
 
+  // --- Session ID (per-browser, persisted in localStorage) ---
+  function getSessionId(): string {
+    if (typeof window === "undefined") return "anonymous";
+    const KEY = "explore-disc-golf-session";
+    let id = localStorage.getItem(KEY);
+    if (!id) {
+      id = (crypto && crypto.randomUUID) ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+      localStorage.setItem(KEY, id);
+    }
+    return id;
+  }
+
   // --- State ---
   let messages = $state<ChatMessage[]>([]);
   let status = $state<Status>("idle");
@@ -50,6 +62,9 @@
   let conversationId = $state<string | null>(null);
   let errorMessage = $state("");
   let packetGenerating = $state(false);
+  let sessionId = $state("anonymous");
+  let copiedIndex = $state<number | null>(null);
+  let shareCopied = $state(false);
   let packetData = $state<Packet | null>(null);
   let packetActiveTab = $state(0);
 
@@ -96,8 +111,35 @@
     }
   }
 
-  // --- On mount: load existing conversation ---
+  // --- Copy a message to clipboard ---
+  async function copyMessage(index: number, content: string) {
+    try {
+      await navigator.clipboard.writeText(content);
+      copiedIndex = index;
+      setTimeout(() => {
+        if (copiedIndex === index) copiedIndex = null;
+      }, 2000);
+    } catch (err) {
+      console.error("[ExploreChat] Copy failed:", err);
+    }
+  }
+
+  // --- Copy share link to clipboard ---
+  async function copyShareLink() {
+    if (!conversationId) return;
+    const url = `${window.location.origin}/chat/${conversationId}`;
+    try {
+      await navigator.clipboard.writeText(url);
+      shareCopied = true;
+      setTimeout(() => { shareCopied = false; }, 2000);
+    } catch (err) {
+      console.error("[ExploreChat] Share copy failed:", err);
+    }
+  }
+
+  // --- On mount: initialize session and load existing conversation ---
   $effect(() => {
+    sessionId = getSessionId();
     loadExistingConversation();
   });
 
@@ -111,7 +153,7 @@
   async function loadExistingConversation() {
     try {
       const res = await fetch(
-        `/api/chat/conversation?officeId=${encodeURIComponent(officeId)}&sessionId=anonymous`
+        `/api/chat/conversation?officeId=${encodeURIComponent(officeId)}&sessionId=${encodeURIComponent(sessionId)}`
       );
       if (!res.ok) return;
       const data = await res.json();
@@ -168,6 +210,7 @@
           officeId,
           messages: messages.slice(0, -1).map((m) => ({ role: m.role, content: m.content })),
           userMessage: userText,
+          sessionId,
         }),
       });
 
@@ -353,6 +396,25 @@
       </p>
     </div>
     <div class="flex items-center gap-2">
+      {#if conversationId && messages.length > 1}
+        <button
+          class="btn btn-ghost btn-sm"
+          onclick={copyShareLink}
+          title="Copy share link"
+        >
+          {#if shareCopied}
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-success" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+            </svg>
+            Copied!
+          {:else}
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
+            </svg>
+            Share
+          {/if}
+        </button>
+      {/if}
       {#if showPacketButton && conversationId}
         <button
           class="btn btn-info btn-sm"
@@ -443,7 +505,26 @@
               </div>
             {:else}
               <!-- Assistant message -->
-              <div class="assistant-bubble rounded-lg rounded-bl-sm px-4 py-3">
+              <div class="assistant-bubble group relative rounded-lg rounded-bl-sm px-4 py-3">
+                {#if message.content}
+                  <button
+                    class="copy-btn absolute top-2 right-2 btn btn-ghost btn-xs opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity"
+                    onclick={() => copyMessage(i, message.content)}
+                    aria-label="Copy message"
+                    title="Copy message"
+                  >
+                    {#if copiedIndex === i}
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-success" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                      </svg>
+                    {:else}
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z" />
+                        <path d="M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z" />
+                      </svg>
+                    {/if}
+                  </button>
+                {/if}
                 <!-- Tool status chips -->
                 {#if message.tools && message.tools.length > 0}
                   <div class="flex flex-wrap gap-1.5 mb-2">

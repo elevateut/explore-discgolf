@@ -1,0 +1,166 @@
+---
+/**
+ * Public Chat Permalink — /chat/[id]
+ *
+ * Read-only view of a conversation, shareable via URL.
+ */
+
+import BaseLayout from "@layouts/BaseLayout.astro";
+import { getConversationById } from "@lib/supabase/queries";
+import { marked } from "marked";
+
+const { id } = Astro.params;
+if (!id) {
+  return new Response(null, { status: 404, statusText: "Not Found" });
+}
+
+const result = await getConversationById(id);
+if (!result) {
+  return new Response(null, { status: 404, statusText: "Not Found" });
+}
+
+const { conversation, messages, office } = result;
+
+const officeName = office?.name ?? "BLM Office";
+const officeState = office?.state ?? "";
+const officeUnitCode = office?.blm_unit_code;
+
+// Filter out the context-injection messages (they have markers like "I'm on the page for")
+const visibleMessages = messages.filter(
+  (m) => !m.content.startsWith("I'm on the page for the ") &&
+         !m.content.startsWith("I'll research the ") &&
+         m.role !== "system"
+);
+
+const firstUserMessage = visibleMessages.find((m) => m.role === "user")?.content ?? "";
+const pageTitle = conversation.title || `Disc golf brainstorm: ${officeName}`;
+const pageDescription = firstUserMessage.slice(0, 160) || `A community conversation about disc golf development at ${officeName}.`;
+
+marked.setOptions({ breaks: true, gfm: true });
+function renderMarkdown(md: string): string {
+  if (!md) return "";
+  return marked.parse(md) as string;
+}
+
+const formattedDate = new Date(conversation.created_at).toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+---
+
+<BaseLayout
+  title={`${pageTitle} — EXPLORE Disc Golf`}
+  description={pageDescription}
+>
+  <section class="section-padding">
+    <div class="content-width">
+      <!-- Breadcrumb -->
+      <div class="breadcrumbs text-sm mb-6">
+        <ul>
+          <li><a href="/" class="text-primary">Home</a></li>
+          <li><a href="/offices" class="text-primary">Offices</a></li>
+          {officeUnitCode && (
+            <li>
+              <a href={`/offices/${officeUnitCode}`} class="text-primary">{officeName}</a>
+            </li>
+          )}
+          <li class="text-base-content/60">Conversation</li>
+        </ul>
+      </div>
+
+      <!-- Header -->
+      <div class="mb-8">
+        <p class="text-sm font-semibold uppercase tracking-wider text-info mb-2">Community Conversation</p>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-base-content mb-3">
+          {pageTitle}
+        </h1>
+        <div class="flex flex-wrap items-center gap-2 text-sm text-base-content/60">
+          <span>About</span>
+          {officeUnitCode ? (
+            <a href={`/offices/${officeUnitCode}`} class="text-primary hover:underline font-semibold">
+              {officeName}{officeState ? `, ${officeState}` : ""}
+            </a>
+          ) : (
+            <span class="font-semibold">{officeName}</span>
+          )}
+          <span>·</span>
+          <time>{formattedDate}</time>
+          <span>·</span>
+          <span>{visibleMessages.length} messages</span>
+        </div>
+      </div>
+
+      <!-- Conversation -->
+      <div class="card bg-base-200 shadow-sm border border-base-300">
+        <div class="card-body p-6 md:p-8">
+          <div class="flex flex-col gap-4">
+            {visibleMessages.map((message) => (
+              <div class={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
+                <div class="max-w-[85%] sm:max-w-[80%]">
+                  {message.role === "user" ? (
+                    <div class="bg-primary text-primary-content rounded-lg rounded-br-sm px-4 py-2.5">
+                      <p class="text-sm whitespace-pre-wrap">{message.content}</p>
+                    </div>
+                  ) : (
+                    <div class="bg-base-100 border border-base-300 rounded-lg rounded-bl-sm px-4 py-3">
+                      <div class="chat-markdown text-sm" set:html={renderMarkdown(message.content)} />
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer CTA -->
+      <div class="mt-10 text-center">
+        <p class="text-base-content/60 mb-4">Want to start your own brainstorm about this office?</p>
+        {officeUnitCode && (
+          <a href={`/offices/${officeUnitCode}#explore`} class="btn btn-primary btn-lg">
+            Start Your Own Conversation
+          </a>
+        )}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  :global(.chat-markdown) {
+    color: var(--color-base-content, #1E2D3B);
+    line-height: 1.6;
+  }
+  :global(.chat-markdown h1),
+  :global(.chat-markdown h2),
+  :global(.chat-markdown h3) {
+    font-weight: 700;
+    color: var(--color-primary, #B85C38);
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  :global(.chat-markdown h2) { font-size: 1.1rem; }
+  :global(.chat-markdown h3) { font-size: 1rem; }
+  :global(.chat-markdown p) { margin-bottom: 0.75rem; }
+  :global(.chat-markdown ul),
+  :global(.chat-markdown ol) {
+    padding-left: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+  :global(.chat-markdown ul) { list-style-type: disc; }
+  :global(.chat-markdown ol) { list-style-type: decimal; }
+  :global(.chat-markdown li) { margin-bottom: 0.25rem; }
+  :global(.chat-markdown a) {
+    color: var(--color-primary, #B85C38);
+    text-decoration: underline;
+  }
+  :global(.chat-markdown strong) { font-weight: 700; }
+  :global(.chat-markdown blockquote) {
+    border-left: 3px solid var(--color-primary, #B85C38);
+    padding-left: 0.75rem;
+    margin: 0.75rem 0;
+    color: var(--color-base-content, #1E2D3B);
+    opacity: 0.8;
+  }
+</style>

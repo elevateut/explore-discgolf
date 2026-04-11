@@ -9,8 +9,10 @@
 import BaseLayout from "@layouts/BaseLayout.astro";
 import OfficeMap from "@components/OfficeMap.svelte";
 import ExploreChat from "@components/ExploreChat.svelte";
+import CommunityConversations from "@components/CommunityConversations.svelte";
 import officesData from "@data/blm-offices.json";
 import { engagementBadges, officeTypeLabels } from "@lib/badges";
+import { getOfficeByUnitCode } from "@lib/supabase/queries";
 
 const { id } = Astro.params;
 
@@ -23,6 +25,10 @@ const office = officesData.find((o: any) => o.id === id);
 if (!office) {
   return new Response(null, { status: 404, statusText: "Not Found" });
 }
+
+// Look up the Supabase UUID for community conversations
+const dbOffice = await getOfficeByUnitCode(id);
+const officeUuid = dbOffice?.id ?? null;
 
 const engagement = {
   status: "no-contact",
@@ -195,6 +201,18 @@ const hasPlanner = isReal(office.recreationPlannerName);
           officeName={office.name}
           officeState={office.state}
         />
+      </div>
+
+      <!-- Community Conversations -->
+      <div class="mt-12">
+        <div class="mb-6">
+          <p class="text-sm font-semibold uppercase tracking-wider text-info mb-2">Community</p>
+          <h2 class="text-2xl font-bold text-base-content">Community Conversations</h2>
+          <p class="text-base-content/60 mt-1">
+            See what others have brainstormed about disc golf opportunities at this office.
+          </p>
+        </div>
+        <CommunityConversations client:visible officeUuid={officeUuid} />
       </div>
     </div>
   </section>

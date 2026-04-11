@@ -310,6 +310,88 @@ export async function getConversationMessages(
   return (data ?? []) as ConversationMessage[];
 }
 
+/** Get a single conversation by UUID with messages and office. */
+export async function getConversationById(
+  id: string,
+): Promise<{
+  conversation: Conversation;
+  messages: ConversationMessage[];
+  office: BlmOffice | null;
+} | null> {
+  const supabase = getSupabaseClient();
+  if (!supabase) return null;
+
+  const { data: conversation, error: convErr } = await supabase
+    .from("conversations")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+
+  if (convErr || !conversation) return null;
+
+  const messages = await getConversationMessages(id);
+
+  let office: BlmOffice | null = null;
+  if (conversation.office_id) {
+    const { data: officeData } = await supabase
+      .from("blm_offices")
+      .select("*")
+      .eq("id", conversation.office_id)
+      .maybeSingle();
+    office = (officeData as BlmOffice) ?? null;
+  }
+
+  return {
+    conversation: conversation as Conversation,
+    messages,
+    office,
+  };
+}
+
+/** Get conversations for an office with at least 2 user messages. */
+export async function getConversationsByOffice(
+  officeUuid: string,
+  limit = 20,
+): Promise<Array<Conversation & { messageCount: number; preview: string }>> {
+  const supabase = getSupabaseClient();
+  if (!supabase) return [];
+
+  // Get conversations
+  const { data: convs, error: convErr } = await supabase
+    .from("conversations")
+    .select("*")
+    .eq("office_id", officeUuid)
+    .order("updated_at", { ascending: false })
+    .limit(limit * 2); // fetch extra in case some are filtered out
+
+  if (convErr || !convs) return [];
+
+  // For each, count user messages and get the first one
+  const enriched: Array<Conversation & { messageCount: number; preview: string }> = [];
+  for (const conv of convs) {
+    const { data: msgs } = await supabase
+      .from("conversation_messages")
+      .select("role, content")
+      .eq("conversation_id", conv.id)
+      .order("created_at", { ascending: true });
+
+    if (!msgs) continue;
+    const userMsgs = msgs.filter((m: any) => m.role === "user");
+    if (userMsgs.length < 2) continue; // skip auto-started, never-engaged convs
+
+    const preview = userMsgs[0]?.content ?? "";
+    enriched.push({
+      ...(conv as Conversation),
+      messageCount: msgs.length,
+      preview: preview.slice(0, 200),
+    });
+
+    if (enriched.length >= limit) break;
+  }
+
+  return enriched;
+}
+
 /** Save a message to a conversation. */
 export async function saveConversationMessage(
   conversationId: string,
@@ -328,10 +410,34 @@ export async function saveConversationMessage(
   });
 
   // Touch conversation updated_at
+  const update: Record<string, unknown> = { updated_at: new Date().toISOString() };
+
+  // Auto-set title from first user message if not yet set
+  if (role === "user") {
+    const { data: conv } = await supabase
+      .from("conversations")
+      .select("title")
+      .eq("id", conversationId)
+      .maybeSingle();
+
+    if (conv && !conv.title) {
+      update.title = truncateTitle(content);
+    }
+  }
+
   await supabase
     .from("conversations")
-    .update({ updated_at: new Date().toISOString() })
+    .update(update)
     .eq("id", conversationId);
+}
+
+/** Truncate a message to a short title at a word boundary. */
+function truncateTitle(content: string, maxLen = 60): string {
+  const cleaned = content.trim().replace(/\s+/g, " ");
+  if (cleaned.length <= maxLen) return cleaned;
+  const cut = cleaned.slice(0, maxLen);
+  const lastSpace = cut.lastIndexOf(" ");
+  return (lastSpace > 30 ? cut.slice(0, lastSpace) : cut) + "…";
 }
 
 /** Update conversation status. */
