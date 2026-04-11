@@ -376,46 +376,41 @@
       <span class="text-base-content/50">{boundaryError}</span>
     </div>
   {/if}
+</div>
 
-  <!-- Legend — bottom-right, clears MapLibre's compact attribution button
-       which sits at bottom-0 right-0. Non-interactive (pointer-events-none)
-       so it never steals map drag/zoom gestures. -->
-  <div
-    class="absolute bottom-10 right-3 bg-base-100/90 backdrop-blur-sm rounded-lg border border-base-300 shadow-md px-3 py-2 text-xs pointer-events-none select-none"
-    aria-hidden="true"
-  >
-    <div class="font-semibold mb-1.5 text-[10px] uppercase tracking-wide text-base-content/50">Legend</div>
-    <div class="flex flex-col gap-1.5">
-      <div class="flex items-center gap-2">
-        <span
-          class="inline-block w-3 h-3 rounded-sm border border-black/10"
-          style="background-color: #ffe778;"
-        ></span>
-        <span class="text-base-content/70">BLM land</span>
-      </div>
-      <div class="flex items-center gap-2">
-        <span
-          class="inline-block w-3 h-3 rounded-sm border"
-          style="background-color: rgba(26, 139, 163, 0.15); border-color: #1a8ba3;"
-        ></span>
-        <span class="text-base-content/70">Office boundary</span>
-      </div>
-      <div class="flex items-center gap-2">
-        <svg
-          viewBox="0 0 24 32"
-          xmlns="http://www.w3.org/2000/svg"
-          class="w-3 h-4 shrink-0"
-          aria-hidden="true"
-        >
-          <path
-            d="M12 0C5.4 0 0 5.4 0 12c0 9 12 20 12 20s12-11 12-20C24 5.4 18.6 0 12 0z"
-            fill="#b85c38"
-          />
-          <circle cx="12" cy="12" r="4" fill="#ffffff" />
-        </svg>
-        <span class="text-base-content/70">Field office</span>
-      </div>
-    </div>
+<!-- Map legend — rendered in normal document flow below the map so it
+     never collides with MapLibre's attribution, scale bar, or the click
+     popup. Horizontal layout wraps on narrow screens. -->
+<div class="flex flex-wrap items-center gap-x-4 gap-y-1.5 mt-2.5 text-xs text-base-content/70">
+  <span class="font-semibold text-[10px] uppercase tracking-wide text-base-content/50">Legend</span>
+  <div class="flex items-center gap-1.5">
+    <span
+      class="inline-block w-3 h-3 rounded-sm border border-black/10"
+      style="background-color: #ffe778;"
+    ></span>
+    <span>BLM land</span>
+  </div>
+  <div class="flex items-center gap-1.5">
+    <span
+      class="inline-block w-3 h-3 rounded-sm border"
+      style="background-color: rgba(26, 139, 163, 0.15); border-color: #1a8ba3;"
+    ></span>
+    <span>Office boundary</span>
+  </div>
+  <div class="flex items-center gap-1.5">
+    <svg
+      viewBox="0 0 24 32"
+      xmlns="http://www.w3.org/2000/svg"
+      class="w-3 h-4 shrink-0"
+      aria-hidden="true"
+    >
+      <path
+        d="M12 0C5.4 0 0 5.4 0 12c0 9 12 20 12 20s12-11 12-20C24 5.4 18.6 0 12 0z"
+        fill="#b85c38"
+      />
+      <circle cx="12" cy="12" r="4" fill="#ffffff" />
+    </svg>
+    <span>Field office</span>
   </div>
 </div>
 
