@@ -1,13 +1,24 @@
 <script lang="ts">
   /**
-   * OfficeMap — renders a MapLibre map showing a BLM field office location
-   * and its boundary polygon fetched from the BLM ArcGIS MapServer.
+   * OfficeMap — interactive scouting map for a single BLM field office.
+   *
+   * Renders the office's admin boundary polygon over a 3D-terrain basemap
+   * (Positron + hillshade by default) and lets the user:
+   *   - tilt the map to see hills (Ctrl+drag, or the pitch control)
+   *   - switch between Terrain / Satellite / Topo basemaps
+   *   - go fullscreen for serious site scouting
    *
    * Usage: <OfficeMap client:visible officeId="UTC01000" lat={37.6775} lng={-113.0619} />
    */
 
   import maplibregl from "maplibre-gl";
   import "maplibre-gl/dist/maplibre-gl.css";
+  import {
+    BasemapSwitcher,
+    applyTerrain,
+    basemapStyle,
+    type BasemapId,
+  } from "@lib/map/terrain";
 
   interface Props {
     officeId: string;
@@ -18,6 +29,7 @@
 
   let { officeId, lat, lng, officeName = "" }: Props = $props();
 
+  let mapWrapper: HTMLDivElement | undefined = $state();
   let mapContainer: HTMLDivElement | undefined = $state();
   let loadingBoundary = $state(true);
   let boundaryError = $state<string | null>(null);
@@ -59,54 +71,108 @@
   }
 
   $effect(() => {
-    if (!mapContainer) return;
+    if (!mapContainer || !mapWrapper) return;
+
+    // Local closure state — kept out of $state to avoid re-running this effect
+    // when the basemap or boundary changes mid-session.
+    let activeBasemap: BasemapId = "terrain";
+    let boundaryFeature: GeoJSON.Feature | null = null;
+    let cancelled = false;
 
     const m = new maplibregl.Map({
       container: mapContainer,
-      style: "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
+      style: basemapStyle(activeBasemap),
       center: [lng, lat],
       zoom: 8,
-      attributionControl: true,
+      pitch: 0,
+      maxPitch: 75,
+      attributionControl: { compact: true },
     });
 
-    m.addControl(new maplibregl.NavigationControl(), "top-right");
-
-    // Office marker
+    // Office marker (DOM overlay — survives setStyle, no need to re-add)
     new maplibregl.Marker({ color: "#B85C38" })
       .setLngLat([lng, lat])
       .addTo(m);
 
+    // ----- Controls -----
+    m.addControl(
+      new maplibregl.NavigationControl({ visualizePitch: true }),
+      "top-right",
+    );
+    m.addControl(
+      new maplibregl.ScaleControl({ unit: "imperial", maxWidth: 120 }),
+      "bottom-left",
+    );
+    m.addControl(
+      new maplibregl.FullscreenControl({ container: mapWrapper }),
+      "top-right",
+    );
+
+    const switcher = new BasemapSwitcher(activeBasemap, (id) => {
+      activeBasemap = id;
+      // Detach terrain BEFORE setStyle so MapLibre doesn't try to reference
+      // the old DEM source mid-swap and throw "source does not exist".
+      m.setTerrain(null);
+      m.setStyle(basemapStyle(id), { diff: false });
+      // The style.load handler below re-adds terrain + boundary on the new style.
+    });
+    m.addControl(switcher, "top-left");
+
+    // ----- Layer management -----
+    function addBoundaryLayers(map: maplibregl.Map) {
+      if (!boundaryFeature || map.getSource("boundary")) return;
+
+      map.addSource("boundary", {
+        type: "geojson",
+        data: boundaryFeature,
+      });
+
+      map.addLayer({
+        id: "boundary-fill",
+        type: "fill",
+        source: "boundary",
+        paint: {
+          "fill-color": "#1A8BA3", // Basin Teal
+          "fill-opacity": 0.12,
+        },
+      });
+
+      map.addLayer({
+        id: "boundary-stroke",
+        type: "line",
+        source: "boundary",
+        paint: {
+          "line-color": "#1A8BA3",
+          "line-width": 2,
+          "line-opacity": 0.6,
+        },
+      });
+    }
+
+    // Re-add terrain + boundary on every style load (initial AND basemap swaps)
+    function handleStyleLoad() {
+      if (cancelled) return;
+      applyTerrain(m, activeBasemap === "terrain");
+      addBoundaryLayers(m);
+      switcher.setCurrent(activeBasemap);
+    }
+    m.on("style.load", handleStyleLoad);
+
+    // MapLibre doesn't always catch wrapper-fullscreen resizes automatically.
+    function handleFullscreenChange() {
+      m.resize();
+    }
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+
+    // ----- One-time boundary fetch -----
     m.on("load", async () => {
       try {
         const boundary = await fetchBoundary();
+        if (cancelled) return;
+
         if (boundary) {
-          m.addSource("boundary", {
-            type: "geojson",
-            data: boundary,
-          });
-
-          // Fill
-          m.addLayer({
-            id: "boundary-fill",
-            type: "fill",
-            source: "boundary",
-            paint: {
-              "fill-color": "#1A8BA3", // Basin Teal
-              "fill-opacity": 0.12,
-            },
-          });
-
-          // Stroke
-          m.addLayer({
-            id: "boundary-stroke",
-            type: "line",
-            source: "boundary",
-            paint: {
-              "line-color": "#1A8BA3",
-              "line-width": 2,
-              "line-opacity": 0.6,
-            },
-          });
+          boundaryFeature = boundary;
+          addBoundaryLayers(m);
 
           // Fit the map to the boundary
           const coords = boundary.geometry.type === "Polygon"
@@ -124,19 +190,22 @@
           boundaryError = "Boundary data not available for this office.";
         }
       } catch {
-        boundaryError = "Could not load boundary data.";
+        if (!cancelled) boundaryError = "Could not load boundary data.";
       } finally {
-        loadingBoundary = false;
+        if (!cancelled) loadingBoundary = false;
       }
     });
 
     return () => {
+      cancelled = true;
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+      m.off("style.load", handleStyleLoad);
       m.remove();
     };
   });
 </script>
 
-<div class="relative">
+<div bind:this={mapWrapper} class="relative map-wrapper">
   <div
     bind:this={mapContainer}
     class="h-[350px] lg:h-[400px] rounded-lg overflow-hidden border border-base-300"
@@ -151,16 +220,62 @@
   {/if}
 
   {#if boundaryError}
-    <div class="absolute bottom-3 left-3 bg-base-100/90 backdrop-blur-sm rounded-lg px-3 py-2 text-xs shadow-md">
+    <div class="absolute bottom-10 left-3 bg-base-100/90 backdrop-blur-sm rounded-lg px-3 py-2 text-xs shadow-md">
       <span class="text-base-content/50">{boundaryError}</span>
     </div>
   {/if}
-
-  <!-- Legend -->
-  <div class="absolute bottom-3 right-3 bg-base-100/90 backdrop-blur-sm rounded-lg px-3 py-2 text-xs shadow-md border border-base-300">
-    <div class="flex items-center gap-1.5">
-      <span class="inline-block w-3 h-3 rounded-sm border border-base-300" style="background-color: rgba(26, 139, 163, 0.12); border-color: #1A8BA3;"></span>
-      <span class="text-base-content/60">Office boundary</span>
-    </div>
-  </div>
 </div>
+
+<style>
+  /* Fullscreen: wrapper fills viewport, inner map fills wrapper. */
+  :global(.map-wrapper:fullscreen),
+  :global(.map-wrapper:-webkit-full-screen),
+  :global(.map-wrapper:-moz-full-screen) {
+    width: 100vw;
+    height: 100vh;
+    background: #000;
+  }
+  :global(.map-wrapper:fullscreen > div:first-child),
+  :global(.map-wrapper:-webkit-full-screen > div:first-child),
+  :global(.map-wrapper:-moz-full-screen > div:first-child) {
+    height: 100% !important;
+    border-radius: 0 !important;
+    border: none !important;
+  }
+
+  /* BasemapSwitcher — horizontal tab-style buttons in a single ctrl group.
+     Selectors are scoped under .basemap-switcher to outweigh MapLibre's
+     default `.maplibregl-ctrl-group button { width: 29px; height: 29px }`
+     rule, which would otherwise crush the text labels. */
+  :global(.basemap-switcher) {
+    display: flex;
+    overflow: hidden;
+  }
+  :global(.basemap-switcher button.basemap-switcher__btn) {
+    width: auto;
+    height: auto;
+    min-width: 64px;
+    background: white;
+    border: none;
+    border-right: 1px solid rgba(0, 0, 0, 0.08);
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.2;
+    color: #4b5563;
+    cursor: pointer;
+    transition: background-color 0.15s, color 0.15s;
+    display: block;
+  }
+  :global(.basemap-switcher button.basemap-switcher__btn:last-child) {
+    border-right: none;
+  }
+  :global(.basemap-switcher button.basemap-switcher__btn:hover) {
+    background: #f3f4f6;
+    color: #1f2937;
+  }
+  :global(.basemap-switcher button.basemap-switcher__btn.is-active) {
+    background: #b85c38;
+    color: white;
+  }
+</style>
