@@ -39,7 +39,7 @@
 - **UDisc 2026 Growth Report** — 11,165 U.S. courses; 21.2 million rounds logged in 2025; 32.8 million player-hours; 1,650 new courses 2022-2024; 89% of courses free; 3 new courses per day in 2025; 121 average play days per year; 93-minute average round; 3,800 steps; 400 calories per round; $425 million global market.
 - **Consumer surplus study** — Peer-reviewed travel cost model at FDR/Heckscher State Parks, NY. Individual consumer surplus ~$68 per trip; ~$6 million aggregate annual surplus for single urban-adjacent course.
 - **USDGC/CDGNC economic impact** — Two events in York County, SC generated $4.5 million in economic activity.
-- **Creekside DGC, Lehi, UT** — 59,142 recreation-hours on ~$200,000 investment. (Scott's data/ElevateUT)
+- **Creekside DGC, Salt Lake City, UT** — 59,142 recreation-hours on ~$200,000 investment. (Scott's data/ElevateUT)
 - **Dragonfly DGC** — 11,824 recreation-hours with near-zero city funding. (Scott's data/ElevateUT)
 - **Cost comparisons** — 9-hole disc golf course: $9,000-$18,000. Single pickleball court: $28,000-$37,500. 18-hole volunteer build: $15,000-$25,000. Professional install: $30,000-$50,000+.
 - **Dunkin' Donuts U.S. locations** — 10,014 (comparison benchmark for 11,165 disc golf courses).

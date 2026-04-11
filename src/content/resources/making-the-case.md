@@ -26,7 +26,7 @@ Disc golf delivers more recreation hours per dollar invested than nearly any com
 | Comparable pickleball court | $28,000–$37,500 |
 | Daily capacity (9-hole) | 432 player-slots |
 | Annual maintenance | $1,000–$5,000 (primarily volunteer) |
-| Creekside DGC (Lehi, UT) | 59,142 recreation-hours on ~$200K |
+| Creekside DGC (Salt Lake City, UT) | 59,142 recreation-hours on ~$200K |
 | Individual consumer surplus | ~$68 per trip (peer-reviewed) |
 | Average round | 93 minutes outdoors, 3,800 steps |
 

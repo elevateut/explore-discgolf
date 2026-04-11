@@ -40,7 +40,7 @@ The sport has 11,165 U.S. courses and 21.2 million annual rounds. 89% of courses
 
 ### The cost case
 
-A 9-hole course costs $9,000–$18,000 to build. Daily capacity: 432 player-slots. Annual maintenance: $1,000–$5,000 (volunteer labor). Creekside DGC (Lehi, UT) delivered 59,142 recreation-hours on approximately $200K investment.
+A 9-hole course costs $9,000–$18,000 to build. Daily capacity: 432 player-slots. Annual maintenance: $1,000–$5,000 (volunteer labor). Creekside DGC (Salt Lake City, UT) delivered 59,142 recreation-hours on approximately $200K investment.
 
 ### What we're asking
 
