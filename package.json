@@ -9,7 +9,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "seed:offices": "node scripts/seed-offices.mjs",
-    "import:offices": "node scripts/import-offices.mjs"
+    "import:offices": "node scripts/import-offices.mjs",
+    "generate:resource-pdfs": "tsx scripts/generate-resource-pdfs.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",
@@ -28,6 +29,7 @@
     "@tailwindcss/vite": "^4.1.0",
     "daisyui": "^5.0.0",
     "playwright": "^1.59.1",
-    "tailwindcss": "^4.1.0"
+    "tailwindcss": "^4.1.0",
+    "tsx": "^4.21.0"
   }
 }

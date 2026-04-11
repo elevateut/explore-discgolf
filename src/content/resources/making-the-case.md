@@ -3,6 +3,7 @@ title: "Making the Case: Why Disc Golf Fits BLM Land"
 description: "Data-driven arguments for disc golf on public lands — cost efficiency, growth statistics, environmental profile, and BLM priority alignment."
 category: guide
 downloadable: true
+filePath: /downloads/making-the-case.pdf
 ---
 
 ## The right pitch

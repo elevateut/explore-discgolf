@@ -3,6 +3,7 @@ title: "BLM Executive One-Pager"
 description: "A ready-to-customize one-page brief for BLM field offices — what the EXPLORE Act enables, why disc golf fits, and the cost case."
 category: one-pager
 downloadable: true
+filePath: /downloads/blm-one-pager.pdf
 ---
 
 Use this one-pager as the lead document when engaging a BLM field office. Customize the "What we're asking" section for your specific office and proposal.

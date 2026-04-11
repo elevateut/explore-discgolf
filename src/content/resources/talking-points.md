@@ -3,6 +3,7 @@ title: "Talking Points for Common BLM Concerns"
 description: "Ready-to-use responses for the questions BLM staff will ask — erosion, wildlife, maintenance, liability, and land use plan conformance."
 category: talking-points
 downloadable: true
+filePath: /downloads/talking-points.pdf
 ---
 
 When you meet with a BLM field office, staff will raise practical concerns. These talking points provide honest, evidence-based responses.

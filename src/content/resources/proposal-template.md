@@ -3,6 +3,7 @@ title: "Full Project Proposal Template"
 description: "A comprehensive template for proposing disc golf course development on BLM land — site assessment, NEPA pathway, cost estimates, and partnership framework."
 category: template
 downloadable: true
+filePath: /downloads/proposal-template.pdf
 ---
 
 Use this template as the foundation for a formal disc golf course development proposal to a BLM field office. Customize every section for your specific site and partnership.

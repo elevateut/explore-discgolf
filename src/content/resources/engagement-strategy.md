@@ -3,6 +3,7 @@ title: "BLM Engagement Strategy"
 description: "How to get packets into BLM offices — pilot sequencing, local champions, meeting requests, and priority target offices by tier."
 category: guide
 downloadable: true
+filePath: /downloads/engagement-strategy.pdf
 ---
 
 ## The sequence

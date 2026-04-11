@@ -3,6 +3,7 @@ title: "Public Messaging Guide"
 description: "Audience-specific messaging frameworks — how to talk about disc golf on public lands to BLM, players, coalitions, communities, funders, and veterans."
 category: guide
 downloadable: true
+filePath: /downloads/public-messaging.pdf
 ---
 
 ## What works
