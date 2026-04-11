@@ -15,6 +15,9 @@
   import "maplibre-gl/dist/maplibre-gl.css";
   import {
     BasemapSwitcher,
+    OverlayToggle,
+    SMA_LAYER_ID,
+    applySmaOverlay,
     applyTerrain,
     basemapStyle,
     type BasemapId,
@@ -76,6 +79,7 @@
     // Local closure state — kept out of $state to avoid re-running this effect
     // when the basemap or boundary changes mid-session.
     let activeBasemap: BasemapId = "terrain";
+    let smaVisible = true;
     let boundaryFeature: GeoJSON.Feature | null = null;
     let cancelled = false;
 
@@ -118,6 +122,20 @@
     });
     m.addControl(switcher, "top-left");
 
+    // BLM Surface Management Agency overlay toggle. The initial layer is
+    // added inside handleStyleLoad() once the style has parsed.
+    const smaToggle = new OverlayToggle("BLM Lands", smaVisible, (visible) => {
+      smaVisible = visible;
+      if (m.getLayer(SMA_LAYER_ID)) {
+        m.setLayoutProperty(
+          SMA_LAYER_ID,
+          "visibility",
+          visible ? "visible" : "none",
+        );
+      }
+    });
+    m.addControl(smaToggle, "top-left");
+
     // ----- Layer management -----
     function addBoundaryLayers(map: maplibregl.Map) {
       if (!boundaryFeature || map.getSource("boundary")) return;
@@ -149,10 +167,14 @@
       });
     }
 
-    // Re-add terrain + boundary on every style load (initial AND basemap swaps)
+    // Re-add terrain + SMA overlay + boundary on every style load (initial
+    // AND basemap swaps). Order matters: terrain goes under everything,
+    // SMA overlay above terrain but under labels (via beforeId inside
+    // applySmaOverlay), boundary on top.
     function handleStyleLoad() {
       if (cancelled) return;
       applyTerrain(m, activeBasemap === "terrain");
+      applySmaOverlay(m, { visible: smaVisible });
       addBoundaryLayers(m);
       switcher.setCurrent(activeBasemap);
     }
@@ -281,6 +303,32 @@
     color: #1f2937;
   }
   :global(.basemap-switcher button.basemap-switcher__btn.is-active) {
+    background: #b85c38;
+    color: white;
+  }
+
+  /* OverlayToggle — single toggle button, matches basemap switcher styling.
+     Same specificity trick to outweigh MapLibre's 29x29 default. */
+  :global(.overlay-toggle button.overlay-toggle__btn) {
+    width: auto;
+    height: auto;
+    min-width: 64px;
+    background: white;
+    border: none;
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.2;
+    color: #4b5563;
+    cursor: pointer;
+    transition: background-color 0.15s, color 0.15s;
+    display: block;
+  }
+  :global(.overlay-toggle button.overlay-toggle__btn:hover) {
+    background: #f3f4f6;
+    color: #1f2937;
+  }
+  :global(.overlay-toggle button.overlay-toggle__btn.is-active) {
     background: #b85c38;
     color: white;
   }

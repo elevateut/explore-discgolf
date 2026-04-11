@@ -1,17 +1,22 @@
 /**
- * Map terrain & basemap helpers — shared between MapLibre map components.
+ * Map terrain, basemap, and overlay helpers — shared between MapLibre map
+ * components.
  *
  * Exposes:
  *   - basemapStyle(id) — picks the right MapLibre style for a basemap choice
  *   - applyTerrain(map, showHillshade) — adds the DEM source + 3D terrain
  *     (and a hillshade overlay on the Terrain basemap). Idempotent; safe to
  *     call from a `style.load` handler on every basemap swap.
+ *   - applySmaOverlay(map, opts) — adds the BLM Surface Management Agency
+ *     overlay showing federal lands classified by agency. Idempotent.
  *   - BasemapSwitcher — a maplibregl IControl with three radio-style buttons.
+ *   - OverlayToggle — a single-button IControl for toggling an overlay layer.
  *
  * All sources are free and no-auth (for use on a 501c3 advocacy site):
  *   - DEM: AWS Open Data Terrain Tiles (Mapzen, terrarium encoding)
  *   - Satellite: ESRI World Imagery
- *   - Topo: USGS National Map
+ *   - Topo: OpenTopoMap
+ *   - BLM surface lands: BLM National SMA LimitedScale (gis.blm.gov)
  */
 
 import type {
@@ -160,6 +165,82 @@ export function applyTerrain(map: MaplibreMap, showHillshade: boolean): void {
 }
 
 // ---------------------------------------------------------------------------
+// BLM Surface Management Agency (SMA) overlay
+// ---------------------------------------------------------------------------
+
+export const SMA_LAYER_ID = "blm-sma";
+const SMA_SOURCE_ID = "blm-sma";
+
+// Dynamic image export from BLM's ArcGIS MapServer. MapLibre templates
+// `{bbox-epsg-3857}` per tile request, and the server renders a PNG of the
+// Surface Management Agency polygon layer on demand. `layers=show:1` picks
+// just the polygon layer (not the server-side labels, which would clash
+// with Positron's labels and can't be styled client-side).
+const SMA_TILE_URL =
+  "https://gis.blm.gov/arcgis/rest/services/lands/BLM_Natl_SMA_LimitedScale" +
+  "/MapServer/export" +
+  "?bbox={bbox-epsg-3857}&bboxSR=3857&imageSR=3857" +
+  "&size=512,512&format=png32&transparent=true" +
+  "&layers=show:1" +
+  "&f=image";
+
+/**
+ * Idempotently add the BLM Surface Management Agency overlay — a dynamic
+ * raster layer showing every acre of federal land classified by its active
+ * surface-managing agency (BLM yellow, USFS green, NPS dark green, FWS,
+ * DoD, tribal, etc.) across the continental US, Alaska, Hawaii, and
+ * territories.
+ *
+ * BLM's SMA LimitedScale service only renders below scale ~1:36K (roughly
+ * zoom 14 and wider), which is exactly the office-scouting zoom range we
+ * care about. Past zoom ~14 the server returns nothing and the overlay
+ * effectively hides — by which point a satellite basemap is more useful.
+ *
+ * Call from a `style.load` handler — sources and layers are wiped on
+ * `setStyle()`, so this needs to re-add them on every basemap swap.
+ */
+export function applySmaOverlay(
+  map: MaplibreMap,
+  opts: { visible?: boolean; opacity?: number } = {},
+): void {
+  const visible = opts.visible ?? true;
+  const opacity = opts.opacity ?? 0.55;
+
+  if (!map.getSource(SMA_SOURCE_ID)) {
+    map.addSource(SMA_SOURCE_ID, {
+      type: "raster",
+      tiles: [SMA_TILE_URL],
+      tileSize: 512,
+      attribution:
+        'Surface lands: <a href="https://www.blm.gov" target="_blank" rel="noopener">© Bureau of Land Management</a>',
+    });
+  }
+
+  if (!map.getLayer(SMA_LAYER_ID)) {
+    // Insert below the first symbol layer so place labels stay readable
+    // over the overlay (same beforeId trick as hillshade).
+    const layers = map.getStyle().layers ?? [];
+    const firstSymbolId = layers.find((l) => l.type === "symbol")?.id;
+    map.addLayer(
+      {
+        id: SMA_LAYER_ID,
+        type: "raster",
+        source: SMA_SOURCE_ID,
+        layout: { visibility: visible ? "visible" : "none" },
+        paint: { "raster-opacity": opacity },
+      },
+      firstSymbolId,
+    );
+  } else {
+    map.setLayoutProperty(
+      SMA_LAYER_ID,
+      "visibility",
+      visible ? "visible" : "none",
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
 // BasemapSwitcher — a MapLibre IControl with 3 toggle buttons
 // ---------------------------------------------------------------------------
 
@@ -231,5 +312,59 @@ export class BasemapSwitcher implements IControl {
       this.entries.push({ id, button: btn, handler });
       this.container.appendChild(btn);
     });
+  }
+}
+
+// ---------------------------------------------------------------------------
+// OverlayToggle — single-button IControl for toggling a data overlay
+// ---------------------------------------------------------------------------
+
+type OverlayToggleHandler = (visible: boolean) => void;
+
+export class OverlayToggle implements IControl {
+  private container: HTMLDivElement;
+  private button: HTMLButtonElement;
+  private active: boolean;
+  private onChange: OverlayToggleHandler;
+  private handler: () => void;
+
+  constructor(
+    label: string,
+    initial: boolean,
+    onChange: OverlayToggleHandler,
+  ) {
+    this.active = initial;
+    this.onChange = onChange;
+
+    this.container = document.createElement("div");
+    this.container.className =
+      "maplibregl-ctrl maplibregl-ctrl-group overlay-toggle";
+
+    this.button = document.createElement("button");
+    this.button.type = "button";
+    this.button.textContent = label;
+    this.button.className =
+      "overlay-toggle__btn" + (initial ? " is-active" : "");
+    this.button.setAttribute("aria-pressed", String(initial));
+    this.button.setAttribute("aria-label", `Toggle ${label}`);
+
+    this.handler = () => {
+      this.active = !this.active;
+      this.button.classList.toggle("is-active", this.active);
+      this.button.setAttribute("aria-pressed", String(this.active));
+      this.onChange(this.active);
+    };
+
+    this.button.addEventListener("click", this.handler);
+    this.container.appendChild(this.button);
+  }
+
+  onAdd(_map: MaplibreMap): HTMLElement {
+    return this.container;
+  }
+
+  onRemove(_map: MaplibreMap): void {
+    this.button.removeEventListener("click", this.handler);
+    this.container.parentNode?.removeChild(this.container);
   }
 }
