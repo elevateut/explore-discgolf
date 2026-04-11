@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /**
  * Generate branded PDFs for every resource in src/content/resources/.
  *
@@ -6,10 +5,11 @@
  * generateResourcePDF() from src/lib/pdf/generator.ts, and writes the
  * resulting PDF to public/downloads/<slug>.pdf.
  *
- * Node 22.6+ supports importing .ts files directly, so this .mjs script
- * can import the TypeScript generator with no build step.
- *
- * Run with: npm run generate:resource-pdfs
+ * This script must be run under tsx (not plain node) so the dynamic
+ * import of the TypeScript generator resolves on Node 20+, the minimum
+ * version documented in CONTRIBUTING.md. The package.json script
+ * `generate:resource-pdfs` is wired to `tsx ...` — always invoke via
+ * `npm run generate:resource-pdfs`.
  */
 
 import fs from "node:fs/promises";
