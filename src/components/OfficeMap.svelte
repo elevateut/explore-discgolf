@@ -159,8 +159,10 @@
     m.on("style.load", handleStyleLoad);
 
     // MapLibre doesn't always catch wrapper-fullscreen resizes automatically.
+    // requestAnimationFrame ensures the new :fullscreen CSS is applied before
+    // we measure the container.
     function handleFullscreenChange() {
-      m.resize();
+      requestAnimationFrame(() => m.resize());
     }
     document.addEventListener("fullscreenchange", handleFullscreenChange);
 
@@ -208,7 +210,7 @@
 <div bind:this={mapWrapper} class="relative map-wrapper">
   <div
     bind:this={mapContainer}
-    class="h-[350px] lg:h-[400px] rounded-lg overflow-hidden border border-base-300"
+    class="map-canvas h-[350px] lg:h-[400px] rounded-lg overflow-hidden border border-base-300"
     role="application"
     aria-label="Map showing {officeName || officeId} boundary"
   ></div>
@@ -227,7 +229,10 @@
 </div>
 
 <style>
-  /* Fullscreen: wrapper fills viewport, inner map fills wrapper. */
+  /* Fullscreen: wrapper fills viewport, .map-canvas inside fills the wrapper.
+     Targeting .map-canvas by class avoids ambiguity with :first-child, which
+     can be tripped up by Svelte's hydration anchors. Using vw/vh (rather than
+     100%) bypasses any percentage-of-parent box-model surprises. */
   :global(.map-wrapper:fullscreen),
   :global(.map-wrapper:-webkit-full-screen),
   :global(.map-wrapper:-moz-full-screen) {
@@ -235,10 +240,11 @@
     height: 100vh;
     background: #000;
   }
-  :global(.map-wrapper:fullscreen > div:first-child),
-  :global(.map-wrapper:-webkit-full-screen > div:first-child),
-  :global(.map-wrapper:-moz-full-screen > div:first-child) {
-    height: 100% !important;
+  :global(.map-wrapper:fullscreen .map-canvas),
+  :global(.map-wrapper:-webkit-full-screen .map-canvas),
+  :global(.map-wrapper:-moz-full-screen .map-canvas) {
+    width: 100vw !important;
+    height: 100vh !important;
     border-radius: 0 !important;
     border: none !important;
   }
