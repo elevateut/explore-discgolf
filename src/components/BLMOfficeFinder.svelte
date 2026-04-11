@@ -10,6 +10,11 @@
   import maplibregl from "maplibre-gl";
   import "maplibre-gl/dist/maplibre-gl.css";
   import { officeTypeLabels } from "@lib/badges";
+  import {
+    OverlayToggle,
+    SMA_LAYER_ID,
+    applySmaOverlay,
+  } from "@lib/map/terrain";
 
   /** Shape of each office passed as a prop. */
   interface OfficeItem {
@@ -38,6 +43,7 @@
   let map: maplibregl.Map | undefined = $state();
   let popup: maplibregl.Popup | undefined = $state();
   let mapReady = $state(false);
+  let showBlmLands = $state(true);
 
   // ---------------------------------------------------------------------------
   // Office type color mapping
@@ -129,7 +135,22 @@
 
     m.addControl(new maplibregl.NavigationControl(), "top-right");
 
+    // BLM Lands overlay toggle. Initial value hardcoded to true so we don't
+    // create a reactive dependency on showBlmLands inside this effect —
+    // further changes flow through the onChange callback and a separate
+    // $effect that watches the state variable.
+    m.addControl(
+      new OverlayToggle("BLM Lands", true, (visible) => {
+        showBlmLands = visible;
+      }),
+      "top-left",
+    );
+
     m.on("load", () => {
+      // BLM surface lands overlay — added first so the offices circle
+      // layers added below land on top of it in the style stack.
+      applySmaOverlay(m);
+
       // Add GeoJSON source
       m.addSource("offices", {
         type: "geojson",
@@ -252,6 +273,24 @@
       f.id = i;
     });
     source.setData(geojson);
+  });
+
+  // ---------------------------------------------------------------------------
+  // React to BLM Lands toggle by flipping the overlay layer's visibility.
+  // The OverlayToggle's onChange writes showBlmLands; this effect reads it
+  // and updates MapLibre. Kept separate from the main map-creation effect
+  // so a toggle click doesn't tear down the entire map.
+  // ---------------------------------------------------------------------------
+
+  $effect(() => {
+    if (!map || !mapReady) return;
+    if (map.getLayer(SMA_LAYER_ID)) {
+      map.setLayoutProperty(
+        SMA_LAYER_ID,
+        "visibility",
+        showBlmLands ? "visible" : "none",
+      );
+    }
   });
 
   // ---------------------------------------------------------------------------
@@ -538,8 +577,8 @@
 
   <!-- Map + sidebar split layout -->
   <div class="flex flex-col lg:flex-row gap-4">
-    <!-- Map container -->
-    <div class="w-full lg:w-2/3 relative">
+    <!-- Map column: map canvas + legend stacked vertically -->
+    <div class="w-full lg:w-2/3 flex flex-col gap-2.5">
       <div
         bind:this={mapContainer}
         class="h-[300px] lg:h-[500px] rounded-lg overflow-hidden border border-base-300"
@@ -547,20 +586,25 @@
         aria-label="Map of BLM offices"
       ></div>
 
-      <!-- Map legend -->
-      <div class="absolute bottom-3 left-3 bg-base-100/90 backdrop-blur-sm rounded-lg px-3 py-2 text-xs shadow-md border border-base-300">
-        <div class="font-semibold mb-1 text-base-content/70">Office Types</div>
-        <div class="flex flex-col gap-0.5">
-          {#each Object.entries(typeColors) as [type, color]}
-            <div class="flex items-center gap-1.5">
-              <span
-                class="inline-block w-2.5 h-2.5 rounded-full border border-white"
-                style="background-color: {color};"
-              ></span>
-              <span class="text-base-content/60">{officeTypeLabels[type] ?? type}</span>
-            </div>
-          {/each}
+      <!-- Legend — horizontal strip below the map, wraps on narrow screens -->
+      <div class="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-base-content/70">
+        <span class="font-semibold text-[10px] uppercase tracking-wide text-base-content/50">Legend</span>
+        <div class="flex items-center gap-1.5">
+          <span
+            class="inline-block w-3 h-3 rounded-sm border border-black/10"
+            style="background-color: #ffe778;"
+          ></span>
+          <span>BLM land</span>
         </div>
+        {#each Object.entries(typeColors) as [type, color]}
+          <div class="flex items-center gap-1.5">
+            <span
+              class="inline-block w-2.5 h-2.5 rounded-full border border-white"
+              style="background-color: {color};"
+            ></span>
+            <span>{officeTypeLabels[type] ?? type}</span>
+          </div>
+        {/each}
       </div>
     </div>
 
