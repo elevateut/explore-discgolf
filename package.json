@@ -9,7 +9,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "seed:offices": "node scripts/seed-offices.mjs",
-    "import:offices": "node scripts/import-offices.mjs"
+    "import:offices": "node scripts/import-offices.mjs",
+    "generate:resource-pdfs": "node scripts/generate-resource-pdfs.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",

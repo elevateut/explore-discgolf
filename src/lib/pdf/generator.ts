@@ -122,13 +122,22 @@ function pageFooter(doc: PDFKit.PDFDocument, num: number) {
   doc.moveTo(ML, PAGE_H - 48).lineTo(ML + CW, PAGE_H - 48)
     .strokeColor(C.base300).lineWidth(0.5).stroke();
 
+  // pdfkit's text() auto-paginates whenever the cursor is past the bottom
+  // margin (maxY = pageH - margins.bottom). Footer text sits below the
+  // content area by design, so temporarily shrink the bottom margin to
+  // avoid phantom page creation during the switchToPage footer pass.
+  const savedBottom = doc.page.margins.bottom;
+  doc.page.margins.bottom = 10;
+
   doc.fillColor(C.textMuted).font("Inter").fontSize(7)
     .text(
       "EXPLORE Disc Golf — explorediscgolf.org — A 501(c)(3) initiative by ElevateUT",
-      ML, PAGE_H - 40, { width: CW - 30 },
+      ML, PAGE_H - 40, { width: CW - 30, lineBreak: false },
     );
   doc.fillColor(C.textMuted).font("Inter-Med").fontSize(7.5)
-    .text(String(num), ML, PAGE_H - 40, { width: CW, align: "right" });
+    .text(String(num), ML, PAGE_H - 40, { width: CW, align: "right", lineBreak: false });
+
+  doc.page.margins.bottom = savedBottom;
 }
 
 function ensureSpace(doc: PDFKit.PDFDocument, needed: number) {
@@ -144,10 +153,28 @@ function ensureSpace(doc: PDFKit.PDFDocument, needed: number) {
 
 function renderMarkdown(doc: PDFKit.PDFDocument, md: string) {
   const lines = md.split("\n");
+  let i = 0;
 
-  for (const raw of lines) {
+  while (i < lines.length) {
+    const raw = lines[i];
     const line = raw.trim();
-    if (!line) { doc.y += 5; continue; }
+    if (!line) { doc.y += 5; i++; continue; }
+
+    // Table (lookahead-collected block of |-prefixed rows)
+    if (line.startsWith("|") && line.endsWith("|")) {
+      const tableRows: string[] = [];
+      while (i < lines.length) {
+        const t = lines[i].trim();
+        if (t.startsWith("|") && t.endsWith("|")) {
+          tableRows.push(t);
+          i++;
+        } else {
+          break;
+        }
+      }
+      renderTable(doc, tableRows);
+      continue;
+    }
 
     // # Heading 1
     if (line.startsWith("# ") && !line.startsWith("## ")) {
@@ -156,7 +183,7 @@ function renderMarkdown(doc: PDFKit.PDFDocument, md: string) {
       doc.fillColor(C.nightSky).font("Jakarta").fontSize(15)
         .text(line.slice(2), ML, doc.y, { width: CW });
       doc.y += 4;
-      continue;
+      i++; continue;
     }
 
     // --- Horizontal rule
@@ -165,7 +192,7 @@ function renderMarkdown(doc: PDFKit.PDFDocument, md: string) {
       doc.moveTo(ML, doc.y).lineTo(ML + CW, doc.y)
         .strokeColor(C.base300).lineWidth(0.75).stroke();
       doc.y += 8;
-      continue;
+      i++; continue;
     }
 
     // ## Heading 2
@@ -173,9 +200,9 @@ function renderMarkdown(doc: PDFKit.PDFDocument, md: string) {
       ensureSpace(doc, 30);
       doc.y += 6;
       doc.fillColor(C.terraCotta).font("Jakarta").fontSize(12.5)
-        .text(line.slice(3), ML, doc.y, { width: CW });
+        .text(stripMarkdown(line.slice(3)), ML, doc.y, { width: CW });
       doc.y += 3;
-      continue;
+      i++; continue;
     }
 
     // ### Heading 3
@@ -183,15 +210,15 @@ function renderMarkdown(doc: PDFKit.PDFDocument, md: string) {
       ensureSpace(doc, 24);
       doc.y += 4;
       doc.fillColor(C.nightSky).font("Inter-B").fontSize(10.5)
-        .text(line.slice(4), ML, doc.y, { width: CW });
+        .text(stripMarkdown(line.slice(4)), ML, doc.y, { width: CW });
       doc.y += 2;
-      continue;
+      i++; continue;
     }
 
     // > Blockquote
     if (line.startsWith("> ")) {
       callout(doc, line.slice(2));
-      continue;
+      i++; continue;
     }
 
     // Bullet list
@@ -207,13 +234,13 @@ function renderMarkdown(doc: PDFKit.PDFDocument, md: string) {
       if (bold) {
         doc.fillColor(C.textBody).font("Inter-SB").fontSize(9.5)
           .text(bold[1], ML + 16, doc.y, { width: CW - 16, continued: true });
-        doc.font("Inter").text(bold[2]);
+        doc.font("Inter").text(stripMarkdown(bold[2]));
       } else {
         doc.fillColor(C.textBody).font("Inter").fontSize(9.5)
           .text(stripMarkdown(text), ML + 16, doc.y, { width: CW - 16 });
       }
       doc.y += 1;
-      continue;
+      i++; continue;
     }
 
     // Numbered list
@@ -226,7 +253,7 @@ function renderMarkdown(doc: PDFKit.PDFDocument, md: string) {
       doc.fillColor(C.textBody).font("Inter").fontSize(9.5)
         .text(stripMarkdown(num[2]), ML + 18, baseY, { width: CW - 18 });
       doc.y += 1;
-      continue;
+      i++; continue;
     }
 
     // Regular paragraph
@@ -234,7 +261,110 @@ function renderMarkdown(doc: PDFKit.PDFDocument, md: string) {
     doc.fillColor(C.textBody).font("Inter").fontSize(9.5)
       .text(stripMarkdown(line), ML, doc.y, { width: CW, lineGap: 2 });
     doc.y += 2;
+    i++;
   }
+}
+
+// ---------------------------------------------------------------------------
+// Table Renderer
+// ---------------------------------------------------------------------------
+
+function renderTable(doc: PDFKit.PDFDocument, tableLines: string[]) {
+  // Parse rows — strip leading/trailing pipes and split on pipe
+  const parsed = tableLines
+    .map((l) => l.replace(/^\|/, "").replace(/\|$/, "").split("|").map((c) => c.trim()));
+
+  // Drop the separator row (e.g. | --- | --- |)
+  const rows = parsed.filter(
+    (r) => !r.every((c) => /^:?-{2,}:?$/.test(c) || c === ""),
+  );
+  if (rows.length === 0) return;
+
+  const header = rows[0];
+  const body = rows.slice(1);
+  const cols = header.length;
+  if (cols === 0) return;
+
+  // Column widths — give the first column ~40% when there are ≥3 columns,
+  // otherwise split evenly (good for key/value tables).
+  const colWidths: number[] = (() => {
+    if (cols === 1) return [CW];
+    if (cols === 2) return [CW * 0.58, CW * 0.42];
+    const first = CW * 0.4;
+    const rest = (CW - first) / (cols - 1);
+    return [first, ...Array(cols - 1).fill(rest)];
+  })();
+
+  const padX = 8;
+  const padY = 6;
+  const fontSize = 9;
+
+  const measureRow = (row: string[], font: string): number => {
+    doc.font(font).fontSize(fontSize);
+    let maxH = 0;
+    for (let c = 0; c < row.length; c++) {
+      const h = doc.heightOfString(stripMarkdown(row[c] ?? ""), {
+        width: colWidths[c] - padX * 2,
+      });
+      if (h > maxH) maxH = h;
+    }
+    return maxH + padY * 2;
+  };
+
+  const drawHeaderRow = (y: number, rowH: number) => {
+    doc.rect(ML, y, CW, rowH).fill(C.nightSky);
+    doc.rect(ML, y, 3, rowH).fill(C.terraCotta);
+    let x = ML;
+    for (let c = 0; c < header.length; c++) {
+      doc.fillColor(C.snow).font("Jakarta").fontSize(fontSize)
+        .text(stripMarkdown(header[c] ?? ""), x + padX, y + padY, {
+          width: colWidths[c] - padX * 2,
+        });
+      x += colWidths[c];
+    }
+  };
+
+  const drawBodyRow = (row: string[], y: number, rowH: number, alt: boolean) => {
+    if (alt) {
+      doc.rect(ML, y, CW, rowH).fill(C.sandstone);
+    }
+    const isBoldRow = row.some((c) => /^\*\*.+\*\*$/.test((c ?? "").trim()));
+    const rowFont = isBoldRow ? "Inter-SB" : "Inter";
+    let x = ML;
+    for (let c = 0; c < row.length; c++) {
+      doc.fillColor(C.textBody).font(rowFont).fontSize(fontSize)
+        .text(stripMarkdown(row[c] ?? ""), x + padX, y + padY, {
+          width: colWidths[c] - padX * 2,
+        });
+      x += colWidths[c];
+    }
+    // Subtle divider
+    doc.moveTo(ML, y + rowH).lineTo(ML + CW, y + rowH)
+      .strokeColor(C.base300).lineWidth(0.4).stroke();
+  };
+
+  doc.y += 6;
+  const headerH = measureRow(header, "Jakarta");
+  const firstBodyH = body.length > 0 ? measureRow(body[0], "Inter") : 0;
+  ensureSpace(doc, headerH + firstBodyH + 4);
+
+  drawHeaderRow(doc.y, headerH);
+  doc.y += headerH;
+
+  for (let r = 0; r < body.length; r++) {
+    const row = body[r];
+    const h = measureRow(row, "Inter");
+    if (doc.y + h > PAGE_H - MB) {
+      doc.addPage();
+      doc.y = MT;
+      drawHeaderRow(doc.y, headerH);
+      doc.y += headerH;
+    }
+    drawBodyRow(row, doc.y, h, r % 2 === 1);
+    doc.y += h;
+  }
+
+  doc.y += 10;
 }
 
 function stripMarkdown(s: string): string {
@@ -394,6 +524,161 @@ export async function generatePacketPDF(input: PacketPDFInput): Promise<Buffer> 
     }
 
     doc.end();
+    } catch (err) {
+      reject(err instanceof Error ? err : new Error(String(err)));
+    }
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Resource PDF (standalone advocacy documents)
+// ---------------------------------------------------------------------------
+
+export type ResourceCategory = "template" | "one-pager" | "guide" | "talking-points";
+
+const CATEGORY_LABELS: Record<ResourceCategory, string> = {
+  "one-pager": "ONE-PAGER",
+  "template": "TEMPLATE",
+  "guide": "GUIDE",
+  "talking-points": "TALKING POINTS",
+};
+
+export interface ResourcePDFInput {
+  title: string;
+  description: string;
+  category: ResourceCategory;
+  /** Markdown body — the portion of the resource after the frontmatter. */
+  body: string;
+  /** ISO-format generation timestamp. */
+  generatedAt: string;
+}
+
+export async function generateResourcePDF(input: ResourcePDFInput): Promise<Buffer> {
+  return new Promise((resolve, reject) => {
+    try {
+      const doc = new PDFDocument({
+        size: "LETTER",
+        margins: { top: MT, bottom: MB, left: ML, right: MR },
+        bufferPages: true,
+        info: {
+          Title: input.title,
+          Author: "EXPLORE Disc Golf (ElevateUT)",
+          Subject: input.description,
+        },
+      });
+
+      const chunks: Buffer[] = [];
+      doc.on("data", (c: Buffer) => chunks.push(c));
+      doc.on("end", () => resolve(Buffer.concat(chunks)));
+      doc.on("error", (err: Error) => {
+        console.error("[pdf] Document error:", err);
+        reject(err);
+      });
+
+      try {
+        registerFonts(doc);
+      } catch (fontErr) {
+        console.warn("[pdf] Font registration failed, using Helvetica:", fontErr);
+        doc.registerFont("Jakarta", "Helvetica-Bold");
+        doc.registerFont("Jakarta-XB", "Helvetica-Bold");
+        doc.registerFont("Inter", "Helvetica");
+        doc.registerFont("Inter-Med", "Helvetica");
+        doc.registerFont("Inter-SB", "Helvetica-Bold");
+        doc.registerFont("Inter-B", "Helvetica-Bold");
+      }
+
+      // =================================================================
+      // Cover Page — mirrors the packet cover: Night Sky bleed, Terra
+      // Cotta top bar, logo in white, oversized Jakarta-XB title,
+      // Sandstone description, brand color bar at the footer.
+      // =================================================================
+      doc.rect(0, 0, PAGE_W, PAGE_H).fill(C.nightSky);
+      doc.rect(0, 0, PAGE_W, 5).fill(C.terraCotta);
+
+      const logo = resolvePath("images", "brand", "explore-disc-golf-white.png");
+      if (fs.existsSync(logo)) doc.image(logo, ML, 72, { height: 34 });
+
+      // Category label (Summit Gold, spaced caps)
+      const catLabel = CATEGORY_LABELS[input.category] ?? String(input.category).toUpperCase();
+      doc.fillColor(C.summitGold).font("Jakarta").fontSize(11)
+        .text(catLabel, ML, 190, { width: CW, characterSpacing: 2 });
+
+      // Title — size adapts if the title is long
+      const titleSize = input.title.length > 48 ? 30 : input.title.length > 32 ? 34 : 40;
+      doc.fillColor(C.snow).font("Jakarta-XB").fontSize(titleSize)
+        .text(input.title, ML, 216, { width: CW, lineGap: 2 });
+
+      // Terra Cotta rule under title
+      const ruleY = doc.y + 18;
+      doc.rect(ML, ruleY, 60, 3).fill(C.terraCotta);
+
+      // Description
+      doc.fillColor(C.sandstone).font("Inter").fontSize(12.5)
+        .text(input.description, ML, ruleY + 18, { width: CW, lineGap: 3 });
+
+      // Footer branding
+      const dateStr = new Date(input.generatedAt).toLocaleDateString("en-US", {
+        year: "numeric", month: "long", day: "numeric",
+      });
+      doc.fillColor(C.sandstone).font("Inter").fontSize(9)
+        .text("EXPLORE Disc Golf", ML, PAGE_H - 118, { width: CW });
+      doc.fillColor("#8A9BB0").fontSize(8)
+        .text("A 501(c)(3) initiative by ElevateUT — explorediscgolf.org", ML, doc.y + 2, { width: CW })
+        .text(`Published ${dateStr}`, ML, doc.y + 2, { width: CW })
+        .text("Disc golf on America's public lands.", ML, doc.y + 2, { width: CW });
+
+      // Brand color bar
+      const bw = CW / 4;
+      const by = PAGE_H - 36;
+      doc.rect(ML, by, bw, 5).fill(C.terraCotta);
+      doc.rect(ML + bw, by, bw, 5).fill(C.sage);
+      doc.rect(ML + bw * 2, by, bw, 5).fill(C.summitGold);
+      doc.rect(ML + bw * 3, by, bw, 5).fill(C.basinTeal);
+
+      // =================================================================
+      // Content — single section using the shared pageHeader + renderer
+      // =================================================================
+      doc.addPage();
+      pageHeader(doc, input.title, input.description);
+      doc.y += 8;
+      renderMarkdown(doc, input.body);
+
+      // =================================================================
+      // Back Cover — identical to the packet back cover
+      // =================================================================
+      doc.addPage();
+      doc.rect(0, 0, PAGE_W, PAGE_H).fill(C.nightSky);
+
+      if (fs.existsSync(logo)) doc.image(logo, ML, PAGE_H / 2 - 60, { height: 36 });
+
+      doc.fillColor(C.snow).font("Jakarta-XB").fontSize(24)
+        .text("Disc golf on America's", ML, PAGE_H / 2, { width: CW });
+      doc.fillColor(C.terraCotta).font("Jakarta-XB").fontSize(24)
+        .text("public lands.", ML, doc.y, { width: CW });
+
+      doc.fillColor(C.sandstone).font("Inter").fontSize(10)
+        .text("explorediscgolf.org", ML, doc.y + 24, { width: CW })
+        .text("A 501(c)(3) initiative by ElevateUT", ML, doc.y + 4, { width: CW });
+
+      doc.fillColor("#8A9BB0").font("Inter").fontSize(8)
+        .text(
+          "Free to use and distribute. Customize and review before submitting to BLM offices or partners.",
+          ML, doc.y + 30, { width: CW },
+        );
+
+      doc.rect(ML, PAGE_H - 36, bw, 5).fill(C.terraCotta);
+      doc.rect(ML + bw, PAGE_H - 36, bw, 5).fill(C.sage);
+      doc.rect(ML + bw * 2, PAGE_H - 36, bw, 5).fill(C.summitGold);
+      doc.rect(ML + bw * 3, PAGE_H - 36, bw, 5).fill(C.basinTeal);
+
+      // Page footers on interior pages only (skip cover + back cover)
+      const range = doc.bufferedPageRange();
+      for (let i = 1; i < range.count - 1; i++) {
+        doc.switchToPage(i);
+        pageFooter(doc, i);
+      }
+
+      doc.end();
     } catch (err) {
       reject(err instanceof Error ? err : new Error(String(err)));
     }
