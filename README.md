@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="brand/final/explore-disc-golf-dark.png" alt="EXPLORE Disc Golf" width="500" />
+  <img src="brand/final/preview-on-terracotta.png" alt="EXPLORE Disc Golf" width="500" />
 </p>
 
 <p align="center">
