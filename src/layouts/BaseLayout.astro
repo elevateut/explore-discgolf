@@ -72,6 +72,19 @@ const navLinks = [
     <link rel="preload" href="/fonts/Inter-Medium.ttf" as="font" type="font/ttf" crossorigin />
     <link rel="preload" href="/fonts/Inter-SemiBold.ttf" as="font" type="font/ttf" crossorigin />
     <link rel="preload" href="/fonts/Inter-Bold.ttf" as="font" type="font/ttf" crossorigin />
+
+    <!-- Google Analytics (gtag.js) — production only -->
+    {import.meta.env.PROD && (
+      <>
+        <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-8SECH5L6T4"></script>
+        <script is:inline>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-8SECH5L6T4');
+        </script>
+      </>
+    )}
   </head>
 
   <body class="min-h-screen flex flex-col font-body antialiased">
