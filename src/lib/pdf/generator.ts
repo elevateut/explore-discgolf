@@ -151,6 +151,124 @@ function ensureSpace(doc: PDFKit.PDFDocument, needed: number) {
 // Markdown-ish Content Renderer
 // ---------------------------------------------------------------------------
 
+/**
+ * Base URL used to resolve site-relative links (e.g. `/explore-act/…`) into
+ * absolute URLs so they remain clickable when the PDF is read off-site.
+ */
+const SITE_BASE_URL = "https://explorediscgolf.org";
+
+interface Run {
+  text: string;
+  bold?: boolean;
+  link?: string;
+}
+
+function resolveUrl(u: string): string {
+  if (/^(https?:|mailto:|tel:)/.test(u)) return u;
+  if (u.startsWith("/")) return SITE_BASE_URL + u;
+  if (u.startsWith("#")) return u;
+  return u;
+}
+
+/**
+ * Strip inline italic/underscore/code — bold and links are handled by the
+ * tokenizer. Runs before tokenization so italic markers that wrap across a
+ * link boundary (e.g. `*text [link](url) more*`) don't leave orphaned
+ * asterisks in the split halves.
+ */
+function stripInline(s: string): string {
+  return s
+    // *italic* — but NOT **bold**. Use a temp placeholder for ** to avoid
+    // matching the inner * of **.
+    .replace(/\*\*/g, "\u0000BOLD\u0000")
+    .replace(/\*([^*\n]+)\*/g, "$1")
+    .replace(/\u0000BOLD\u0000/g, "**")
+    // _italic_
+    .replace(/(^|[^_])_([^_\n]+)_/g, "$1$2")
+    // `code`
+    .replace(/`([^`]+)`/g, "$1");
+}
+
+/**
+ * Tokenize a markdown line into a sequence of styled runs. Handles:
+ *   - `**[text](url)**` → bold link
+ *   - `[text](url)`     → link
+ *   - `**text**`        → bold
+ *   - everything else   → plain (with inline italic/code stripped)
+ */
+function tokenizeLine(rawLine: string): Run[] {
+  // Strip italic/code markers up front so they can't wrap across a link
+  // boundary and leave orphan asterisks in the tokenized runs.
+  const line = stripInline(rawLine);
+
+  const runs: Run[] = [];
+  const re =
+    /\*\*\[([^\]]+)\]\(([^)]+)\)\*\*|\[([^\]]+)\]\(([^)]+)\)|\*\*([^*\n]+?)\*\*/g;
+  let last = 0;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(line)) !== null) {
+    if (m.index > last) {
+      runs.push({ text: line.slice(last, m.index) });
+    }
+    if (m[1] !== undefined && m[2] !== undefined) {
+      runs.push({ text: m[1], bold: true, link: resolveUrl(m[2]) });
+    } else if (m[3] !== undefined && m[4] !== undefined) {
+      runs.push({ text: m[3], link: resolveUrl(m[4]) });
+    } else if (m[5] !== undefined) {
+      runs.push({ text: m[5], bold: true });
+    }
+    last = re.lastIndex;
+  }
+  if (last < line.length) {
+    runs.push({ text: line.slice(last) });
+  }
+  return runs.length > 0 ? runs : [{ text: line }];
+}
+
+/**
+ * Render a sequence of runs as a single flowing text block, using pdfkit's
+ * `continued: true` chaining. Links get Basin Teal + underline + clickable
+ * annotation; bold runs get Inter-SB.
+ */
+function renderRuns(
+  doc: PDFKit.PDFDocument,
+  runs: Run[],
+  x: number,
+  y: number,
+  width: number,
+  opts: { baseFont?: string; boldFont?: string; fontSize?: number; lineGap?: number } = {},
+) {
+  const base = opts.baseFont ?? "Inter";
+  const boldFont = opts.boldFont ?? "Inter-SB";
+  const fontSize = opts.fontSize ?? 9.5;
+  const lineGap = opts.lineGap ?? 2;
+
+  for (let i = 0; i < runs.length; i++) {
+    const r = runs[i];
+    const isLast = i === runs.length - 1;
+
+    doc.font(r.bold ? boldFont : base).fontSize(fontSize);
+    doc.fillColor(r.link ? C.basinTeal : C.textBody);
+
+    const options: Record<string, unknown> = {
+      continued: !isLast,
+      lineGap,
+      underline: Boolean(r.link),
+    };
+    if (r.link) options.link = r.link;
+
+    if (i === 0) {
+      doc.text(r.text, x, y, { width, ...options });
+    } else {
+      doc.text(r.text, options);
+    }
+  }
+
+  // Reset styling state after a chained run so the next text() call on this
+  // document starts clean.
+  doc.fillColor(C.textBody).font("Inter");
+}
+
 function renderMarkdown(doc: PDFKit.PDFDocument, md: string) {
   const lines = md.split("\n");
   let i = 0;
@@ -229,16 +347,8 @@ function renderMarkdown(doc: PDFKit.PDFDocument, md: string) {
       // Colored bullet
       doc.circle(ML + 7, doc.y + 5, 2).fill(C.terraCotta);
 
-      // Bold prefix: **Key:** value
-      const bold = text.match(/^\*\*(.+?)\*\*(.*)$/);
-      if (bold) {
-        doc.fillColor(C.textBody).font("Inter-SB").fontSize(9.5)
-          .text(bold[1], ML + 16, doc.y, { width: CW - 16, continued: true });
-        doc.font("Inter").text(stripMarkdown(bold[2]));
-      } else {
-        doc.fillColor(C.textBody).font("Inter").fontSize(9.5)
-          .text(stripMarkdown(text), ML + 16, doc.y, { width: CW - 16 });
-      }
+      const runs = tokenizeLine(text);
+      renderRuns(doc, runs, ML + 16, doc.y, CW - 16);
       doc.y += 1;
       i++; continue;
     }
@@ -250,16 +360,16 @@ function renderMarkdown(doc: PDFKit.PDFDocument, md: string) {
       const baseY = doc.y;
       doc.fillColor(C.terraCotta).font("Inter-B").fontSize(9.5)
         .text(num[1] + ".", ML, baseY, { width: 14, align: "right" });
-      doc.fillColor(C.textBody).font("Inter").fontSize(9.5)
-        .text(stripMarkdown(num[2]), ML + 18, baseY, { width: CW - 18 });
+      const runs = tokenizeLine(num[2]);
+      renderRuns(doc, runs, ML + 18, baseY, CW - 18);
       doc.y += 1;
       i++; continue;
     }
 
     // Regular paragraph
     ensureSpace(doc, 16);
-    doc.fillColor(C.textBody).font("Inter").fontSize(9.5)
-      .text(stripMarkdown(line), ML, doc.y, { width: CW, lineGap: 2 });
+    const runs = tokenizeLine(line);
+    renderRuns(doc, runs, ML, doc.y, CW);
     doc.y += 2;
     i++;
   }
