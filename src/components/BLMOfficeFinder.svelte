@@ -14,6 +14,7 @@
     OverlayToggle,
     SMA_LAYER_ID,
     applySmaOverlay,
+    createBlmIdentifier,
   } from "@lib/map/terrain";
 
   /** Shape of each office passed as a prop. */
@@ -124,6 +125,8 @@
 
   $effect(() => {
     if (!mapContainer) return;
+
+    const blmIdentifier = createBlmIdentifier();
 
     const m = new maplibregl.Map({
       container: mapContainer,
@@ -247,10 +250,26 @@
       }
     });
 
+    // BLM parcel click-to-identify. Fires for clicks anywhere on the map,
+    // BUT we bail out if the click also hit an office circle so the
+    // layer-specific handler above gets to run selectOffice() cleanly
+    // without showing two popups at once.
+    function handleMapClick(e: maplibregl.MapMouseEvent) {
+      if (!showBlmLands) return;
+      const officeHits = m.queryRenderedFeatures(e.point, {
+        layers: ["offices-circles"],
+      });
+      if (officeHits.length > 0) return;
+      blmIdentifier.onClick(m, e);
+    }
+    m.on("click", handleMapClick);
+
     map = m;
 
     return () => {
+      blmIdentifier.dispose();
       popup?.remove();
+      m.off("click", handleMapClick);
       m.remove();
       map = undefined;
       mapReady = false;

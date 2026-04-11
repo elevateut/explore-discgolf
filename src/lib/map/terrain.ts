@@ -19,9 +19,11 @@
  *   - BLM surface lands: BLM National SMA LimitedScale (gis.blm.gov)
  */
 
+import maplibregl from "maplibre-gl";
 import type {
   IControl,
   Map as MaplibreMap,
+  MapMouseEvent,
   StyleSpecification,
 } from "maplibre-gl";
 
@@ -364,4 +366,275 @@ export class OverlayToggle implements IControl {
     this.button.removeEventListener("click", this.handler);
     this.container.parentNode?.removeChild(this.container);
   }
+}
+
+// ---------------------------------------------------------------------------
+// BLM field office click-to-identify
+// ---------------------------------------------------------------------------
+
+const BLM_IDENTIFIER_SOURCE_ID = "blm-identifier-highlight";
+const BLM_IDENTIFIER_FILL_ID = "blm-identifier-highlight-fill";
+const BLM_IDENTIFIER_STROKE_ID = "blm-identifier-highlight-stroke";
+
+interface BlmFieldOfficeAttributes {
+  ADM_UNIT_CD?: string;
+  ADMU_NAME?: string;
+  BLM_ORG_TYPE?: string;
+  ADMIN_ST?: string;
+  PARENT_NAME?: string;
+}
+
+interface ArcGisFeature {
+  attributes: BlmFieldOfficeAttributes;
+  geometry?: { rings?: number[][][] };
+}
+
+/** Escape a string for safe HTML interpolation in popup content. */
+function escapeHtmlForPopup(str: string): string {
+  const div = document.createElement("div");
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+/** Convert an ArcGIS rings array to a GeoJSON Polygon or MultiPolygon. */
+function ringsToGeometry(
+  rings: number[][][],
+): GeoJSON.Polygon | GeoJSON.MultiPolygon {
+  const coords = rings.map((ring) =>
+    ring.map(([x, y]) => [x, y] as [number, number]),
+  );
+  if (coords.length === 1) {
+    return { type: "Polygon", coordinates: coords };
+  }
+  return {
+    type: "MultiPolygon",
+    coordinates: coords.map((r) => [r]),
+  };
+}
+
+/** Build the popup HTML for a resolved BLM field office feature. */
+function buildFieldOfficePopupHtml(attrs: BlmFieldOfficeAttributes): string {
+  const adminCode = (attrs.ADM_UNIT_CD || "").toString().trim();
+  const rawName = (attrs.ADMU_NAME || "").toString().trim();
+  const orgType = (attrs.BLM_ORG_TYPE || "").toString().trim();
+  const state = (attrs.ADMIN_ST || "").toString().trim();
+  const parent = (attrs.PARENT_NAME || "").toString().trim();
+
+  // BLM names are usually bare ("Salt Lake", "Cedar City") — append the
+  // org type suffix for full display ("Salt Lake Field Office").
+  const fullName =
+    orgType && !/office|district/i.test(rawName)
+      ? `${rawName} ${orgType} Office`
+      : rawName || "BLM Administrative Unit";
+
+  const metaParts: string[] = [];
+  if (state) metaParts.push(escapeHtmlForPopup(state));
+  if (parent) metaParts.push(escapeHtmlForPopup(parent));
+
+  const linkHtml = adminCode
+    ? `<a href="/offices/${encodeURIComponent(adminCode)}" style="display:inline-block;margin-top:6px;font-size:11px;color:#b85c38;text-decoration:underline;">View office details &rarr;</a>`
+    : "";
+
+  return `<div style="font-family:system-ui,sans-serif;padding:2px;min-width:180px;">
+    <div style="font-weight:600;font-size:13px;color:#1e2d3b;line-height:1.25;margin-bottom:3px;">
+      ${escapeHtmlForPopup(fullName)}
+    </div>
+    <div style="font-size:11px;color:#6b7280;">
+      Bureau of Land Management
+    </div>
+    ${metaParts.length ? `<div style="font-size:11px;color:#9ca3af;margin-top:4px;">${metaParts.join(" &middot; ")}</div>` : ""}
+    ${linkHtml}
+  </div>`;
+}
+
+/**
+ * Create a BLM field-office click identifier with its own popup, abort
+ * controller, and highlight source/layer state. Each map component
+ * instantiates its own so state is isolated.
+ *
+ * Usage:
+ *   const identifier = createBlmIdentifier();
+ *   map.on("click", (e) => identifier.onClick(map, e));
+ *   // ...cleanup...
+ *   identifier.dispose();
+ *
+ * On click, queries BLM's AdminUnit service for the field office
+ * jurisdiction containing the click point, draws the office's boundary
+ * polygon in Terra Cotta, and shows a popup with the office name,
+ * state, parent district, and a deep link to /offices/{ADM_UNIT_CD}.
+ * Closing the popup (X button or another click) clears the highlight.
+ */
+export function createBlmIdentifier() {
+  let abort: AbortController | null = null;
+  let popup: maplibregl.Popup | null = null;
+  let boundMap: MaplibreMap | null = null;
+
+  function addHighlight(
+    map: MaplibreMap,
+    geometry: GeoJSON.Polygon | GeoJSON.MultiPolygon,
+  ): void {
+    const data: GeoJSON.Feature = {
+      type: "Feature",
+      properties: {},
+      geometry,
+    };
+
+    const existing = map.getSource(BLM_IDENTIFIER_SOURCE_ID) as
+      | maplibregl.GeoJSONSource
+      | undefined;
+    if (existing) {
+      existing.setData(data);
+      return;
+    }
+
+    map.addSource(BLM_IDENTIFIER_SOURCE_ID, { type: "geojson", data });
+    map.addLayer({
+      id: BLM_IDENTIFIER_FILL_ID,
+      type: "fill",
+      source: BLM_IDENTIFIER_SOURCE_ID,
+      paint: {
+        "fill-color": "#b85c38",
+        "fill-opacity": 0.1,
+      },
+    });
+    map.addLayer({
+      id: BLM_IDENTIFIER_STROKE_ID,
+      type: "line",
+      source: BLM_IDENTIFIER_SOURCE_ID,
+      paint: {
+        "line-color": "#b85c38",
+        "line-width": 2.5,
+        "line-opacity": 0.85,
+      },
+    });
+  }
+
+  function clearHighlight(map: MaplibreMap): void {
+    try {
+      if (map.getLayer(BLM_IDENTIFIER_STROKE_ID)) {
+        map.removeLayer(BLM_IDENTIFIER_STROKE_ID);
+      }
+      if (map.getLayer(BLM_IDENTIFIER_FILL_ID)) {
+        map.removeLayer(BLM_IDENTIFIER_FILL_ID);
+      }
+      if (map.getSource(BLM_IDENTIFIER_SOURCE_ID)) {
+        map.removeSource(BLM_IDENTIFIER_SOURCE_ID);
+      }
+    } catch {
+      // Map is mid-teardown — swallow.
+    }
+  }
+
+  async function onClick(
+    map: MaplibreMap,
+    e: MapMouseEvent,
+  ): Promise<void> {
+    // Cancel any in-flight query, close previous popup (which clears
+    // the highlight via the close handler below), set up new state.
+    abort?.abort();
+    abort = new AbortController();
+    popup?.remove();
+    boundMap = map;
+
+    const { lng, lat } = e.lngLat;
+
+    // Show loading popup immediately so the click feels responsive
+    const thisPopup = new maplibregl.Popup({
+      offset: 12,
+      maxWidth: "260px",
+    })
+      .setLngLat(e.lngLat)
+      .setHTML(
+        '<div style="font-family:system-ui,sans-serif;font-size:12px;color:#6b7280;padding:2px;">Looking up office…</div>',
+      )
+      .addTo(map);
+
+    // When this popup closes (X button, next click, etc), clear the
+    // highlight — but only if it's still the "current" popup in our
+    // closure state, so a stale close event from an already-replaced
+    // popup doesn't wipe a newer highlight.
+    thisPopup.on("close", () => {
+      if (popup === thisPopup) {
+        clearHighlight(map);
+        popup = null;
+      }
+    });
+
+    popup = thisPopup;
+
+    try {
+      const url = new URL(
+        "https://gis.blm.gov/arcgis/rest/services/admin_boundaries/BLM_Natl_AdminUnit/MapServer/3/query",
+      );
+      url.searchParams.set("where", "1=1");
+      url.searchParams.set("geometry", `${lng},${lat}`);
+      url.searchParams.set("geometryType", "esriGeometryPoint");
+      url.searchParams.set("inSR", "4326");
+      url.searchParams.set("outSR", "4326");
+      url.searchParams.set("spatialRel", "esriSpatialRelIntersects");
+      url.searchParams.set(
+        "outFields",
+        "ADM_UNIT_CD,ADMU_NAME,BLM_ORG_TYPE,ADMIN_ST,PARENT_NAME",
+      );
+      url.searchParams.set("returnGeometry", "true");
+      url.searchParams.set("f", "json");
+
+      const res = await fetch(url.toString(), { signal: abort.signal });
+      if (!res.ok) throw new Error(`BLM query HTTP ${res.status}`);
+      const data = await res.json();
+
+      // Bail if the user clicked elsewhere or closed the popup while
+      // the fetch was in flight.
+      if (popup !== thisPopup) return;
+
+      const features: ArcGisFeature[] = data.features ?? [];
+      if (features.length === 0) {
+        thisPopup.setHTML(
+          '<div style="font-family:system-ui,sans-serif;font-size:12px;color:#6b7280;padding:2px;">Outside BLM field office jurisdiction.</div>',
+        );
+        return;
+      }
+
+      // Prefer the narrowest unit (Field > District > State) when
+      // multiple overlapping jurisdictions contain the point.
+      const priority: Record<string, number> = {
+        Field: 0,
+        District: 1,
+        State: 2,
+      };
+      features.sort((a, b) => {
+        const pa = priority[a.attributes.BLM_ORG_TYPE ?? ""] ?? 99;
+        const pb = priority[b.attributes.BLM_ORG_TYPE ?? ""] ?? 99;
+        return pa - pb;
+      });
+
+      const feature = features[0];
+
+      // Draw the office boundary as a highlight before updating the
+      // popup so the visual feedback is simultaneous.
+      if (feature.geometry?.rings && feature.geometry.rings.length > 0) {
+        addHighlight(map, ringsToGeometry(feature.geometry.rings));
+      }
+
+      thisPopup.setHTML(buildFieldOfficePopupHtml(feature.attributes));
+    } catch (err: unknown) {
+      if ((err as Error)?.name === "AbortError") return;
+      if (popup !== thisPopup) return;
+      thisPopup.setHTML(
+        '<div style="font-family:system-ui,sans-serif;font-size:12px;color:#ef4444;padding:2px;">Could not look up office.</div>',
+      );
+    }
+  }
+
+  function dispose(): void {
+    abort?.abort();
+    if (boundMap) {
+      clearHighlight(boundMap);
+      boundMap = null;
+    }
+    popup?.remove();
+    popup = null;
+  }
+
+  return { onClick, dispose };
 }

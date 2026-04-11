@@ -20,6 +20,7 @@
     applySmaOverlay,
     applyTerrain,
     basemapStyle,
+    createBlmIdentifier,
     type BasemapId,
   } from "@lib/map/terrain";
 
@@ -39,13 +40,6 @@
 
   const ADMIN_UNIT_BASE =
     "https://gis.blm.gov/arcgis/rest/services/admin_boundaries/BLM_Natl_AdminUnit/MapServer";
-
-  /** Escape a string for safe interpolation into popup HTML. */
-  function escapeHtml(str: string): string {
-    const div = document.createElement("div");
-    div.textContent = str;
-    return div.innerHTML;
-  }
 
   /**
    * Fetch boundary polygon from BLM ArcGIS and convert to GeoJSON.
@@ -89,8 +83,7 @@
     let smaVisible = true;
     let boundaryFeature: GeoJSON.Feature | null = null;
     let cancelled = false;
-    let clickAbort: AbortController | null = null;
-    let clickPopup: maplibregl.Popup | null = null;
+    const blmIdentifier = createBlmIdentifier();
 
     const m = new maplibregl.Map({
       container: mapContainer,
@@ -197,119 +190,12 @@
     }
     document.addEventListener("fullscreenchange", handleFullscreenChange);
 
-    // ----- Click to identify managing BLM field office -----
-    // The SMA layer we render attributes only at the state level ("Bureau
-    // of Land Management UT" for every polygon in Utah) so it can't tell
-    // us which field office manages a clicked parcel. The AdminUnit layer
-    // CAN — its polygons are the field-office jurisdictional boundaries,
-    // and its ADM_UNIT_CD field is the same ID format as our office
-    // detail pages, so we can link straight through with no fuzzy match.
-    async function handleMapClick(e: maplibregl.MapMouseEvent) {
+    // Click to identify managing BLM field office (with polygon outline).
+    // Implementation lives in createBlmIdentifier() in @lib/map/terrain.
+    function handleMapClick(e: maplibregl.MapMouseEvent) {
       if (!smaVisible) return;
-
-      // Cancel any in-flight query and close the previous popup
-      clickAbort?.abort();
-      clickAbort = new AbortController();
-      clickPopup?.remove();
-
-      const { lng, lat } = e.lngLat;
-
-      // Show a loading popup immediately so the click feels responsive
-      clickPopup = new maplibregl.Popup({ offset: 12, maxWidth: "260px" })
-        .setLngLat(e.lngLat)
-        .setHTML(
-          '<div style="font-family:system-ui,sans-serif;font-size:12px;color:#6b7280;padding:2px;">Looking up office…</div>',
-        )
-        .addTo(m);
-
-      try {
-        const url = new URL(
-          "https://gis.blm.gov/arcgis/rest/services/admin_boundaries/BLM_Natl_AdminUnit/MapServer/3/query",
-        );
-        url.searchParams.set("where", "1=1");
-        url.searchParams.set("geometry", `${lng},${lat}`);
-        url.searchParams.set("geometryType", "esriGeometryPoint");
-        url.searchParams.set("inSR", "4326");
-        url.searchParams.set("spatialRel", "esriSpatialRelIntersects");
-        url.searchParams.set(
-          "outFields",
-          "ADM_UNIT_CD,ADMU_NAME,BLM_ORG_TYPE,ADMIN_ST,PARENT_NAME",
-        );
-        url.searchParams.set("returnGeometry", "false");
-        url.searchParams.set("f", "json");
-
-        const res = await fetch(url.toString(), { signal: clickAbort.signal });
-        if (!res.ok) throw new Error(`BLM query HTTP ${res.status}`);
-        const data = await res.json();
-
-        // Guard against races where the user clicked elsewhere before
-        // this query resolved.
-        if (!clickPopup) return;
-
-        const features = data.features ?? [];
-        if (features.length === 0) {
-          clickPopup.setHTML(
-            '<div style="font-family:system-ui,sans-serif;font-size:12px;color:#6b7280;padding:2px;">Outside BLM field office jurisdiction.</div>',
-          );
-          return;
-        }
-
-        // AdminUnit returns all containing units at a point — field, district,
-        // and state offices can overlap hierarchically. Prefer the narrowest
-        // (Field > District > State).
-        const priority: Record<string, number> = {
-          Field: 0,
-          District: 1,
-          State: 2,
-        };
-        features.sort((a: { attributes: { BLM_ORG_TYPE?: string } }, b: { attributes: { BLM_ORG_TYPE?: string } }) => {
-          const pa = priority[a.attributes.BLM_ORG_TYPE ?? ""] ?? 99;
-          const pb = priority[b.attributes.BLM_ORG_TYPE ?? ""] ?? 99;
-          return pa - pb;
-        });
-
-        const attrs = features[0].attributes;
-        const adminCode = (attrs.ADM_UNIT_CD || "").toString().trim();
-        const rawName = (attrs.ADMU_NAME || "").toString().trim();
-        const orgType = (attrs.BLM_ORG_TYPE || "").toString().trim();
-        const state = (attrs.ADMIN_ST || "").toString().trim();
-        const parent = (attrs.PARENT_NAME || "").toString().trim();
-
-        // BLM names are usually bare ("Salt Lake", "Cedar City") — append the
-        // org type suffix for full display ("Salt Lake Field Office").
-        const fullName = orgType && !/office|district/i.test(rawName)
-          ? `${rawName} ${orgType} Office`
-          : rawName || "BLM Administrative Unit";
-
-        const metaParts: string[] = [];
-        if (state) metaParts.push(escapeHtml(state));
-        if (parent) metaParts.push(escapeHtml(parent));
-
-        const linkHtml = adminCode
-          ? `<a href="/offices/${encodeURIComponent(adminCode)}" style="display:inline-block;margin-top:6px;font-size:11px;color:#b85c38;text-decoration:underline;">View office details &rarr;</a>`
-          : "";
-
-        clickPopup.setHTML(
-          `<div style="font-family:system-ui,sans-serif;padding:2px;min-width:180px;">
-            <div style="font-weight:600;font-size:13px;color:#1e2d3b;line-height:1.25;margin-bottom:3px;">
-              ${escapeHtml(fullName)}
-            </div>
-            <div style="font-size:11px;color:#6b7280;">
-              Bureau of Land Management
-            </div>
-            ${metaParts.length ? `<div style="font-size:11px;color:#9ca3af;margin-top:4px;">${metaParts.join(" &middot; ")}</div>` : ""}
-            ${linkHtml}
-          </div>`,
-        );
-      } catch (err: unknown) {
-        if ((err as Error)?.name === "AbortError") return;
-        if (!clickPopup) return;
-        clickPopup.setHTML(
-          '<div style="font-family:system-ui,sans-serif;font-size:12px;color:#ef4444;padding:2px;">Could not look up office.</div>',
-        );
-      }
+      blmIdentifier.onClick(m, e);
     }
-
     m.on("click", handleMapClick);
 
     // ----- One-time boundary fetch -----
@@ -346,9 +232,7 @@
 
     return () => {
       cancelled = true;
-      clickAbort?.abort();
-      clickPopup?.remove();
-      clickPopup = null;
+      blmIdentifier.dispose();
       document.removeEventListener("fullscreenchange", handleFullscreenChange);
       m.off("style.load", handleStyleLoad);
       m.off("click", handleMapClick);
