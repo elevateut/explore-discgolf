@@ -17,6 +17,7 @@ Strategic analysis and action blueprint for leveraging the EXPLORE Act (P.L. 118
 | 9 | [Public Messaging](09-public-messaging.md) | Messaging framework and campaign concept |
 | 10 | [Timeline & Priorities](10-timeline-and-priorities.md) | 90-day launch plan, highest-leverage actions, Year 1 metrics |
 | 11 | [Sources](11-sources.md) | Citations, statutes, BLM records, and data sources |
+| 12 | [State Grant Funding](12-state-grant-funding.md) | State-by-state recreation grant inventory across the 12 BLM states, with a Top 15 ranking for a national disc golf 501(c)(3) |
 
 ## Key framing
 
