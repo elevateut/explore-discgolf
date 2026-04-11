@@ -15,8 +15,12 @@
   import "maplibre-gl/dist/maplibre-gl.css";
   import {
     BasemapSwitcher,
+    OverlayToggle,
+    SMA_LAYER_ID,
+    applySmaOverlay,
     applyTerrain,
     basemapStyle,
+    createBlmIdentifier,
     type BasemapId,
   } from "@lib/map/terrain";
 
@@ -76,8 +80,10 @@
     // Local closure state — kept out of $state to avoid re-running this effect
     // when the basemap or boundary changes mid-session.
     let activeBasemap: BasemapId = "terrain";
+    let smaVisible = true;
     let boundaryFeature: GeoJSON.Feature | null = null;
     let cancelled = false;
+    const blmIdentifier = createBlmIdentifier();
 
     const m = new maplibregl.Map({
       container: mapContainer,
@@ -118,6 +124,20 @@
     });
     m.addControl(switcher, "top-left");
 
+    // BLM Surface Management Agency overlay toggle. The initial layer is
+    // added inside handleStyleLoad() once the style has parsed.
+    const smaToggle = new OverlayToggle("BLM Lands", smaVisible, (visible) => {
+      smaVisible = visible;
+      if (m.getLayer(SMA_LAYER_ID)) {
+        m.setLayoutProperty(
+          SMA_LAYER_ID,
+          "visibility",
+          visible ? "visible" : "none",
+        );
+      }
+    });
+    m.addControl(smaToggle, "top-left");
+
     // ----- Layer management -----
     function addBoundaryLayers(map: maplibregl.Map) {
       if (!boundaryFeature || map.getSource("boundary")) return;
@@ -149,10 +169,14 @@
       });
     }
 
-    // Re-add terrain + boundary on every style load (initial AND basemap swaps)
+    // Re-add terrain + SMA overlay + boundary on every style load (initial
+    // AND basemap swaps). Order matters: terrain goes under everything,
+    // SMA overlay above terrain but under labels (via beforeId inside
+    // applySmaOverlay), boundary on top.
     function handleStyleLoad() {
       if (cancelled) return;
       applyTerrain(m, activeBasemap === "terrain");
+      applySmaOverlay(m, { visible: smaVisible });
       addBoundaryLayers(m);
       switcher.setCurrent(activeBasemap);
     }
@@ -165,6 +189,14 @@
       requestAnimationFrame(() => m.resize());
     }
     document.addEventListener("fullscreenchange", handleFullscreenChange);
+
+    // Click to identify managing BLM field office (with polygon outline).
+    // Implementation lives in createBlmIdentifier() in @lib/map/terrain.
+    function handleMapClick(e: maplibregl.MapMouseEvent) {
+      if (!smaVisible) return;
+      blmIdentifier.onClick(m, e);
+    }
+    m.on("click", handleMapClick);
 
     // ----- One-time boundary fetch -----
     m.on("load", async () => {
@@ -200,8 +232,10 @@
 
     return () => {
       cancelled = true;
+      blmIdentifier.dispose();
       document.removeEventListener("fullscreenchange", handleFullscreenChange);
       m.off("style.load", handleStyleLoad);
+      m.off("click", handleMapClick);
       m.remove();
     };
   });
@@ -228,6 +262,42 @@
   {/if}
 </div>
 
+<!-- Map legend — rendered in normal document flow below the map so it
+     never collides with MapLibre's attribution, scale bar, or the click
+     popup. Horizontal layout wraps on narrow screens. -->
+<div class="flex flex-wrap items-center gap-x-4 gap-y-1.5 mt-2.5 text-xs text-base-content/70">
+  <span class="font-semibold text-[10px] uppercase tracking-wide text-base-content/50">Legend</span>
+  <div class="flex items-center gap-1.5">
+    <span
+      class="inline-block w-3 h-3 rounded-sm border border-black/10"
+      style="background-color: #ffe778;"
+    ></span>
+    <span>BLM land</span>
+  </div>
+  <div class="flex items-center gap-1.5">
+    <span
+      class="inline-block w-3 h-3 rounded-sm border"
+      style="background-color: rgba(26, 139, 163, 0.15); border-color: #1a8ba3;"
+    ></span>
+    <span>Office boundary</span>
+  </div>
+  <div class="flex items-center gap-1.5">
+    <svg
+      viewBox="0 0 24 32"
+      xmlns="http://www.w3.org/2000/svg"
+      class="w-3 h-4 shrink-0"
+      aria-hidden="true"
+    >
+      <path
+        d="M12 0C5.4 0 0 5.4 0 12c0 9 12 20 12 20s12-11 12-20C24 5.4 18.6 0 12 0z"
+        fill="#b85c38"
+      />
+      <circle cx="12" cy="12" r="4" fill="#ffffff" />
+    </svg>
+    <span>Field office</span>
+  </div>
+</div>
+
 <style>
   /* Fullscreen: wrapper fills viewport, .map-canvas inside fills the wrapper.
      Targeting .map-canvas by class avoids ambiguity with :first-child, which
@@ -249,39 +319,7 @@
     border: none !important;
   }
 
-  /* BasemapSwitcher — horizontal tab-style buttons in a single ctrl group.
-     Selectors are scoped under .basemap-switcher to outweigh MapLibre's
-     default `.maplibregl-ctrl-group button { width: 29px; height: 29px }`
-     rule, which would otherwise crush the text labels. */
-  :global(.basemap-switcher) {
-    display: flex;
-    overflow: hidden;
-  }
-  :global(.basemap-switcher button.basemap-switcher__btn) {
-    width: auto;
-    height: auto;
-    min-width: 64px;
-    background: white;
-    border: none;
-    border-right: 1px solid rgba(0, 0, 0, 0.08);
-    padding: 8px 14px;
-    font-size: 12px;
-    font-weight: 500;
-    line-height: 1.2;
-    color: #4b5563;
-    cursor: pointer;
-    transition: background-color 0.15s, color 0.15s;
-    display: block;
-  }
-  :global(.basemap-switcher button.basemap-switcher__btn:last-child) {
-    border-right: none;
-  }
-  :global(.basemap-switcher button.basemap-switcher__btn:hover) {
-    background: #f3f4f6;
-    color: #1f2937;
-  }
-  :global(.basemap-switcher button.basemap-switcher__btn.is-active) {
-    background: #b85c38;
-    color: white;
-  }
+  /* BasemapSwitcher and OverlayToggle control styles live in
+     src/styles/global.css so they're available on every page that
+     renders a map-island, not just the detail page. */
 </style>

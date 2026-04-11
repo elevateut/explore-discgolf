@@ -242,3 +242,57 @@
     margin: 1.5rem 0;
   }
 }
+
+/*
+ * MapLibre custom IControl styling — shared by OfficeMap (detail page)
+ * and BLMOfficeFinder (national finder on the homepage). Lives here
+ * rather than in either component's <style> block because Svelte scoped
+ * styles only get injected when their component mounts, and these
+ * controls are used across multiple Svelte islands that aren't
+ * guaranteed to be on the same page.
+ *
+ * Selectors are scoped under .basemap-switcher / .overlay-toggle to
+ * outweigh MapLibre's default `.maplibregl-ctrl-group button
+ * { width: 29px; height: 29px }` rule, which would otherwise crush
+ * the text labels.
+ */
+
+.basemap-switcher {
+  display: flex;
+  overflow: hidden;
+}
+.basemap-switcher button.basemap-switcher__btn,
+.overlay-toggle button.overlay-toggle__btn {
+  width: auto;
+  height: auto;
+  min-width: 64px;
+  background: white;
+  border: none;
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.2;
+  color: #4b5563;
+  cursor: pointer;
+  transition:
+    background-color 0.15s,
+    color 0.15s;
+  display: block;
+  white-space: nowrap;
+}
+.basemap-switcher button.basemap-switcher__btn {
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
+}
+.basemap-switcher button.basemap-switcher__btn:last-child {
+  border-right: none;
+}
+.basemap-switcher button.basemap-switcher__btn:hover,
+.overlay-toggle button.overlay-toggle__btn:hover {
+  background: #f3f4f6;
+  color: #1f2937;
+}
+.basemap-switcher button.basemap-switcher__btn.is-active,
+.overlay-toggle button.overlay-toggle__btn.is-active {
+  background: #b85c38;
+  color: white;
+}
