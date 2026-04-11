@@ -435,65 +435,7 @@
     border: none !important;
   }
 
-  /* BasemapSwitcher — horizontal tab-style buttons in a single ctrl group.
-     Selectors are scoped under .basemap-switcher to outweigh MapLibre's
-     default `.maplibregl-ctrl-group button { width: 29px; height: 29px }`
-     rule, which would otherwise crush the text labels. */
-  :global(.basemap-switcher) {
-    display: flex;
-    overflow: hidden;
-  }
-  :global(.basemap-switcher button.basemap-switcher__btn) {
-    width: auto;
-    height: auto;
-    min-width: 64px;
-    background: white;
-    border: none;
-    border-right: 1px solid rgba(0, 0, 0, 0.08);
-    padding: 8px 14px;
-    font-size: 12px;
-    font-weight: 500;
-    line-height: 1.2;
-    color: #4b5563;
-    cursor: pointer;
-    transition: background-color 0.15s, color 0.15s;
-    display: block;
-  }
-  :global(.basemap-switcher button.basemap-switcher__btn:last-child) {
-    border-right: none;
-  }
-  :global(.basemap-switcher button.basemap-switcher__btn:hover) {
-    background: #f3f4f6;
-    color: #1f2937;
-  }
-  :global(.basemap-switcher button.basemap-switcher__btn.is-active) {
-    background: #b85c38;
-    color: white;
-  }
-
-  /* OverlayToggle — single toggle button, matches basemap switcher styling.
-     Same specificity trick to outweigh MapLibre's 29x29 default. */
-  :global(.overlay-toggle button.overlay-toggle__btn) {
-    width: auto;
-    height: auto;
-    min-width: 64px;
-    background: white;
-    border: none;
-    padding: 8px 14px;
-    font-size: 12px;
-    font-weight: 500;
-    line-height: 1.2;
-    color: #4b5563;
-    cursor: pointer;
-    transition: background-color 0.15s, color 0.15s;
-    display: block;
-  }
-  :global(.overlay-toggle button.overlay-toggle__btn:hover) {
-    background: #f3f4f6;
-    color: #1f2937;
-  }
-  :global(.overlay-toggle button.overlay-toggle__btn.is-active) {
-    background: #b85c38;
-    color: white;
-  }
+  /* BasemapSwitcher and OverlayToggle control styles live in
+     src/styles/global.css so they're available on every page that
+     renders a map-island, not just the detail page. */
 </style>
