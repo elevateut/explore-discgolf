@@ -163,11 +163,52 @@ interface Run {
   link?: string;
 }
 
-function resolveUrl(u: string): string {
-  if (/^(https?:|mailto:|tel:)/.test(u)) return u;
-  if (u.startsWith("/")) return SITE_BASE_URL + u;
+/**
+ * UTM context used to tag site-owned links with their PDF origin so the
+ * destination site can attribute inbound clicks back to a specific document.
+ * Only links resolved against SITE_BASE_URL receive UTMs — we never rewrite
+ * third-party URLs like congress.gov.
+ */
+interface UtmContext {
+  /** `utm_medium` — identifies the PDF product: e.g. `resource`, `packet`. */
+  medium: string;
+  /** `utm_campaign` — identifies the specific document: the resource slug or office id. */
+  campaign: string;
+}
+
+function resolveUrl(u: string, utm?: UtmContext): string {
+  if (/^(mailto:|tel:)/i.test(u)) return u;
   if (u.startsWith("#")) return u;
-  return u;
+
+  let absolute: string;
+  if (/^https?:\/\//i.test(u)) {
+    absolute = u;
+  } else if (u.startsWith("/")) {
+    absolute = SITE_BASE_URL + u;
+  } else {
+    return u; // unknown form — leave as-is
+  }
+
+  // Only tag our own URLs — never rewrite third-party links.
+  const isSiteOwned =
+    absolute === SITE_BASE_URL || absolute.startsWith(SITE_BASE_URL + "/");
+  if (!isSiteOwned || !utm) return absolute;
+
+  try {
+    const url = new URL(absolute);
+    if (!url.searchParams.has("utm_source")) {
+      url.searchParams.set("utm_source", "pdf");
+    }
+    if (!url.searchParams.has("utm_medium")) {
+      url.searchParams.set("utm_medium", utm.medium);
+    }
+    if (!url.searchParams.has("utm_campaign")) {
+      url.searchParams.set("utm_campaign", utm.campaign);
+    }
+    return url.toString();
+  } catch {
+    return absolute;
+  }
 }
 
 /**
@@ -196,7 +237,7 @@ function stripInline(s: string): string {
  *   - `**text**`        → bold
  *   - everything else   → plain (with inline italic/code stripped)
  */
-function tokenizeLine(rawLine: string): Run[] {
+function tokenizeLine(rawLine: string, utm?: UtmContext): Run[] {
   // Strip italic/code markers up front so they can't wrap across a link
   // boundary and leave orphan asterisks in the tokenized runs.
   const line = stripInline(rawLine);
@@ -211,9 +252,9 @@ function tokenizeLine(rawLine: string): Run[] {
       runs.push({ text: line.slice(last, m.index) });
     }
     if (m[1] !== undefined && m[2] !== undefined) {
-      runs.push({ text: m[1], bold: true, link: resolveUrl(m[2]) });
+      runs.push({ text: m[1], bold: true, link: resolveUrl(m[2], utm) });
     } else if (m[3] !== undefined && m[4] !== undefined) {
-      runs.push({ text: m[3], link: resolveUrl(m[4]) });
+      runs.push({ text: m[3], link: resolveUrl(m[4], utm) });
     } else if (m[5] !== undefined) {
       runs.push({ text: m[5], bold: true });
     }
@@ -269,7 +310,7 @@ function renderRuns(
   doc.fillColor(C.textBody).font("Inter");
 }
 
-function renderMarkdown(doc: PDFKit.PDFDocument, md: string) {
+function renderMarkdown(doc: PDFKit.PDFDocument, md: string, utm?: UtmContext) {
   const lines = md.split("\n");
   let i = 0;
 
@@ -347,7 +388,7 @@ function renderMarkdown(doc: PDFKit.PDFDocument, md: string) {
       // Colored bullet
       doc.circle(ML + 7, doc.y + 5, 2).fill(C.terraCotta);
 
-      const runs = tokenizeLine(text);
+      const runs = tokenizeLine(text, utm);
       renderRuns(doc, runs, ML + 16, doc.y, CW - 16);
       doc.y += 1;
       i++; continue;
@@ -360,7 +401,7 @@ function renderMarkdown(doc: PDFKit.PDFDocument, md: string) {
       const baseY = doc.y;
       doc.fillColor(C.terraCotta).font("Inter-B").fontSize(9.5)
         .text(num[1] + ".", ML, baseY, { width: 14, align: "right" });
-      const runs = tokenizeLine(num[2]);
+      const runs = tokenizeLine(num[2], utm);
       renderRuns(doc, runs, ML + 18, baseY, CW - 18);
       doc.y += 1;
       i++; continue;
@@ -368,7 +409,7 @@ function renderMarkdown(doc: PDFKit.PDFDocument, md: string) {
 
     // Regular paragraph
     ensureSpace(doc, 16);
-    const runs = tokenizeLine(line);
+    const runs = tokenizeLine(line, utm);
     renderRuns(doc, runs, ML, doc.y, CW);
     doc.y += 2;
     i++;
@@ -409,10 +450,14 @@ function renderTable(doc: PDFKit.PDFDocument, tableLines: string[]) {
   const padY = 6;
   const fontSize = 9;
 
+  // Iterate only over the column count defined by the header so that
+  // malformed rows with extra `|` separators (common in LLM output or when
+  // a pipe character isn't escaped) can't produce an undefined colWidth and
+  // poison the pdfkit measurement/drawing with NaN widths.
   const measureRow = (row: string[], font: string): number => {
     doc.font(font).fontSize(fontSize);
     let maxH = 0;
-    for (let c = 0; c < row.length; c++) {
+    for (let c = 0; c < cols; c++) {
       const h = doc.heightOfString(stripMarkdown(row[c] ?? ""), {
         width: colWidths[c] - padX * 2,
       });
@@ -425,7 +470,7 @@ function renderTable(doc: PDFKit.PDFDocument, tableLines: string[]) {
     doc.rect(ML, y, CW, rowH).fill(C.nightSky);
     doc.rect(ML, y, 3, rowH).fill(C.terraCotta);
     let x = ML;
-    for (let c = 0; c < header.length; c++) {
+    for (let c = 0; c < cols; c++) {
       doc.fillColor(C.snow).font("Jakarta").fontSize(fontSize)
         .text(stripMarkdown(header[c] ?? ""), x + padX, y + padY, {
           width: colWidths[c] - padX * 2,
@@ -438,10 +483,12 @@ function renderTable(doc: PDFKit.PDFDocument, tableLines: string[]) {
     if (alt) {
       doc.rect(ML, y, CW, rowH).fill(C.sandstone);
     }
-    const isBoldRow = row.some((c) => /^\*\*.+\*\*$/.test((c ?? "").trim()));
+    const isBoldRow = row
+      .slice(0, cols)
+      .some((c) => /^\*\*.+\*\*$/.test((c ?? "").trim()));
     const rowFont = isBoldRow ? "Inter-SB" : "Inter";
     let x = ML;
-    for (let c = 0; c < row.length; c++) {
+    for (let c = 0; c < cols; c++) {
       doc.fillColor(C.textBody).font(rowFont).fontSize(fontSize)
         .text(stripMarkdown(row[c] ?? ""), x + padX, y + padY, {
           width: colWidths[c] - padX * 2,
@@ -587,11 +634,12 @@ export async function generatePacketPDF(input: PacketPDFInput): Promise<Buffer> 
       { title: "Suggested Contacts", sub: "Prioritized outreach targets", md: input.suggestedContacts },
     ];
 
+    const packetUtm: UtmContext = { medium: "packet", campaign: input.officeId };
     for (const s of sections) {
       doc.addPage();
       pageHeader(doc, s.title, s.sub);
       doc.y += 8;
-      renderMarkdown(doc, s.md);
+      renderMarkdown(doc, s.md, packetUtm);
     }
 
     // =================================================================
@@ -661,6 +709,12 @@ export interface ResourcePDFInput {
   body: string;
   /** ISO-format generation timestamp. */
   generatedAt: string;
+  /**
+   * Resource slug used as the `utm_campaign` value on every site-owned link
+   * so inbound clicks can be attributed back to the specific PDF that drove
+   * them. If omitted, links still work but carry no UTMs.
+   */
+  slug?: string;
 }
 
 export async function generateResourcePDF(input: ResourcePDFInput): Promise<Buffer> {
@@ -751,7 +805,10 @@ export async function generateResourcePDF(input: ResourcePDFInput): Promise<Buff
       doc.addPage();
       pageHeader(doc, input.title, input.description);
       doc.y += 8;
-      renderMarkdown(doc, input.body);
+      const resourceUtm: UtmContext | undefined = input.slug
+        ? { medium: "resource", campaign: input.slug }
+        : undefined;
+      renderMarkdown(doc, input.body, resourceUtm);
 
       // =================================================================
       // Back Cover — identical to the packet back cover

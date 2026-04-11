@@ -98,6 +98,7 @@ async function main() {
       category: data.category,
       body,
       generatedAt,
+      slug,
     });
 
     const outPath = path.join(OUT_DIR, `${slug}.pdf`);
