@@ -48,7 +48,7 @@ Disc golf is a low-impact, dispersed recreation activity requiring minimal groun
 - **Volunteer stewardship:** Construction and maintenance are overwhelmingly volunteer-driven nationally
 
 **The cost case:**
-A 9-hole course costs $9,000-$18,000 to build. Daily capacity: 432 player-slots. Annual maintenance: $1,000-$5,000 (volunteer labor). Creekside DGC (Lehi, UT) delivered 59,142 recreation-hours on ~$200K investment. Individual consumer surplus: ~$68 per trip (peer-reviewed).
+A 9-hole course costs $9,000-$18,000 to build. Daily capacity: 432 player-slots. Annual maintenance: $1,000-$5,000 (volunteer labor). Creekside DGC (Salt Lake City, UT) delivered 59,142 recreation-hours on ~$200K investment. Individual consumer surplus: ~$68 per trip (peer-reviewed).
 
 **What we're asking:**
 [One clear, specific ask tailored to this office]

@@ -123,7 +123,7 @@ UDisc's 2026 Growth Report provides the key metrics:
 - Individual consumer surplus of **~$68 per trip** (peer-reviewed travel cost model, FDR/Heckscher State Parks, NY)
 - Two USDGC/CDGNC events in York County, SC generated **$4.5 million in economic activity**
 
-The **cost-per-recreation-hour comparison** is disc golf's strongest metric for public land managers. A 9-hole disc golf course costs **$9,000–$18,000** to build (vs. $28,000–$37,500 for a single pickleball court) and can serve **432 players daily** (4 players × 9 holes × 12 hours) versus 192 for a 4-court pickleball facility. Scott's own data from Utah reinforces this: **Creekside course in Lehi delivered 59,142 recreation-hours on a ~$200,000 investment**; Dragonfly delivered 11,824 hours with near-zero city funding.
+The **cost-per-recreation-hour comparison** is disc golf's strongest metric for public land managers. A 9-hole disc golf course costs **$9,000–$18,000** to build (vs. $28,000–$37,500 for a single pickleball court) and can serve **432 players daily** (4 players × 9 holes × 12 hours) versus 192 for a 4-court pickleball facility. Scott's own data from Utah reinforces this: **Creekside course in Salt Lake City delivered 59,142 recreation-hours on a ~$200,000 investment**; Dragonfly delivered 11,824 hours with near-zero city funding.
 
 ---
 
@@ -356,7 +356,7 @@ Disc golf delivers more recreation hours per dollar invested than nearly any com
 - **9-hole course: $9,000–$18,000** to build (comparable pickleball court: $28,000–$37,500)
 - **18-hole volunteer-built course: $15,000–$25,000**; professional install: $30,000–$50,000+
 - Daily capacity: **432 player-slots per 9-hole course** (4 players × 9 holes × 12 hours)
-- Creekside DGC (Lehi, UT): **59,142 recreation-hours** on ~$200K investment
+- Creekside DGC (Salt Lake City, UT): **59,142 recreation-hours** on ~$200K investment
 - Dragonfly DGC: **11,824 recreation-hours** with near-zero public funding
 - Academic study (2025): Individual consumer surplus of **$68 per trip**; $6 million aggregate annual surplus for a single urban-adjacent course
 - Annual maintenance: **$1,000–$5,000** (primarily volunteer labor for basket repair, sign replacement, mulching)
